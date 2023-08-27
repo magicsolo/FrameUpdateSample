@@ -1,0 +1,12 @@
+LocalClient/Assembly-CSharp.csproj
+LocalClient/App.config
+LocalClient/Assembly-CSharp-Editor.csproj
+LocalClient/Assembly-CSharp-firstpass.csproj
+LocalClient/LocalClient.sln
+LocalClient/.idea/
+LocalClient/Library/Artifacts/3d/3d025a5b7bcd6d53bf9c80d15b7145b6
+LocalClient/Library/
+LocalClient/Logs/
+LocalClient/obj/
+ProtobufTool/.idea/
+LocalServer/.idea/
