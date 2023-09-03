@@ -10,3 +10,13 @@ LocalClient/Logs/
 LocalClient/obj/
 ProtobufTool/.idea/
 LocalServer/.idea/
+LocalClient/Assets/.idea/
+LocalClient/LocalClient.sln.DotSettings.user
+LocalClient/Temp/
+LocalServer/ConsoleApplicatLocalServer/bin/
+LocalServer/ConsoleApplicatLocalServer/obj/Debug/ConsoleApplicatLocalServer.csproj.AssemblyReference.cache
+LocalServer/packages/
+LocalServer/ConsoleApplicatLocalServer/obj/
+LocalServer/ConsoleApplicatLocalServer.sln.DotSettings.user
+LocalServer/ConsoleApplicatLocalServer/packages.config
+LocalClient/Packages/

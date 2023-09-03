@@ -93,43 +93,12 @@ public class FrameManager : BasicMonoSingle<FrameManager>
 
     private void OnGUI()
     {
-        GUIStyle btnStyle;
-
-        //TODO 
-        btnStyle = GUI.skin.button;
-        btnStyle.fontSize = 120;
-        switch (gameType)
-        {
-            case GameType.Play:
-                if (GUILayout.Button("重播",btnStyle ))
-                {
-                    frameDataInputs.Clear();
-                    PlayBack();
-                }
-
-                if (GUILayout.Button("暂停",btnStyle))
-                {
-                    Pause();
-                }
-                break;
-            case GameType.PlayBack:
-                if (GUILayout.Button("开始",btnStyle))
-                {
-                    Play();
-                }
-                break;
-            case GameType.Pause:
-                if (GUILayout.Button("继续",btnStyle))
-                {
-                    Continue();
-                }
-                break;
-        }
+        
         
         
     }
 
-    private void PlayBack()
+    public void PlayBack()
     {
         frameDataInputs.Clear();
         frameDataInputs.AddRange(ClientManager.instance.inputs.ToArray());
@@ -145,7 +114,7 @@ public class FrameManager : BasicMonoSingle<FrameManager>
         gameType = GameType.Pause;
     }
     
-    private void Play()
+    public void Play()
     {
         gameType = GameType.Play;
         curClientFrame = -1;
@@ -157,7 +126,7 @@ public class FrameManager : BasicMonoSingle<FrameManager>
     
     private int tracingFrameIndex;
 
-    private void Continue()
+    public void Continue()
     {
         gameType = GameType.Play;
     }

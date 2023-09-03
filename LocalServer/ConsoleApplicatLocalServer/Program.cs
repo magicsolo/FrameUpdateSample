@@ -4,6 +4,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using C2SProtoInterface;
+using Google.Protobuf;
 
 namespace ConsoleApplicatLocalServer
 {
@@ -11,7 +13,21 @@ namespace ConsoleApplicatLocalServer
     {
         public static void Main(string[] args)
         {
-
+            // IMessage obj = new S2CLogin() { Guid = 2 };
+            //
+            // byte[] data = new byte[sizeof(EMessage) + obj.CalculateSize()]; //` Encoding.UTF8.GetBytes(jsn);
+            // var infoBytes = obj.ToByteArray();
+            // unsafe
+            // {
+            //     fixed (byte* p = data)
+            //         *(EMessage*)p = EMessage.Login;
+            // }
+            //
+            // Buffer.BlockCopy(infoBytes, 0, data, sizeof(EMessage), infoBytes.Length);
+            //
+            // var tstData = S2CLogin.Parser.ParseFrom(data, sizeof(EMessage), data.Length - sizeof(EMessage));
+            //
+            // Console.ReadKey();
             Console.Write("ServerStart");
             
             Thread update = new Thread(Updating);

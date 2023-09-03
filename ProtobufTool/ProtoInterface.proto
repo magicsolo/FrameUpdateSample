@@ -1,0 +1,14 @@
+syntax = "proto3";
+package C2SProtoInterface;
+
+enum EMessage {
+    None = 0;
+    Login = 1;
+}
+
+message C2SLogin{
+}
+
+message S2CLogin {
+   int32 guid = 1;
+}

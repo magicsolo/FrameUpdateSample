@@ -10,11 +10,12 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Text.Json;
-using Proto;
+using System.Threading;
+using C2SProtoInterface;
 using TrueSync;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
+using Google.Protobuf;
+using UnityEngine.Assertions.Must;
 
 public enum EInputEnum
 {
@@ -23,6 +24,31 @@ public enum EInputEnum
     rightDir,
     upDir,
     downDir,
+}
+
+public struct TCPInfo
+{
+    private Byte[] _datas;
+    public EMessage msgType { get; private set; }
+    int _msgOffset;
+    int _msgLength;
+    public unsafe void Init(Byte[] datas)
+    {
+        _datas = datas;
+        _msgOffset = 0;
+        fixed (byte* p = datas)
+        {
+            msgType = *(EMessage*)p;
+            _msgOffset += sizeof(EMessage);
+            _msgLength = *(int*)(p + _msgOffset);
+            _msgOffset += sizeof(int);
+        }
+    }
+
+    public T ParseMsgData<T>(MessageParser<T> parser)where T:IMessage<T>
+    {
+        return parser.ParseFrom(_datas, _msgOffset, _msgLength);
+    }
 }
 
 [Serializable]
@@ -35,6 +61,7 @@ public struct FrameInputData
 
 public class ClientManager : BasicMonoSingle<ClientManager>
 {
+    private Dictionary<EMessage, Action<TCPInfo>> _callBacks = new Dictionary<EMessage, Action<TCPInfo>>();
     private FP frameTime => FrameManager.instance.frameTime;
     private float timeCount = 0;
     public List<FrameInputData> inputs = new List<FrameInputData>();
@@ -47,7 +74,8 @@ public class ClientManager : BasicMonoSingle<ClientManager>
     IPEndPoint ipPoint;
     private NetworkStream stream;
     private BinaryFormatter _serializer = new BinaryFormatter();
-    private PlayerLogInfo _logInfo;
+
+    private Socket udpSocket = new Socket(AddressFamily.InterNetwork,SocketType.Dgram,ProtocolType.Udp);
     bool isPlaying
     {
         get
@@ -68,32 +96,57 @@ public class ClientManager : BasicMonoSingle<ClientManager>
     
     private void Start()
     {
-        Init();
-        // IPAddress ipAdress = IPAddress.Parse(ip);
-        // ipPoint = new IPEndPoint(ipAdress, pot);
-        var tcpClient = new TcpClient(ip,8080);
-
+        IPAddress ipAddress = IPAddress.Parse(ip);
+        ipPoint = new IPEndPoint(ipAddress, pot);
+        udpSocket.Connect(ipPoint);
+        tcpClient = new TcpClient(ip,8080);
         stream = tcpClient.GetStream();
-        string message = "Hello";
-        byte[] data = Encoding.UTF8.GetBytes(message);
-        stream.Write(data,0,data.Length);
 
-        stream.Read(data, 0, data.Length);
-        var dataStr = Encoding.UTF8.GetString(data);
-        PlayerLogInfo deserializedWeatherForecast = JsonSerializer.Deserialize<PlayerLogInfo>(dataStr);
-        using (MemoryStream ms = new MemoryStream(data))
-        {
-            IFormatter formatter = new BinaryFormatter();
-            var obj = formatter.Deserialize(ms);
-        }
-        
-        //int dataLength = stream.Read(data, 0, data.Length);
-        object loginData = _serializer.Deserialize(stream);
-        _logInfo = (PlayerLogInfo)loginData;
-
-        //stream.Close();
+        Init();
+        //StartCoroutine("TCPUpdate");
+        Thread TCP = new Thread(TCPUpdate);
+        TCP.Start();
     }
-    
+
+    private TcpClient tcpClient;
+    void TCPUpdate()
+    {
+
+        var readBytes = new byte[1024];
+        while (true)
+        {
+            var readLength = stream.Read(readBytes, 0, readBytes.Length);
+            if (readLength <=0)
+                continue;
+            RecieveTCPInfo(readBytes);
+        }
+    }
+
+    void RecieveTCPInfo(byte[] data)
+    {
+        var tcpData = new TCPInfo();
+        tcpData.Init(data);
+
+        if (_callBacks.TryGetValue(tcpData.msgType,out var func))
+            func(tcpData);
+    }
+
+    void OnLogin(Byte[] data)
+    {
+        var logInfo = S2CLogin.Parser.ParseFrom(data,sizeof(EMessage),data.Length - sizeof(EMessage));
+        
+    }
+    public unsafe void SendTCPInfo(EMessage mesgType,IMessage data = null,Action<TCPInfo> callBack = null)
+    {
+        if (callBack != null)
+        {
+            _callBacks[mesgType] = callBack;
+        }
+        var bytesType = new Byte[sizeof(EMessage) + (data == null ? 0 : data.CalculateSize())];
+        fixed (void* pbytes = bytesType)
+            *(EMessage*)pbytes = mesgType;
+        stream.Write(bytesType,0,bytesType.Length);
+    }
     
     private void Init()
     {
@@ -102,19 +155,19 @@ public class ClientManager : BasicMonoSingle<ClientManager>
     }
     private void Update()
     {
-        if (!isPlaying)
-            return;
-        string message = "updating";
-        byte[] data = Encoding.UTF8.GetBytes(message);
-        stream.Read(data,0,data.Length);
-        timeCount += Time.deltaTime;
-        int curIndex = (int)Mathf.Floor(timeCount/(float)frameTime);
-        while (inputs.Count < (curIndex + 1))
-        {
-            if ( FrameManager.instance.gameType != GameType.Pause && curClientFrame>=0)
-                FrameManager.instance.UpdateInputData( inputs[curClientFrame] );
-            inputs.Add( new FrameInputData(){ index = (curServerFrame + 1), input = EInputEnum.none } );
-        }
+        // if (!isPlaying)
+        //     return;
+        // string message = "updating";
+        // byte[] data = Encoding.UTF8.GetBytes(message);
+        // stream.Read(data,0,data.Length);
+        // timeCount += Time.deltaTime;
+        // int curIndex = (int)Mathf.Floor(timeCount/(float)frameTime);
+        // while (inputs.Count < (curIndex + 1))
+        // {
+        //     if ( FrameManager.instance.gameType != GameType.Pause && curClientFrame>=0)
+        //         FrameManager.instance.UpdateInputData( inputs[curClientFrame] );
+        //     inputs.Add( new FrameInputData(){ index = (curServerFrame + 1), input = EInputEnum.none } );
+        // }
     }
 
     public void Play()
@@ -155,4 +208,11 @@ public class ClientManager : BasicMonoSingle<ClientManager>
     //         
     //     }
     // }
+    private void OnDestroy()
+    {
+        if (tcpClient!=null&&tcpClient.Connected)
+        {
+            tcpClient.Close();
+        }
+    }
 }
