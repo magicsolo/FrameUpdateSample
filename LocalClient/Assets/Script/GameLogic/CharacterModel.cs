@@ -4,41 +4,31 @@ using System.Collections.Generic;
 using TrueSync;
 using UnityEngine;
 
-
-public class CharacterModel : MonoBehaviour
+namespace Game
 {
-    public FP speed = 1f;
-    public TSTransform tsTrans;
-
-    private void Awake()
+    public class CharacterModel : MonoBehaviour
     {
-        tsTrans = GetComponent<TSTransform>();
-    }
+        public FP speed = 1f;
+        public TSTransform tsTrans;
+        public bool isLeftTeam;
 
-    public void UpdateInput(EInputEnum input)
-    {
-        if (tsTrans == null)
-            return;
-        
-        TSVector dir = TSVector.zero;
-
-        switch (input)
+        private void Awake()
         {
-            case EInputEnum.downDir:
-                dir = TSVector.back;
-                break;
-            case EInputEnum.leftDir:
-                dir = TSVector.left;
-                break;
-            case EInputEnum.rightDir:
-                dir = TSVector.right;
-                break;
-            case EInputEnum.upDir:
-                dir = TSVector.forward;
-                break;
+            tsTrans = GetComponent<TSTransform>();
         }
 
-        dir *= speed * FrameManager.instance.frameTime;
-        tsTrans.position += dir;
+        public void UpdateInput(InputData inputData)
+        {
+            if (tsTrans == null)
+                return;
+            //移动
+            if (inputData.inputMoveAngle >= 0)
+            {
+                var moveDir = TSQuaternion.Euler(0, inputData.inputMoveAngle, 0) * TSVector.forward;
+
+                moveDir *= speed * FrameManager.instance.frameTime;
+                tsTrans.position += moveDir;
+            }
+        }
     }
 }

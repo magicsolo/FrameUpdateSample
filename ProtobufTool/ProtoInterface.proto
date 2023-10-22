@@ -4,11 +4,42 @@ package C2SProtoInterface;
 enum EMessage {
     None = 0;
     Login = 1;
+    StartGame = 2;
 }
 
 message C2SLogin{
+    int32 gId = 1;
+    string name = 2;
 }
 
 message S2CLogin {
-   int32 guid = 1;
+    int32 gId = 1;
+    int32 udpPot = 2;
+    int32 playerNum = 3;
+}
+
+message C2SStartGame{}
+
+message S2CStartGame{
+    int32 playerNum = 1;
+}
+
+message C2SFrameUpdate{
+    int32 index = 1;
+    int32 start = 2;
+    int32 end = 3;
+    int64 angle = 4;
+    int32 input = 5;
+}
+
+message S2CFrameData{
+    int32 frameIndex = 1;
+    repeated int32 inputs = 2;
+    repeated int64 inputAngles = 3;
+}
+
+message S2CFrameUpdate
+{
+    int32 curServerFrame = 1;
+    repeated S2CFrameData frameDatas = 2;
 }

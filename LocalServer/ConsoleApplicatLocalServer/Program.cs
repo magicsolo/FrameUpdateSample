@@ -1,60 +1,64 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using C2SProtoInterface;
 using Google.Protobuf;
+using ThreadState = System.Threading.ThreadState;
 
 namespace ConsoleApplicatLocalServer
 {
     internal class Program
     {
+        public static Thread update;
+
         public static void Main(string[] args)
         {
-            // IMessage obj = new S2CLogin() { Guid = 2 };
-            //
-            // byte[] data = new byte[sizeof(EMessage) + obj.CalculateSize()]; //` Encoding.UTF8.GetBytes(jsn);
-            // var infoBytes = obj.ToByteArray();
-            // unsafe
-            // {
-            //     fixed (byte* p = data)
-            //         *(EMessage*)p = EMessage.Login;
-            // }
-            //
-            // Buffer.BlockCopy(infoBytes, 0, data, sizeof(EMessage), infoBytes.Length);
-            //
-            // var tstData = S2CLogin.Parser.ParseFrom(data, sizeof(EMessage), data.Length - sizeof(EMessage));
-            //
-            // Console.ReadKey();
-            Console.Write("ServerStart");
+
+            StartServer();
             
-            Thread update = new Thread(Updating);
-            update.Start();
-            Console.Write("ServerEnd");
         }
 
+        public static void StartServer()
+        {
+            Console.Write("ServerStart\n");
+            serverLogic.StartServer();
+
+            update = new Thread(Updating);
+            update.Start();
+
+            Thread receiveTcpDt = new Thread(ReceiveTCPData);
+            receiveTcpDt.Start();
+            
+            Console.Write("ServerEnd\n");
+        }
+        static ServerLogic serverLogic = new ServerLogic();
+
+        public static void ReceiveTCPData()
+        {
+            while (true)
+            {
+                serverLogic.RecieveTCPInfo();
+                Thread.Sleep(0);
+            }
+        }
+        
         public static void Updating()
         {
-            int secondTime = 100;
-            var serverLogic = new ServerLogic();
-            serverLogic.StartServer();
-            serverLogic.Update(0);
 
             while (true)
             {
-                serverLogic.Update(secondTime);
-                Thread.Sleep(secondTime);
+                serverLogic.Update();
+                Thread.Sleep(ServerLogic.frameTime);
             }
 
             
         }
-        //
-        // private void InitServer()
-        // {
-        //     
-        // }
+
         public void TestFunc()
         {
             // Console.WriteLine("udp server start");

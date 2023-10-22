@@ -1,218 +1,168 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Threading;
 using C2SProtoInterface;
+using CenterBase;
 using TrueSync;
 using UnityEngine;
 using Google.Protobuf;
-using UnityEngine.Assertions.Must;
 
-public enum EInputEnum
+namespace Game
 {
-    none,
-    leftDir,
-    rightDir,
-    upDir,
-    downDir,
-}
-
-public struct TCPInfo
-{
-    private Byte[] _datas;
-    public EMessage msgType { get; private set; }
-    int _msgOffset;
-    int _msgLength;
-    public unsafe void Init(Byte[] datas)
+    public enum EInputEnum
     {
-        _datas = datas;
-        _msgOffset = 0;
-        fixed (byte* p = datas)
-        {
-            msgType = *(EMessage*)p;
-            _msgOffset += sizeof(EMessage);
-            _msgLength = *(int*)(p + _msgOffset);
-            _msgOffset += sizeof(int);
-        }
+        none,
     }
 
-    public T ParseMsgData<T>(MessageParser<T> parser)where T:IMessage<T>
+    public struct TCPInfo
     {
-        return parser.ParseFrom(_datas, _msgOffset, _msgLength);
-    }
-}
+        private Byte[] _datas;
+        public EMessage msgType { get; private set; }
+        int _msgOffset;
+        int _msgLength;
 
-[Serializable]
-public struct FrameInputData
-{
-    public int index;
-    public EInputEnum input;
-}
-
-
-public class ClientManager : BasicMonoSingle<ClientManager>
-{
-    private Dictionary<EMessage, Action<TCPInfo>> _callBacks = new Dictionary<EMessage, Action<TCPInfo>>();
-    private FP frameTime => FrameManager.instance.frameTime;
-    private float timeCount = 0;
-    public List<FrameInputData> inputs = new List<FrameInputData>();
-
-    public static int curServerFrame => instance.inputs.Count - 1;
-    public static int curClientFrame => instance.inputs.Count - 2;
-    
-    private string ip = "192.168.50.22";
-    private int pot = 8080;
-    IPEndPoint ipPoint;
-    private NetworkStream stream;
-    private BinaryFormatter _serializer = new BinaryFormatter();
-
-    private Socket udpSocket = new Socket(AddressFamily.InterNetwork,SocketType.Dgram,ProtocolType.Udp);
-    bool isPlaying
-    {
-        get
+        public unsafe void Init(Byte[] datas)
         {
-            switch (FrameManager.instance.gameType)
+            _datas = datas;
+            _msgOffset = 0;
+            fixed (byte* p = datas)
             {
-                case GameType.Play:
-                case GameType.Pause:
-                case GameType.TraceFrame:
-                    return true;
-                    break;
-                default:
-                    return false;
-                    break;
+                msgType = *(EMessage*)p;
+                _msgOffset += sizeof(EMessage);
+                _msgLength = *(int*)(p + _msgOffset);
+                _msgOffset += sizeof(int);
             }
         }
-    }
-    
-    private void Start()
-    {
-        IPAddress ipAddress = IPAddress.Parse(ip);
-        ipPoint = new IPEndPoint(ipAddress, pot);
-        udpSocket.Connect(ipPoint);
-        tcpClient = new TcpClient(ip,8080);
-        stream = tcpClient.GetStream();
 
-        Init();
-        //StartCoroutine("TCPUpdate");
-        Thread TCP = new Thread(TCPUpdate);
-        TCP.Start();
-    }
-
-    private TcpClient tcpClient;
-    void TCPUpdate()
-    {
-
-        var readBytes = new byte[1024];
-        while (true)
+        public T ParseMsgData<T>(MessageParser<T> parser) where T : IMessage<T>
         {
-            var readLength = stream.Read(readBytes, 0, readBytes.Length);
-            if (readLength <=0)
-                continue;
+            return parser.ParseFrom(_datas, _msgOffset, _msgLength);
+        }
+    }
+
+    public class ClientManager : BasicMonoSingle<ClientManager>
+    {
+        private Dictionary<EMessage, Action<TCPInfo>> _callBacks = new Dictionary<EMessage, Action<TCPInfo>>();
+        private FP frameTime => FrameManager.instance.frameTime;
+
+        public string ip = "192.168.50.22";
+        public string pot = "8080";
+        private int guid;
+        public string playerName;
+        private BinaryFormatter _serializer = new BinaryFormatter();
+
+        private IPEndPoint udpPoint;
+
+        //private TcpClient tcpClient;
+        private TCPConnecter tcp;
+        private UDPConnecter udp;
+        public EConnecterState tcpState => tcp.CurState;
+
+
+        private void OnEnable()
+        {
+            playerName = PlayerPrefs.GetString("name");
+            guid = PlayerPrefs.GetInt("guid");
+            ip = PlayerPrefs.GetString("ip");
+            pot = PlayerPrefs.GetString("pot");
+
+            tcp = new TCPConnecter();
+            udp = new UDPConnecter();
+        }
+
+        public void ReConnect()
+        {
+            IPAddress ipAddress = IPAddress.Parse(ip);
+            tcp.Connect(ip, pot);
+            PlayerPrefs.SetString("ip",ip);
+            PlayerPrefs.SetString("pot",pot);
+            Init();
+            // Thread TCP = new Thread(TCPUpdate);
+            // TCP.Start();
+        }
+
+        private void Update()
+        {
+            TCPUpdate();
+        }
+
+        void TCPUpdate()
+        {
+            var readBytes = new byte[1024];
+            if (tcp.CurState != EConnecterState.Connected)
+                return;
+
+            if (!tcp.Stream.DataAvailable)
+                return;
+            
+            var readLength = tcp.Stream.Read(readBytes, 0, readBytes.Length);
+            if (readLength <= 0)
+                return;
             RecieveTCPInfo(readBytes);
         }
-    }
 
-    void RecieveTCPInfo(byte[] data)
-    {
-        var tcpData = new TCPInfo();
-        tcpData.Init(data);
-
-        if (_callBacks.TryGetValue(tcpData.msgType,out var func))
-            func(tcpData);
-    }
-
-    void OnLogin(Byte[] data)
-    {
-        var logInfo = S2CLogin.Parser.ParseFrom(data,sizeof(EMessage),data.Length - sizeof(EMessage));
-        
-    }
-    public unsafe void SendTCPInfo(EMessage mesgType,IMessage data = null,Action<TCPInfo> callBack = null)
-    {
-        if (callBack != null)
+        void RecieveTCPInfo(byte[] data)
         {
-            _callBacks[mesgType] = callBack;
+            var tcpData = new TCPInfo();
+            tcpData.Init(data);
+
+            if (_callBacks.TryGetValue(tcpData.msgType, out var func))
+                func(tcpData);
         }
-        var bytesType = new Byte[sizeof(EMessage) + (data == null ? 0 : data.CalculateSize())];
-        fixed (void* pbytes = bytesType)
-            *(EMessage*)pbytes = mesgType;
-        stream.Write(bytesType,0,bytesType.Length);
-    }
-    
-    private void Init()
-    {
-        timeCount = 0;
-        inputs.Clear();
-    }
-    private void Update()
-    {
-        // if (!isPlaying)
-        //     return;
-        // string message = "updating";
-        // byte[] data = Encoding.UTF8.GetBytes(message);
-        // stream.Read(data,0,data.Length);
-        // timeCount += Time.deltaTime;
-        // int curIndex = (int)Mathf.Floor(timeCount/(float)frameTime);
-        // while (inputs.Count < (curIndex + 1))
-        // {
-        //     if ( FrameManager.instance.gameType != GameType.Pause && curClientFrame>=0)
-        //         FrameManager.instance.UpdateInputData( inputs[curClientFrame] );
-        //     inputs.Add( new FrameInputData(){ index = (curServerFrame + 1), input = EInputEnum.none } );
-        // }
-    }
 
-    public void Play()
-    {
-        inputs.Clear();
-        timeCount = 0;
-    }
-    
-    public void Send(EInputEnum input)
-    {
-        if (!isPlaying)
-            return;
-        
-        var inputs = instance.inputs;
-
-        if (inputs.Count>0)
+        public void Login(Action<S2CLogin> callBack)
         {
-            var inputData = inputs[inputs.Count - 1];
-            inputData.input = input;
-            inputs[inputs.Count - 1] = inputData;
+            guid = 1;
+            PlayerPrefs.SetString("name",playerName);
+            PlayerPrefs.SetInt("guid",guid);
+            ClientManager.instance.SendTCPInfo(EMessage.Login, new C2SLogin() { Name = playerName, GId = guid },
+                (data) =>
+                {
+                    var logInfo = data.ParseMsgData(S2CLogin.Parser);
+                    callBack(logInfo);
+                });
         }
-        
-    }
-    
-    public void RequireFrames(int start,int end)
-    {
-        end = Math.Min(end, inputs.Count - 1);
-        var reQuireFrames = inputs.GetRange(start, end - start + 1);
-        FrameManager.instance.InsertFrames(reQuireFrames.ToArray());
-    }
 
-    // private int clientFrame = 0;
-    //
-    // public static void Recieve()
-    // {
-    //     if (instance.clientFrame < curFrame)
-    //     {
-    //         
-    //     }
-    // }
-    private void OnDestroy()
-    {
-        if (tcpClient!=null&&tcpClient.Connected)
+
+        public unsafe void SendTCPInfo(EMessage mesgType, IMessage data = null, Action<TCPInfo> callBack = null)
         {
-            tcpClient.Close();
+            if (callBack != null)
+            {
+                _callBacks[mesgType] = callBack;
+            }
+
+            var bytes = new Byte[sizeof(EMessage) + (data == null ? 0 : data.CalculateSize())];
+            fixed (void* pbytes = bytes)
+                *(EMessage*)pbytes = mesgType;
+            var infoBytes = data.ToByteArray();
+            Buffer.BlockCopy(infoBytes, 0, bytes, sizeof(EMessage), infoBytes.Length);
+            tcp.Stream.Write(bytes, 0, bytes.Length);
+        }
+
+        private void Init()
+        {
+        }
+
+        public unsafe void UDPSend(C2SFrameUpdate data)
+        {
+            var dataBytes = data.ToByteArray();
+            var sendBytes = new Byte[sizeof(Int32) + (data == null ? 0 : data.CalculateSize())];
+            fixed (void* pbytes = sendBytes)
+                *(Int32*)pbytes = guid;
+            Buffer.BlockCopy(dataBytes, 0, sendBytes, sizeof(Int32), dataBytes.Length);
+            udp.Send(sendBytes);
+        }
+
+        public S2CFrameUpdate UDPReceive()
+        {
+            return udp.Receive();
+        }
+
+        private void OnDestroy()
+        {
+            tcp.Close();
         }
     }
 }
