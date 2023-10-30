@@ -31,8 +31,13 @@ namespace CenterBase
         {
             Close();
 
+            Connect(ip,Convert.ToInt32(pot));
+        }
+
+        public virtual void Connect(String ip, int pot)
+        {
             this.ip = ip;
-            this.pot = Convert.ToInt32(pot);
+            this.pot = pot;
             IPAddress ipAddress = IPAddress.Parse(ip);
             edPoint = new IPEndPoint(ipAddress, this.pot);
         }
@@ -51,6 +56,17 @@ namespace CenterBase
         public override void Connect(string ip, string pot)
         {
             base.Connect(ip, pot);
+            SocketConnect();
+        }
+
+        public override void Connect(string ip, int pot)
+        {
+            base.Connect(ip, pot);
+            SocketConnect();
+        }
+
+        void SocketConnect()
+        {
             udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             udpSocket.Connect(edPoint);
         }

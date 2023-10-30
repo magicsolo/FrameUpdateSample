@@ -25,6 +25,18 @@ namespace Game
             }
         }
 
+        public override void Enter(FSMState<LogicState> lstState, object param = null)
+        {
+            base.Enter(lstState, param);
+            ClientManager.instance.RegistNoteListener(EMessage.Restart,OnLogin);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            ClientManager.instance.UnRegistNoteListener(EMessage.Restart);
+        }
+
         public override void Update()
         {
             
@@ -36,7 +48,7 @@ namespace Game
         
         private void Login()
         {
-            ClientManager.instance.Login(OnLogin);
+            ClientManager.instance.Login();
         }
 
         void ShowDisConnected()
@@ -50,8 +62,6 @@ namespace Game
             GUILayout.Label("Pot:", btnStyle);
             ClientManager.instance.pot = GUILayout.TextArea(ClientManager.instance.pot, btnStyle);
             GUILayout.EndHorizontal();
-            
-            
             
             if (GUILayout.Button("已断开 重连连接", btnStyle))
             {
@@ -67,23 +77,22 @@ namespace Game
             GUILayout.EndHorizontal();
             
             if (GUILayout.Button("登录",btnStyle))
-                ClientManager.instance.Login(OnLogin);
+                ClientManager.instance.Login();
         }
-        void OnLogin(S2CLogin data)
+        void OnLogin(TCPInfo servDat)
         {
-            FrameManager.instance.ResetPlay(data.PlayerNum);
-            logicFsm.ChangeState(ELogicType.Match);
+            logicFsm.ChangeState(ELogicType.Match,servDat);
         }
 
         private void StartGame()
         {
-            ClientManager.instance.SendTCPInfo(EMessage.StartGame,new C2SStartGame(),OnStartGame);
+            //ClientManager.instance.SendTCPInfo(EMessage.StartGame,new C2SStartGame(),OnStartGame);
         }
         
         void OnStartGame(TCPInfo data)
         {
             var startGameInfo = data.ParseMsgData(S2CStartGame.Parser);
-            FrameManager.instance.ResetPlay(startGameInfo.PlayerNum);
+            FrameManager.instance.ResetPlay(startGameInfo);
         }
         
         

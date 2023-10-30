@@ -3,8 +3,8 @@ package C2SProtoInterface;
 
 enum EMessage {
     None = 0;
-    Login = 1;
-    StartGame = 2;
+    EnterGame = 1;
+    Restart = 2;
 }
 
 message C2SLogin{
@@ -12,16 +12,16 @@ message C2SLogin{
     string name = 2;
 }
 
-message S2CLogin {
-    int32 gId = 1;
-    int32 udpPot = 2;
-    int32 playerNum = 3;
-}
-
 message C2SStartGame{}
 
+message S2CPlayerData{
+    int32 guid = 1;
+    string name = 2;
+}
+
 message S2CStartGame{
-    int32 playerNum = 1;
+    int32 pot = 1;
+    repeated S2CPlayerData players = 2;
 }
 
 message C2SFrameUpdate{

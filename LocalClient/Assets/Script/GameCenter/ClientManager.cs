@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using C2SProtoInterface;
@@ -112,17 +113,18 @@ namespace Game
                 func(tcpData);
         }
 
-        public void Login(Action<S2CLogin> callBack)
+        public void Login()
         {
-            guid = 1;
+            guid = playerName.GetHashCode();
             PlayerPrefs.SetString("name",playerName);
             PlayerPrefs.SetInt("guid",guid);
-            ClientManager.instance.SendTCPInfo(EMessage.Login, new C2SLogin() { Name = playerName, GId = guid },
-                (data) =>
-                {
-                    var logInfo = data.ParseMsgData(S2CLogin.Parser);
-                    callBack(logInfo);
-                });
+            ClientManager.instance.SendTCPInfo(EMessage.EnterGame, new C2SLogin() { Name = playerName, GId = guid });
+            // ,
+            // (data) =>
+            // {
+            //     var logInfo = data.ParseMsgData(S2CLogin.Parser);
+            //     callBack(logInfo);
+            // });
         }
 
 
@@ -145,6 +147,12 @@ namespace Game
         {
         }
 
+        public void UDPConnect(int pot)
+        {
+            udp.Connect(ip,pot);
+        }
+        
+
         public unsafe void UDPSend(C2SFrameUpdate data)
         {
             var dataBytes = data.ToByteArray();
@@ -163,6 +171,16 @@ namespace Game
         private void OnDestroy()
         {
             tcp.Close();
+        }
+
+        public void RegistNoteListener(EMessage mesgType,Action<TCPInfo> callBack)
+        {
+            _callBacks[mesgType] = callBack;
+        }
+
+        public void UnRegistNoteListener(EMessage mesgType)
+        {
+            _callBacks[mesgType] = null;
         }
     }
 }

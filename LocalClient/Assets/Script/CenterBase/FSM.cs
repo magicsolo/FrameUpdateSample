@@ -15,17 +15,15 @@ namespace CenterBase
             states.Add(st.stateType,st);
         }
 
-        protected void ChgST(int stType)
+        protected void ChgST(int stType,object param = null)
         {
             if (states.TryGetValue(stType,out  var st) && (curState == null || curState.CanEnterState(st)) )
             {
                 if (curState!=null)
-                {
                     curState.Exit();
-                }
 
                 curState = st;
-                st.Enter();
+                st.Enter(curState,param);
 
             }
         }
@@ -46,7 +44,7 @@ namespace CenterBase
 
         public virtual void Exit(){}
 
-        public virtual void Enter(){}
+        public virtual void Enter(FSMState<T> lstState,object param = null){}
 
         public bool CanEnterState(T newSt)
         {

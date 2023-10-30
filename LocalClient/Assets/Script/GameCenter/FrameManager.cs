@@ -44,29 +44,22 @@ namespace Game
     {
         public FP frameTime = 0.02f;
         public GameType gameType = GameType.Play;
-        [SerializeField] private Transform players;
 
         private originalData lorData = new originalData() { orPos = TSVector.forward, orRotation = default };
         private originalData rOrData = new originalData() { orPos = TSVector.back, orRotation = default };
         private Dictionary<int, S2CFrameData> frameDataInputs = new Dictionary<int, S2CFrameData>();
-        public CharacterModel[] characters;
+        public LogicPlayer[] players;
         private float timeCount;
         public int curServerFrame = -1;
         public int curClientFrame = -1;
         public int playerNum;
 
-        public override void OnAwake()
-        {
-            base.OnAwake();
-            characters = players.GetComponentsInChildren<CharacterModel>(true);
-        }
-
         /// <summary>
         /// 重新开始前设置一下
         /// </summary>
-        public void ResetPlay(int plNum)
+        public void ResetPlay(S2CStartGame startData)
         {
-            playerNum = plNum;
+            playerNum = startData.Players.Count;
             gameType = GameType.Play;
             ResetCharacters();
             frameDataInputs.Clear();
@@ -78,7 +71,7 @@ namespace Game
             switch (gameType)
             {
                 case GameType.Play:
-                    SetFrameDatas();
+                    RequireFrameDatas();
                     PlayFrames();
                     break;
                     // case GameType.TraceFrame:
@@ -128,19 +121,14 @@ namespace Game
 
         void ResetCharacters()
         {
-            foreach (var character in characters)
+            players = new LogicPlayer[playerNum];
+            for (int i = 0; i < players.Length; i++)
             {
-                if (character.isLeftTeam)
-                {
-                    character.tsTrans.position = lorData.orPos;
-                    character.tsTrans.rotation = lorData.orRotation;
-                }
-                else
-                {
-                    character.tsTrans.position = rOrData.orPos;
-                    character.tsTrans.rotation = rOrData.orRotation;
-                }
+                var lgPl = new LogicPlayer();
+                players[i] = lgPl;
+                lgPl.pos = TSVector.zero;
             }
+            
         }
 
         public void Pause()
@@ -163,7 +151,7 @@ namespace Game
             gameType = GameType.Play;
         }
 
-        private void SetFrameDatas()
+        public void RequireFrameDatas()
         {
             S2CFrameUpdate frmServerData = ClientManager.instance.UDPReceive();
             if (frmServerData != null)
@@ -206,14 +194,14 @@ namespace Game
             ClientManager.instance.UDPSend(frmUpdate);
         }
 
-        private void PlayFrames()
+        public void PlayFrames()
         {
             if (frameDataInputs.TryGetValue(curClientFrame + 1, out var curFrame))
             {
                 curClientFrame++;
                 for (int i = 0; i < playerNum; i++)
                 {
-                    characters[i].UpdateInput(curFrame.GetInputData(i));
+                    players[i].UpdateInput(curFrame.GetInputData(i));
                 }
             }
         }

@@ -35,8 +35,8 @@ namespace Game
         
 
         private LogicFSM fsm;
-
-        private void OnEnable()
+        
+        private void Start()
         {
             fsm = new LogicFSM();
         }
@@ -104,12 +104,7 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
-            // switch (state)
-            // {
-            //     case LogicState.Gaming:
-            //         FrameManager.instance.UpdateInputData();
-            //         break;
-            // }
+            fsm.curState.Update();
         }
         
     }

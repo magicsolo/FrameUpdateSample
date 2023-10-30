@@ -18,6 +18,7 @@ namespace ConsoleApplicatLocalServer
     {
         public int index = -1;
         public int guid = -1;
+        public string name;
         public float lastHeartTime = -1;
         public TcpClient client;
         public NetworkStream stream;
@@ -205,16 +206,16 @@ namespace ConsoleApplicatLocalServer
             fixed (void* p = streamBuffer)
                 msgType = *(EMessage*)p;
 
-            if (msgType != EMessage.Login && plInfo.guid < 0)
+            if (msgType != EMessage.EnterGame && plInfo.guid < 0)
                 return;
             
             switch (msgType)
             {
-                case EMessage.Login:
+                case EMessage.EnterGame:
                     OnPlayerLogin(plInfo, streamBuffer,sizeof(EMessage),readLen);
                     break;
-                case EMessage.StartGame:
-                    OnStartGame(plInfo);
+                case EMessage.Restart:
+                    OnRestartGame(plInfo);
                     break;
             }
         }
@@ -223,16 +224,16 @@ namespace ConsoleApplicatLocalServer
         {
             var c2SLog = C2SLogin.Parser.ParseFrom(streamBuffer, offset, len - offset);
             var guid = c2SLog.GId;
-            if (guid > 0)
+            if (guid != 0)
             {
                 if (allPlayers.TryGetValue(guid, out var oldPlInfo))
                     RemoveClient(oldPlInfo);
                 else
                     plInfo.guid = guid;
                 allPlayers[guid] = plInfo;
-                SendTCPData(plInfo.stream, EMessage.Login, new S2CLogin() {GId = plInfo.guid, UdpPot = udpIPPoint.Port, PlayerNum = playerNum });
+                plInfo.name = c2SLog.Name;
             }
-            
+            OnRestartGame(plInfo);
         }
 
         void RemoveClient(PlayerInfo rmPlInfo)
@@ -241,11 +242,35 @@ namespace ConsoleApplicatLocalServer
             tmpRemovedClient.Add(rmPlInfo.client);
         }
 
-        void OnStartGame(PlayerInfo plInfo)
+        private int[] playerIds;
+        void OnRestartGame(PlayerInfo plInfo)
         {
-            SendTCPData(plInfo.stream, EMessage.StartGame, new S2CStartGame() { PlayerNum = playerNum });
+            lock (_frameInputs)
+            {
+                _frameInputs.Clear();
+                lock (clientCollection)
+                {
+                    S2CPlayerData[] pls = new S2CPlayerData[allPlayers.Count];
+                    int[] playerIds = new int[allPlayers.Count];
+                    int idx = 0;
+                    foreach (var kv in allPlayers)
+                    {
+                        pls[idx] = new S2CPlayerData() { Guid = kv.Key, Name = kv.Value.name };
+                        kv.Value.udpEndPoint = default;
+                        playerIds[idx] = kv.Key;
+                        ++idx;
+                    }
+                    foreach (var kv in allPlayers)
+                    {
+                        var stGame = new S2CStartGame();
+                        stGame.Players.AddRange(pls);
+                        stGame.Pot = udpIPPoint.Port;
+                        SendTCPData(kv.Value.stream, EMessage.Restart,  stGame);
+                    }
+                }
+            }
         }
-
+        
         unsafe void UDPRecieveing()
         {
             _udpSocket.Bind(udpIPPoint);

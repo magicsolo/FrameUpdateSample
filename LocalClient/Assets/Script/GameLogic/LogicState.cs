@@ -17,12 +17,13 @@ namespace Game
         {
             
             AddState(new LoginState(this));
+            AddState(new MatchingState(this));
             ChangeState(ELogicType.Login);
         }
 
-        public void ChangeState(ELogicType stType)
+        public void ChangeState(ELogicType stType,object param = null)
         {
-            ChgST((int)stType);
+            ChgST((int)stType,param);
         }
     }
     
@@ -53,23 +54,6 @@ namespace Game
         }
         
         public virtual void OnGUIUpdate(){}
-    }
-    
-    public class MatchingState : LogicState
-    {
-        public MatchingState(LogicFSM fsm) : base(ELogicType.Match, fsm)
-        {
-        }
-    
-        public override void Update()
-        {
-            // if (!ClientManager.instance.connected)
-            // {
-            //     logicFsm.ChangeState(ELogicType.Login);
-            //     return;
-            // }
-            base.Update();
-        }
     }
 
 }
