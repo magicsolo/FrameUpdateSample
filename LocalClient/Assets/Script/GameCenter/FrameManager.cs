@@ -49,6 +49,7 @@ namespace Game
         private originalData rOrData = new originalData() { orPos = TSVector.back, orRotation = default };
         private Dictionary<int, S2CFrameData> frameDataInputs = new Dictionary<int, S2CFrameData>();
         public LogicPlayer[] players;
+        public Dictionary<int, LogicPlayer> dicPlayers = new Dictionary<int, LogicPlayer>();
         private float timeCount;
         public int curServerFrame = -1;
         public int curClientFrame = -1;
@@ -61,7 +62,7 @@ namespace Game
         {
             playerNum = startData.Players.Count;
             gameType = GameType.Play;
-            ResetCharacters();
+            ResetCharacters(startData);
             frameDataInputs.Clear();
             curClientFrame = -1;
         }
@@ -119,16 +120,17 @@ namespace Game
             // curClientFrame = 0;
         }
 
-        void ResetCharacters()
+        void ResetCharacters(S2CStartGame startData)
         {
             players = new LogicPlayer[playerNum];
+            dicPlayers.Clear();
             for (int i = 0; i < players.Length; i++)
             {
-                var lgPl = new LogicPlayer();
+                var lgPl = new LogicPlayer(startData.Players[i]);
                 players[i] = lgPl;
                 lgPl.pos = TSVector.zero;
+                dicPlayers[lgPl.guid] = lgPl;
             }
-            
         }
 
         public void Pause()
@@ -159,7 +161,6 @@ namespace Game
                 curServerFrame = Math.Max(curServerFrame, frmServerData.CurServerFrame);
                 foreach (var frmDt in frmServerData.FrameDatas)
                 {
-                    Debug.Log($"插入帧 {frmDt.FrameIndex} 输入角度 {frmDt.InputAngles[0]} {DateTime.Now}");
                     frameDataInputs[frmDt.FrameIndex] = frmDt;
                 }
             }
@@ -199,9 +200,10 @@ namespace Game
             if (frameDataInputs.TryGetValue(curClientFrame + 1, out var curFrame))
             {
                 curClientFrame++;
-                for (int i = 0; i < playerNum; i++)
+                for (int i = 0; i < curFrame.Gids.Count; i++)
                 {
-                    players[i].UpdateInput(curFrame.GetInputData(i));
+                    var player = dicPlayers[curFrame.Gids[i]];
+                    player.UpdateInput(curFrame.GetInputData(i));
                 }
             }
         }

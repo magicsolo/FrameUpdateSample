@@ -1,6 +1,7 @@
 ﻿using C2SProtoInterface;
 using CenterBase;
 using Script;
+using UnityEngine;
 
 namespace Game
 {
@@ -15,6 +16,13 @@ namespace Game
             ClientManager.instance.RegistNoteListener(EMessage.Restart,Reset);
             base.Enter(lstState, param);
             Reset((param as TCPInfo?)?? default);
+        }
+
+        public override void OnGUIUpdate()
+        {
+            base.OnGUIUpdate();
+            if (GUILayout.Button("重新开始",btnStyle))
+                ClientManager.instance.SendTCPInfo(EMessage.Restart);
         }
 
         public override void Exit()

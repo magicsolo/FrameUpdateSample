@@ -30,12 +30,13 @@ namespace C2SProtoInterface {
             "GAIgASgJIk4KDFMyQ1N0YXJ0R2FtZRILCgNwb3QYASABKAUSMQoHcGxheWVy",
             "cxgCIAMoCzIgLkMyU1Byb3RvSW50ZXJmYWNlLlMyQ1BsYXllckRhdGEiWQoO",
             "QzJTRnJhbWVVcGRhdGUSDQoFaW5kZXgYASABKAUSDQoFc3RhcnQYAiABKAUS",
-            "CwoDZW5kGAMgASgFEg0KBWFuZ2xlGAQgASgDEg0KBWlucHV0GAUgASgFIkcK",
-            "DFMyQ0ZyYW1lRGF0YRISCgpmcmFtZUluZGV4GAEgASgFEg4KBmlucHV0cxgC",
-            "IAMoBRITCgtpbnB1dEFuZ2xlcxgDIAMoAyJdCg5TMkNGcmFtZVVwZGF0ZRIW",
-            "Cg5jdXJTZXJ2ZXJGcmFtZRgBIAEoBRIzCgpmcmFtZURhdGFzGAIgAygLMh8u",
-            "QzJTUHJvdG9JbnRlcmZhY2UuUzJDRnJhbWVEYXRhKjAKCEVNZXNzYWdlEggK",
-            "BE5vbmUQABINCglFbnRlckdhbWUQARILCgdSZXN0YXJ0EAJiBnByb3RvMw=="));
+            "CwoDZW5kGAMgASgFEg0KBWFuZ2xlGAQgASgDEg0KBWlucHV0GAUgASgFIlUK",
+            "DFMyQ0ZyYW1lRGF0YRISCgpmcmFtZUluZGV4GAEgASgFEgwKBGdpZHMYAiAD",
+            "KAUSDgoGaW5wdXRzGAMgAygFEhMKC2lucHV0QW5nbGVzGAQgAygDIl0KDlMy",
+            "Q0ZyYW1lVXBkYXRlEhYKDmN1clNlcnZlckZyYW1lGAEgASgFEjMKCmZyYW1l",
+            "RGF0YXMYAiADKAsyHy5DMlNQcm90b0ludGVyZmFjZS5TMkNGcmFtZURhdGEq",
+            "MAoIRU1lc3NhZ2USCAoETm9uZRAAEg0KCUVudGVyR2FtZRABEgsKB1Jlc3Rh",
+            "cnQQAmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::C2SProtoInterface.EMessage), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -44,7 +45,7 @@ namespace C2SProtoInterface {
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CPlayerData), global::C2SProtoInterface.S2CPlayerData.Parser, new[]{ "Guid", "Name" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CStartGame), global::C2SProtoInterface.S2CStartGame.Parser, new[]{ "Pot", "Players" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SFrameUpdate), global::C2SProtoInterface.C2SFrameUpdate.Parser, new[]{ "Index", "Start", "End", "Angle", "Input" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CFrameData), global::C2SProtoInterface.S2CFrameData.Parser, new[]{ "FrameIndex", "Inputs", "InputAngles" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CFrameData), global::C2SProtoInterface.S2CFrameData.Parser, new[]{ "FrameIndex", "Gids", "Inputs", "InputAngles" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CFrameUpdate), global::C2SProtoInterface.S2CFrameUpdate.Parser, new[]{ "CurServerFrame", "FrameDatas" }, null, null, null, null)
           }));
     }
@@ -892,6 +893,7 @@ namespace C2SProtoInterface {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public S2CFrameData(S2CFrameData other) : this() {
       frameIndex_ = other.frameIndex_;
+      gids_ = other.gids_.Clone();
       inputs_ = other.inputs_.Clone();
       inputAngles_ = other.inputAngles_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -913,10 +915,20 @@ namespace C2SProtoInterface {
       }
     }
 
-    /// <summary>Field number for the "inputs" field.</summary>
-    public const int InputsFieldNumber = 2;
-    private static readonly pb::FieldCodec<int> _repeated_inputs_codec
+    /// <summary>Field number for the "gids" field.</summary>
+    public const int GidsFieldNumber = 2;
+    private static readonly pb::FieldCodec<int> _repeated_gids_codec
         = pb::FieldCodec.ForInt32(18);
+    private readonly pbc::RepeatedField<int> gids_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Gids {
+      get { return gids_; }
+    }
+
+    /// <summary>Field number for the "inputs" field.</summary>
+    public const int InputsFieldNumber = 3;
+    private static readonly pb::FieldCodec<int> _repeated_inputs_codec
+        = pb::FieldCodec.ForInt32(26);
     private readonly pbc::RepeatedField<int> inputs_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Inputs {
@@ -924,9 +936,9 @@ namespace C2SProtoInterface {
     }
 
     /// <summary>Field number for the "inputAngles" field.</summary>
-    public const int InputAnglesFieldNumber = 3;
+    public const int InputAnglesFieldNumber = 4;
     private static readonly pb::FieldCodec<long> _repeated_inputAngles_codec
-        = pb::FieldCodec.ForInt64(26);
+        = pb::FieldCodec.ForInt64(34);
     private readonly pbc::RepeatedField<long> inputAngles_ = new pbc::RepeatedField<long>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<long> InputAngles {
@@ -947,6 +959,7 @@ namespace C2SProtoInterface {
         return true;
       }
       if (FrameIndex != other.FrameIndex) return false;
+      if(!gids_.Equals(other.gids_)) return false;
       if(!inputs_.Equals(other.inputs_)) return false;
       if(!inputAngles_.Equals(other.inputAngles_)) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -956,6 +969,7 @@ namespace C2SProtoInterface {
     public override int GetHashCode() {
       int hash = 1;
       if (FrameIndex != 0) hash ^= FrameIndex.GetHashCode();
+      hash ^= gids_.GetHashCode();
       hash ^= inputs_.GetHashCode();
       hash ^= inputAngles_.GetHashCode();
       if (_unknownFields != null) {
@@ -975,6 +989,7 @@ namespace C2SProtoInterface {
         output.WriteRawTag(8);
         output.WriteInt32(FrameIndex);
       }
+      gids_.WriteTo(output, _repeated_gids_codec);
       inputs_.WriteTo(output, _repeated_inputs_codec);
       inputAngles_.WriteTo(output, _repeated_inputAngles_codec);
       if (_unknownFields != null) {
@@ -988,6 +1003,7 @@ namespace C2SProtoInterface {
       if (FrameIndex != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(FrameIndex);
       }
+      size += gids_.CalculateSize(_repeated_gids_codec);
       size += inputs_.CalculateSize(_repeated_inputs_codec);
       size += inputAngles_.CalculateSize(_repeated_inputAngles_codec);
       if (_unknownFields != null) {
@@ -1004,6 +1020,7 @@ namespace C2SProtoInterface {
       if (other.FrameIndex != 0) {
         FrameIndex = other.FrameIndex;
       }
+      gids_.Add(other.gids_);
       inputs_.Add(other.inputs_);
       inputAngles_.Add(other.inputAngles_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -1023,11 +1040,16 @@ namespace C2SProtoInterface {
           }
           case 18:
           case 16: {
-            inputs_.AddEntriesFrom(input, _repeated_inputs_codec);
+            gids_.AddEntriesFrom(input, _repeated_gids_codec);
             break;
           }
           case 26:
           case 24: {
+            inputs_.AddEntriesFrom(input, _repeated_inputs_codec);
+            break;
+          }
+          case 34:
+          case 32: {
             inputAngles_.AddEntriesFrom(input, _repeated_inputAngles_codec);
             break;
           }

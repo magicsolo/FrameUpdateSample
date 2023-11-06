@@ -34,8 +34,9 @@ message C2SFrameUpdate{
 
 message S2CFrameData{
     int32 frameIndex = 1;
-    repeated int32 inputs = 2;
-    repeated int64 inputAngles = 3;
+    repeated int32 gids = 2;
+    repeated int32 inputs = 3;
+    repeated int64 inputAngles = 4;
 }
 
 message S2CFrameUpdate

@@ -1,4 +1,5 @@
-﻿using TrueSync;
+﻿using C2SProtoInterface;
+using TrueSync;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
@@ -14,6 +15,12 @@ namespace Game
         public TSQuaternion rot;
 
         public FP speed = 100f;
+
+        public LogicPlayer(S2CPlayerData sPlData)
+        {
+            guid = sPlData.Guid;
+            name = sPlData.Name;
+        }
         public void UpdateInput(InputData inputData)
         {
             //移动

@@ -119,12 +119,6 @@ namespace Game
             PlayerPrefs.SetString("name",playerName);
             PlayerPrefs.SetInt("guid",guid);
             ClientManager.instance.SendTCPInfo(EMessage.EnterGame, new C2SLogin() { Name = playerName, GId = guid });
-            // ,
-            // (data) =>
-            // {
-            //     var logInfo = data.ParseMsgData(S2CLogin.Parser);
-            //     callBack(logInfo);
-            // });
         }
 
 
@@ -138,8 +132,9 @@ namespace Game
             var bytes = new Byte[sizeof(EMessage) + (data == null ? 0 : data.CalculateSize())];
             fixed (void* pbytes = bytes)
                 *(EMessage*)pbytes = mesgType;
-            var infoBytes = data.ToByteArray();
-            Buffer.BlockCopy(infoBytes, 0, bytes, sizeof(EMessage), infoBytes.Length);
+            var infoBytes = data?.ToByteArray();
+            if (infoBytes!=null)
+                Buffer.BlockCopy(infoBytes, 0, bytes, sizeof(EMessage), infoBytes.Length);
             tcp.Stream.Write(bytes, 0, bytes.Length);
         }
 

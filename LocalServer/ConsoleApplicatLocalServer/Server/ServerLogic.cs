@@ -36,19 +36,40 @@ namespace ConsoleApplicatLocalServer
 
     struct PlayerFrameInput
     {
+        public int guid;
         public int input;
         public long moveAngle;
 
-        public void Init()
+        public PlayerFrameInput Init(int gid)
         {
-            moveAngle = -1;
+            guid = gid;
+            return this;
+        }
+
+        public void Refresh(C2SFrameUpdate c2sDt)
+        {
+            input = c2sDt.Input;
+            moveAngle = c2sDt.Angle;
         }
     }
-    
+
+    struct PlayerFrame
+    {
+        public int frame;
+        public List<PlayerFrameInput> inputs;
+
+        public PlayerFrame Init(int frm)
+        {
+            inputs = new List<PlayerFrameInput>();
+            frame = frm;
+            return this;
+        }
+    }
+
     public class ServerLogic
     {
         //毫秒
-        public static int frameTime = 333;
+        public static int frameTime = 33;
         private static int playerNum = 1;
         private static int index = -1;
         private string ip = "192.168.50.22";
@@ -57,12 +78,13 @@ namespace ConsoleApplicatLocalServer
         private IPEndPoint udpIPPoint;
         private TcpListener tcpListener;
         private BinaryFormatter _serializer = new BinaryFormatter();
-        private List<PlayerFrameInput> _frameInputs = new List<PlayerFrameInput>();
+        private List<PlayerFrame> _frameInputs = new List<PlayerFrame>(10000);
+        
         private Dictionary<int, PlayerInfo> allPlayers = new Dictionary<int, PlayerInfo>();
-        private Dictionary<TcpClient,PlayerInfo> clientCollection = new Dictionary<TcpClient,PlayerInfo>();
+        private Dictionary<TcpClient, PlayerInfo> clientCollection = new Dictionary<TcpClient, PlayerInfo>();
         private List<TcpClient> tmpRemovedClient = new List<TcpClient>();
 
-        private int curFrame => _frameInputs.Count / playerNum - 1;
+        private int curFrame => _frameInputs.Count -1;
         private Socket _udpSocket;
 
         public void StartServer()
@@ -118,7 +140,12 @@ namespace ConsoleApplicatLocalServer
                 {
                     S2CFrameUpdate frmDt = new S2CFrameUpdate();
                     frmDt.CurServerFrame = curFrame;
-                    AddFrameData(frmDt, curFrame, curFrame);
+                    var curfrm = _frameInputs[_frameInputs.Count - 1];
+                    foreach (var input in curfrm.inputs)
+                    {
+                        frmDt.FrameDatas.Add(new S2CFrameData() { });
+                    }
+
                     byte[] sendBytes = frmDt.ToByteArray();
 
                     foreach (var plInfo in allPlayers.Values)
@@ -128,14 +155,15 @@ namespace ConsoleApplicatLocalServer
                             //Console.WriteLine($"发送当前帧 {curFrame} {DateTime.Now}");
                         }
                 }
-                
+
                 for (int i = 0; i < playerNum; i++)
                 {
-                    PlayerFrameInput input = new PlayerFrameInput();
-                    input.Init();
+                    PlayerFrame input = new PlayerFrame();
+                    input.Init(_frameInputs.Count);
                     _frameInputs.Add(input);
                 }
             }
+            
         }
 
         public void Collecting()
@@ -146,7 +174,7 @@ namespace ConsoleApplicatLocalServer
                 var tcpClient = tcpListener.AcceptTcpClient();
                 lock (clientCollection)
                 {
-                    clientCollection.Add(tcpClient,new PlayerInfo(tcpClient));
+                    clientCollection.Add(tcpClient, new PlayerInfo(tcpClient));
                 }
             }
         }
@@ -170,24 +198,23 @@ namespace ConsoleApplicatLocalServer
 
         public void RecieveTCPInfo()
         {
+            lock (clientCollection)
             {
-                lock (clientCollection)
+                foreach (var kv in clientCollection)
                 {
-                    foreach (var kv in clientCollection)
-                    {
-                        if (kv.Value.enabled)
-                            OnRecieveTCPInfo(kv.Value);
-                    }
-
-                    if (tmpRemovedClient.Count>0)
-                    {
-                        foreach (var client in tmpRemovedClient)
-                        {
-                            clientCollection.Remove(client);
-                        }
-                    }
-                    tmpRemovedClient.Clear();
+                    if (kv.Value.enabled)
+                        OnRecieveTCPInfo(kv.Value);
                 }
+
+                if (tmpRemovedClient.Count > 0)
+                {
+                    foreach (var client in tmpRemovedClient)
+                    {
+                        clientCollection.Remove(client);
+                    }
+                }
+
+                tmpRemovedClient.Clear();
             }
         }
 
@@ -206,13 +233,13 @@ namespace ConsoleApplicatLocalServer
             fixed (void* p = streamBuffer)
                 msgType = *(EMessage*)p;
 
-            if (msgType != EMessage.EnterGame && plInfo.guid < 0)
+            if (msgType != EMessage.EnterGame && plInfo.guid == 0)
                 return;
-            
+
             switch (msgType)
             {
                 case EMessage.EnterGame:
-                    OnPlayerLogin(plInfo, streamBuffer,sizeof(EMessage),readLen);
+                    OnPlayerLogin(plInfo, streamBuffer, sizeof(EMessage), readLen);
                     break;
                 case EMessage.Restart:
                     OnRestartGame(plInfo);
@@ -220,7 +247,7 @@ namespace ConsoleApplicatLocalServer
             }
         }
 
-        void OnPlayerLogin(PlayerInfo plInfo, byte[] streamBuffer,int offset,int len)
+        void OnPlayerLogin(PlayerInfo plInfo, byte[] streamBuffer, int offset, int len)
         {
             var c2SLog = C2SLogin.Parser.ParseFrom(streamBuffer, offset, len - offset);
             var guid = c2SLog.GId;
@@ -233,6 +260,7 @@ namespace ConsoleApplicatLocalServer
                 allPlayers[guid] = plInfo;
                 plInfo.name = c2SLog.Name;
             }
+
             OnRestartGame(plInfo);
         }
 
@@ -243,45 +271,65 @@ namespace ConsoleApplicatLocalServer
         }
 
         private int[] playerIds;
+
         void OnRestartGame(PlayerInfo plInfo)
         {
+            
+            lock (clientCollection)
+            {
+                S2CPlayerData[] pls = new S2CPlayerData[allPlayers.Count];
+                int[] playerIds = new int[allPlayers.Count];
+                int idx = 0;
+                foreach (var kv in allPlayers)
+                {
+                    pls[idx] = new S2CPlayerData() { Guid = kv.Key, Name = kv.Value.name };
+                    kv.Value.udpEndPoint = default;
+                    playerIds[idx] = kv.Key;
+                    ++idx;
+                }
+
+                foreach (var kv in allPlayers)
+                {
+                    var stGame = new S2CStartGame();
+                    stGame.Players.AddRange(pls);
+                    stGame.Pot = udpIPPoint.Port;
+                    SendTCPData(kv.Value.stream, EMessage.Restart, stGame);
+                }
+            }
             lock (_frameInputs)
             {
                 _frameInputs.Clear();
-                lock (clientCollection)
-                {
-                    S2CPlayerData[] pls = new S2CPlayerData[allPlayers.Count];
-                    int[] playerIds = new int[allPlayers.Count];
-                    int idx = 0;
-                    foreach (var kv in allPlayers)
-                    {
-                        pls[idx] = new S2CPlayerData() { Guid = kv.Key, Name = kv.Value.name };
-                        kv.Value.udpEndPoint = default;
-                        playerIds[idx] = kv.Key;
-                        ++idx;
-                    }
-                    foreach (var kv in allPlayers)
-                    {
-                        var stGame = new S2CStartGame();
-                        stGame.Players.AddRange(pls);
-                        stGame.Pot = udpIPPoint.Port;
-                        SendTCPData(kv.Value.stream, EMessage.Restart,  stGame);
-                    }
-                }
             }
         }
-        
+
         unsafe void UDPRecieveing()
         {
             _udpSocket.Bind(udpIPPoint);
             byte[] data = new byte[1024];
             while (true)
             {
-                if (curFrame <= 0)
-                    continue;
+                OnReceiveUDP(data);
+                Thread.Sleep(0);
+            }
+        }
 
-                EndPoint senderRemote = new IPEndPoint(IPAddress.Any, 0);
-                int readLeng = _udpSocket.ReceiveFrom(data, data.Length, SocketFlags.None, ref senderRemote);
+        unsafe void OnReceiveUDP(byte[] data)
+        {
+            EndPoint senderRemote = new IPEndPoint(IPAddress.Any, 0);
+            int readLeng;
+            try
+            {
+                readLeng = _udpSocket.ReceiveFrom(data, data.Length, SocketFlags.None, ref senderRemote);
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+
+            lock (_frameInputs)
+            {
+                if (curFrame <= 0)
+                    return;
 
                 fixed (void* p = data)
                 {
@@ -291,45 +339,67 @@ namespace ConsoleApplicatLocalServer
 
                     lock (allPlayers)
                     {
-                        var plInfo = allPlayers[guid];
-                        if (plInfo.udpEndPoint != senderRemote)
-                            plInfo.udpEndPoint = senderRemote;
-                    }
-                    
-                    lock (_frameInputs)
-                    {
-                        var upData = C2SFrameUpdate.Parser.ParseFrom(data, _msgOffset, readLeng - _msgOffset);
-
-                        //丢帧补帧
-                        int start = Math.Min(upData.Start, curFrame - 1);
-                        
-                        if (start >= 0)
+                        if (allPlayers.TryGetValue(guid, out var plInfo))
                         {
-                            int end = Math.Min(upData.Start + 500, upData.End);
-                            end = Math.Min(end, curFrame - 1);
-                            end = Math.Min(end, start);
-                            S2CFrameUpdate toC = new S2CFrameUpdate();
-                            toC.CurServerFrame = curFrame - 1;
+                            if (plInfo.udpEndPoint != senderRemote)
+                                plInfo.udpEndPoint = senderRemote;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
 
-                            if (end < curFrame)
-                                AddFrameData(toC, start, end);
-                        
-                            byte[] sendBytes = toC.ToByteArray();
-                            _udpSocket.SendTo(sendBytes, 0, sendBytes.Length, SocketFlags.None, senderRemote);
-                            Console.WriteLine($"补发帧 {start} - {end} {DateTime.Now}");
+                    var upData = C2SFrameUpdate.Parser.ParseFrom(data, _msgOffset, readLeng - _msgOffset);
+
+                    //丢帧补帧
+                    int start = Math.Min(upData.Start, curFrame - 1);
+
+                    if (start >= 0)
+                    {
+                        int end = Math.Min(upData.Start + 500, upData.End);
+                        end = Math.Min(end, curFrame - 1);
+                        end = Math.Min(end, start);
+                        S2CFrameUpdate toC = new S2CFrameUpdate();
+                        toC.CurServerFrame = curFrame - 1;
+
+                        if (end < curFrame)
+                            AddFrameData(toC, start, end);
+
+                        byte[] sendBytes = toC.ToByteArray();
+                        _udpSocket.SendTo(sendBytes, 0, sendBytes.Length, SocketFlags.None, senderRemote);
+                    }
+
+                    var idx = -1;
+                    PlayerFrame input;
+                    {
+                        input = _frameInputs[_frameInputs.Count - 1];
+
+                        var inputs = input.inputs;
+                        for (int i = 0; i < inputs.Count; i++)
+                        {
+                            if (inputs[i].guid == guid)
+                                idx = i;
                         }
 
-                        var idx = upData.Index;
-                        var input = _frameInputs[curFrame * playerNum + idx];
-                        input.moveAngle = upData.Angle;
-                        input.input = upData.Input;
-                        _frameInputs[curFrame * playerNum + idx] = input;
+                        PlayerFrameInput curInput;
+                        if (idx == -1)
+                        {
+                            curInput = new PlayerFrameInput();
+                            idx = inputs.Count;
+                            curInput.Init(guid);
+                            inputs.Add(curInput);
+                        }
+                        else
+                            curInput = inputs[idx];
+
+                        curInput.Refresh(upData);
                     }
                 }
             }
         }
 
-        void AddFrameData(S2CFrameUpdate toC,int start,int end)
+        void AddFrameData(S2CFrameUpdate toC, int start, int end)
         {
             start = Math.Max(0, start);
             end = Math.Min(curFrame, end);
@@ -338,12 +408,14 @@ namespace ConsoleApplicatLocalServer
             {
                 S2CFrameData frmDt = new S2CFrameData();
                 frmDt.FrameIndex = sendIdx;
+                var frm = _frameInputs[sendIdx];
 
-                for (int playerIdx = 0; playerIdx < playerNum; playerIdx++)
+                for (int i = 0; i < frm.inputs.Count; i++)
                 {
-                    PlayerFrameInput frmInput = _frameInputs[sendIdx + playerIdx];
-                    frmDt.Inputs.Add(frmInput.input);
-                    frmDt.InputAngles.Add(frmInput.moveAngle);
+                    var input = frm.inputs[i];
+                    frmDt.Gids.Add(input.guid);
+                    frmDt.Inputs.Add(input.input);
+                    frmDt.InputAngles.Add(input.moveAngle);
                 }
 
                 toC.FrameDatas.Add(frmDt);
