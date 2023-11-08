@@ -141,10 +141,9 @@ namespace ConsoleApplicatLocalServer
                     S2CFrameUpdate frmDt = new S2CFrameUpdate();
                     frmDt.CurServerFrame = curFrame;
                     var curfrm = _frameInputs[_frameInputs.Count - 1];
-                    foreach (var input in curfrm.inputs)
-                    {
-                        frmDt.FrameDatas.Add(new S2CFrameData() { });
-                    }
+                    var s2cData = new S2CFrameData();
+                    frmDt.FrameDatas.Add(s2cData);
+                    AddFrameData(frmDt, _frameInputs.Count - 1, _frameInputs.Count - 1);
 
                     byte[] sendBytes = frmDt.ToByteArray();
 
@@ -394,6 +393,7 @@ namespace ConsoleApplicatLocalServer
                             curInput = inputs[idx];
 
                         curInput.Refresh(upData);
+                        inputs[idx] = curInput;
                     }
                 }
             }
