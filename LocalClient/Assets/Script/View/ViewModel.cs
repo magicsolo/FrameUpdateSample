@@ -13,7 +13,7 @@ namespace Script
         private ViewPlayer sampPlayeer;
         private List<ViewPlayer> players = new List<ViewPlayer>();
 
-        public Transform playersNode;
+        Transform _playersNode;
 
         private void Start()
         {
@@ -21,7 +21,7 @@ namespace Script
             transform.rotation = default;
             
             GameObject plsNode = new GameObject("PlayersNode");
-            playersNode = plsNode.transform;
+            _playersNode = plsNode.transform;
             plsNode.transform.SetParent(transform,true);
             
             players.Clear();
@@ -39,14 +39,15 @@ namespace Script
                 {
                     var lgPl = logicPlayers[idx];
                     ViewPlayer vpl;
-                    if (players.Count<idx)
+                    if (players.Count>idx)
                     {
                         vpl = players[idx];
                     }
                     else
                     {
                         vpl = GameObject.Instantiate(sampPlayeer);
-                        vpl.transform.SetParent(playersNode);
+                        vpl.transform.SetParent(_playersNode);
+                        players.Add(vpl);
                     }
 
                     vpl.lgPlayer = lgPl;

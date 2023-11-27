@@ -14,7 +14,7 @@ namespace Game
         public TSVector pos;
         public TSQuaternion rot;
 
-        public FP speed = 100f;
+        public FP speed = 10f;
 
         public LogicPlayer(S2CPlayerData sPlData)
         {
@@ -31,6 +31,7 @@ namespace Game
                 moveDir *= speed * FrameManager.instance.frameTime;
                 pos += moveDir;
             }
+            Debug.Log($"ServerPos{pos}");
         }
     }
 }

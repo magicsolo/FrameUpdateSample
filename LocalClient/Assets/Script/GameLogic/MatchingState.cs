@@ -7,15 +7,16 @@ namespace Game
 {
     public class MatchingState:LogicState
     {
+        private S2CStartGame startGameInfo;
         public MatchingState( LogicFSM fsm) : base(ELogicType.Match, fsm)
         {
         }
 
         public override void Enter(FSMState<LogicState> lstState, object param = null)
         {
-            ClientManager.instance.RegistNoteListener(EMessage.Restart,Reset);
+            ClientManager.instance.RegistNoteListener(EMessage.Restart,OnReset);
             base.Enter(lstState, param);
-            Reset((param as TCPInfo?)?? default);
+            OnReset((param as TCPInfo?)?? default);
         }
 
         public override void OnGUIUpdate()
@@ -31,13 +32,18 @@ namespace Game
             ClientManager.instance.UnRegistNoteListener(EMessage.Restart);
         }
 
-        void Reset(TCPInfo svInfo )
+        void OnReset(TCPInfo tcpInfo)
         {
-            S2CStartGame s2c = svInfo.ParseMsgData(S2CStartGame.Parser);
-            ClientManager.instance.UDPConnect(s2c.Pot);
-            FrameManager.instance.ResetPlay(s2c);
+            startGameInfo = tcpInfo.ParseMsgData(S2CStartGame.Parser);
+            Reset();
+        }
+        void Reset( )
+        {
+            ClientManager.instance.UDPConnect(startGameInfo.Pot);
+            FrameManager.instance.ResetPlay(startGameInfo);
             ViewModel.instance.ResetPlayers(FrameManager.instance.players);
         }
+        
 
         public override void Update()
         {

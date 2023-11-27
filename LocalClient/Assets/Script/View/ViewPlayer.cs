@@ -12,6 +12,7 @@ namespace Script
         private void Update()
         {
             transform.position = Vector3.Lerp(transform.position, lgPlayer.pos.ToVector(),0.5f);
+            Debug.Log($"LogicPos:{lgPlayer.pos.ToVector()}  ViewPos:{transform.position}");
             transform.rotation = Quaternion.Lerp(transform.rotation,lgPlayer.rot.ToQuaternion(),0.5f);
         }
     }
