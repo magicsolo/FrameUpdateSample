@@ -30,13 +30,14 @@ namespace C2SProtoInterface {
             "GAIgASgJIk4KDFMyQ1N0YXJ0R2FtZRILCgNwb3QYASABKAUSMQoHcGxheWVy",
             "cxgCIAMoCzIgLkMyU1Byb3RvSW50ZXJmYWNlLlMyQ1BsYXllckRhdGEiWQoO",
             "QzJTRnJhbWVVcGRhdGUSDQoFaW5kZXgYASABKAUSDQoFc3RhcnQYAiABKAUS",
-            "CwoDZW5kGAMgASgFEg0KBWFuZ2xlGAQgASgDEg0KBWlucHV0GAUgASgFIlUK",
-            "DFMyQ0ZyYW1lRGF0YRISCgpmcmFtZUluZGV4GAEgASgFEgwKBGdpZHMYAiAD",
-            "KAUSDgoGaW5wdXRzGAMgAygFEhMKC2lucHV0QW5nbGVzGAQgAygDIl0KDlMy",
-            "Q0ZyYW1lVXBkYXRlEhYKDmN1clNlcnZlckZyYW1lGAEgASgFEjMKCmZyYW1l",
-            "RGF0YXMYAiADKAsyHy5DMlNQcm90b0ludGVyZmFjZS5TMkNGcmFtZURhdGEq",
-            "MAoIRU1lc3NhZ2USCAoETm9uZRAAEg0KCUVudGVyR2FtZRABEgsKB1Jlc3Rh",
-            "cnQQAmIGcHJvdG8z"));
+            "CwoDZW5kGAMgASgFEg0KBWFuZ2xlGAQgASgDEg0KBWlucHV0GAUgASgFIhAK",
+            "DkMyU1ByaW50RnJhbWVzIhAKDlMyQ1ByaW50RnJhbWVzIlUKDFMyQ0ZyYW1l",
+            "RGF0YRISCgpmcmFtZUluZGV4GAEgASgFEgwKBGdpZHMYAiADKAUSDgoGaW5w",
+            "dXRzGAMgAygFEhMKC2lucHV0QW5nbGVzGAQgAygDIl0KDlMyQ0ZyYW1lVXBk",
+            "YXRlEhYKDmN1clNlcnZlckZyYW1lGAEgASgFEjMKCmZyYW1lRGF0YXMYAiAD",
+            "KAsyHy5DMlNQcm90b0ludGVyZmFjZS5TMkNGcmFtZURhdGEqQQoIRU1lc3Nh",
+            "Z2USCAoETm9uZRAAEg0KCUVudGVyR2FtZRABEgsKB1Jlc3RhcnQQAhIPCgtQ",
+            "cmludEZyYW1lcxADYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::C2SProtoInterface.EMessage), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -45,6 +46,8 @@ namespace C2SProtoInterface {
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CPlayerData), global::C2SProtoInterface.S2CPlayerData.Parser, new[]{ "Guid", "Name" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CStartGame), global::C2SProtoInterface.S2CStartGame.Parser, new[]{ "Pot", "Players" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SFrameUpdate), global::C2SProtoInterface.C2SFrameUpdate.Parser, new[]{ "Index", "Start", "End", "Angle", "Input" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SPrintFrames), global::C2SProtoInterface.C2SPrintFrames.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CPrintFrames), global::C2SProtoInterface.S2CPrintFrames.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CFrameData), global::C2SProtoInterface.S2CFrameData.Parser, new[]{ "FrameIndex", "Gids", "Inputs", "InputAngles" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CFrameUpdate), global::C2SProtoInterface.S2CFrameUpdate.Parser, new[]{ "CurServerFrame", "FrameDatas" }, null, null, null, null)
           }));
@@ -57,6 +60,7 @@ namespace C2SProtoInterface {
     [pbr::OriginalName("None")] None = 0,
     [pbr::OriginalName("EnterGame")] EnterGame = 1,
     [pbr::OriginalName("Restart")] Restart = 2,
+    [pbr::OriginalName("PrintFrames")] PrintFrames = 3,
   }
 
   #endregion
@@ -867,6 +871,208 @@ namespace C2SProtoInterface {
 
   }
 
+  public sealed partial class C2SPrintFrames : pb::IMessage<C2SPrintFrames> {
+    private static readonly pb::MessageParser<C2SPrintFrames> _parser = new pb::MessageParser<C2SPrintFrames>(() => new C2SPrintFrames());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<C2SPrintFrames> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public C2SPrintFrames() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public C2SPrintFrames(C2SPrintFrames other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public C2SPrintFrames Clone() {
+      return new C2SPrintFrames(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as C2SPrintFrames);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(C2SPrintFrames other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(C2SPrintFrames other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class S2CPrintFrames : pb::IMessage<S2CPrintFrames> {
+    private static readonly pb::MessageParser<S2CPrintFrames> _parser = new pb::MessageParser<S2CPrintFrames>(() => new S2CPrintFrames());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<S2CPrintFrames> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[6]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S2CPrintFrames() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S2CPrintFrames(S2CPrintFrames other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S2CPrintFrames Clone() {
+      return new S2CPrintFrames(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as S2CPrintFrames);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(S2CPrintFrames other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(S2CPrintFrames other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    }
+
+  }
+
   public sealed partial class S2CFrameData : pb::IMessage<S2CFrameData> {
     private static readonly pb::MessageParser<S2CFrameData> _parser = new pb::MessageParser<S2CFrameData>(() => new S2CFrameData());
     private pb::UnknownFieldSet _unknownFields;
@@ -875,7 +1081,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[5]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1067,7 +1273,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[6]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

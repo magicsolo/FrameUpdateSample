@@ -1,25 +1,31 @@
 ﻿using C2SProtoInterface;
 using TrueSync;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 namespace Game
 {
-    public class LogicPlayer
+    public struct PlayerInfo
     {
         public int index;
         public int guid;
         public string name;
+        public int slot;
 
         public TSVector pos;
         public TSQuaternion rot;
+    }
+    public class LogicPlayer
+    {
+        public PlayerInfo playerData = new PlayerInfo();
+
 
         public FP speed = 10f;
 
-        public LogicPlayer(S2CPlayerData sPlData)
+        public LogicPlayer(S2CPlayerData sPlData,int slot)
         {
-            guid = sPlData.Guid;
-            name = sPlData.Name;
+            playerData.guid = sPlData.Guid;
+            playerData.name = sPlData.Name;
+            playerData.slot = slot;
         }
         public void UpdateInput(InputData inputData)
         {
@@ -29,9 +35,8 @@ namespace Game
                 var moveDir = TSQuaternion.Euler(0, inputData.inputMoveAngle, 0) * TSVector.forward;
 
                 moveDir *= speed * FrameManager.instance.frameTime;
-                pos += moveDir;
+                playerData.pos += moveDir;
             }
-            Debug.Log($"ServerPos{pos}");
         }
     }
 }

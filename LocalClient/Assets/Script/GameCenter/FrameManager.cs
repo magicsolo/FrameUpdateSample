@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using C2SProtoInterface;
 using CenterBase;
 using TrueSync;
@@ -47,163 +48,90 @@ namespace Game
 
         private originalData lorData = new originalData() { orPos = TSVector.forward, orRotation = default };
         private originalData rOrData = new originalData() { orPos = TSVector.back, orRotation = default };
-        private Dictionary<int, S2CFrameData> frameDataInputs = new Dictionary<int, S2CFrameData>();
-        public LogicPlayer[] players;
-        public Dictionary<int, LogicPlayer> dicPlayers = new Dictionary<int, LogicPlayer>();
+        public Dictionary<int, S2CFrameData> frameDataInputs = new Dictionary<int, S2CFrameData>();
         private float timeCount;
         public int curServerFrame = -1;
         public int curClientFrame = -1;
-        public int playerNum;
-
-        /// <summary>
-        /// 重新开始前设置一下
-        /// </summary>
-        public void ResetPlay(S2CStartGame startData)
-        {
-            playerNum = startData.Players.Count;
-            gameType = GameType.Play;
-            ResetCharacters(startData);
-            frameDataInputs.Clear();
-            curClientFrame = -1;
-        }
-
-        public void UpdateInputData()
-        {
-            switch (gameType)
-            {
-                case GameType.Play:
-                    RequireFrameDatas();
-                    PlayFrames();
-                    break;
-                    // case GameType.TraceFrame:
-                    //     frameDataInputs.Insert(frameDataInputs.Count, proto);
-                    //     break;
-                    // case GameType.PlayBack:
-                    //     UpdatePlayers();
-                    //     curClientFrame = proto.frameIndex;
-                    break;
-            }
-        }
-
-        private void Update()
-        {
-            switch (gameType)
-            {
-                case GameType.PlayBack:
-                    UpdatePlayBack();
-                    break;
-            }
-        }
-
-
-        private void UpdatePlayBack()
-        {
-            timeCount += Time.deltaTime;
-            int curIndex = (int)Mathf.Floor(timeCount / (float)frameTime);
-            while (curIndex < frameDataInputs.Count && curClientFrame < curIndex)
-            {
-                curClientFrame = curIndex;
-
-                // if (curClientFrame >= 0)
-                //     UpdateInputData( frameDataInputs[curIndex] );
-            }
-        }
-
-        public void PlayBack()
-        {
-            // frameDataInputs.Clear();
-            // frameDataInputs.AddRange(ClientManager.instance.inputs.ToArray());
-            // gameType = GameType.PlayBack;
-            // ResetCharacters();
-            //
-            // timeCount = 0;
-            // curClientFrame = 0;
-        }
-
-        void ResetCharacters(S2CStartGame startData)
-        {
-            players = new LogicPlayer[playerNum];
-            dicPlayers.Clear();
-            for (int i = 0; i < players.Length; i++)
-            {
-                var lgPl = new LogicPlayer(startData.Players[i]);
-                players[i] = lgPl;
-                lgPl.pos = TSVector.zero;
-                dicPlayers[lgPl.guid] = lgPl;
-            }
-        }
-
-        public void Pause()
-        {
-            gameType = GameType.Pause;
-        }
-
-        public void Play()
-        {
-            // gameType = GameType.Play;
-            // curClientFrame = -1;
-            // ClientManager.instance.Play();
-        }
 
 
         private int tracingFrameIndex;
+        
 
-        public void Continue()
-        {
-            gameType = GameType.Play;
-        }
-
+        //TODO 晚点拆分挪到LogicMatch里
         public void RequireFrameDatas()
         {
-            S2CFrameUpdate frmServerData = ClientManager.instance.UDPReceive();
-            if (frmServerData != null)
+            //lock (frameDataInputs)
             {
-                curServerFrame = Math.Max(curServerFrame, frmServerData.CurServerFrame);
-                foreach (var frmDt in frmServerData.FrameDatas)
+                S2CFrameUpdate frmServerData = ClientManager.instance.UDPReceive();
+                if (frmServerData != null)
                 {
-                    frameDataInputs[frmDt.FrameIndex] = frmDt;
-                }
-            }
-
-            C2SFrameUpdate frmUpdate = new C2SFrameUpdate();
-
-            var requireStart = Math.Min(curClientFrame + 1, curServerFrame);
-            var requireEnd = curServerFrame;
-            if (!frameDataInputs.ContainsKey(requireStart))
-            {
-                for (; requireEnd <= curServerFrame; requireEnd++)
-                {
-                    if (frameDataInputs.ContainsKey(requireEnd))
+                    curServerFrame = Math.Max(curServerFrame, frmServerData.CurServerFrame);
+                    foreach (var frmDt in frmServerData.FrameDatas)
                     {
-                        requireEnd -= 1;
-                        break;
+                        frameDataInputs[frmDt.FrameIndex] = frmDt;
                     }
                 }
+
+                C2SFrameUpdate frmUpdate = new C2SFrameUpdate();
+
+                var requireStart = Math.Min(curClientFrame + 1, curServerFrame);
+                var requireEnd = curServerFrame;
+                if (!frameDataInputs.ContainsKey(requireStart))
+                {
+                    for (; requireEnd <= curServerFrame; requireEnd++)
+                    {
+                        if (frameDataInputs.ContainsKey(requireEnd))
+                        {
+                            requireEnd -= 1;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    requireStart = -1;
+                    requireEnd = -1;
+                }
+
+
+                frmUpdate.Start = requireStart;
+                frmUpdate.End = requireEnd;
+
+                frmUpdate.Angle = InputManager.instance.inputData.inputMoveAngle._serializedValue;
+                InputManager.instance.inputData.Clear();
+                ClientManager.instance.UDPSend(frmUpdate);
             }
-            else
-            {
-                requireStart = -1;
-                requireEnd = -1;
-            }
-
-
-            frmUpdate.Start = requireStart;
-            frmUpdate.End = requireEnd;
-
-            frmUpdate.Angle = InputManager.instance.inputData.inputMoveAngle._serializedValue;
-            InputManager.instance.inputData.Clear();
-            ClientManager.instance.UDPSend(frmUpdate);
+            
+            
         }
 
-        public void PlayFrames()
+        
+        
+        public void OnPrintFrames()
         {
-            if (frameDataInputs.TryGetValue(curClientFrame + 1, out var curFrame))
+            //lock (frameDataInputs)
             {
-                curClientFrame++;
-                for (int i = 0; i < curFrame.Gids.Count; i++)
+                
+                var path = Directory.GetCurrentDirectory()+"\\FramesPrint.txt";
+                if (File.Exists(path))
                 {
-                    var player = dicPlayers[curFrame.Gids[i]];
-                    player.UpdateInput(curFrame.GetInputData(i));
+                    File.Delete(path);
+                }
+                using (StreamWriter c = new StreamWriter(path, true))
+                {
+
+                    for (int i = 0; i < frameDataInputs.Count; i++)
+                    {
+                        string inputs = "";
+
+                        var frame = frameDataInputs[i];
+
+                        for (int j = 0; j < frame.Gids.Count; j++)
+                        {
+                            inputs += $" id:{frame.Gids[j]} yaw{frame.InputAngles[j]} ";
+                        }
+                        c.WriteLine($"[{frame.FrameIndex}] {inputs}");
+                    }
                 }
             }
         }

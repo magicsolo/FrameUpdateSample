@@ -16,7 +16,7 @@ namespace Game
         Pause, //掉线
     }
 
-    public struct PlayerData
+    public struct PlayerServData
     {
         //-1:未连接 0:连接中 大于0:已登录
         public int index;
@@ -31,7 +31,7 @@ namespace Game
         }
 
         private LogicState state = LogicState.Login;
-        public PlayerData playerData = new PlayerData() { index = -1 };
+        public PlayerServData playerData = new PlayerServData() { index = -1 };
         
 
         private LogicFSM fsm;

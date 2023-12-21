@@ -83,18 +83,5 @@ namespace Game
         {
             logicFsm.ChangeState(ELogicType.Match,servDat);
         }
-
-        private void StartGame()
-        {
-            //ClientManager.instance.SendTCPInfo(EMessage.StartGame,new C2SStartGame(),OnStartGame);
-        }
-        
-        void OnStartGame(TCPInfo data)
-        {
-            var startGameInfo = data.ParseMsgData(S2CStartGame.Parser);
-            FrameManager.instance.ResetPlay(startGameInfo);
-        }
-        
-        
     }
 }

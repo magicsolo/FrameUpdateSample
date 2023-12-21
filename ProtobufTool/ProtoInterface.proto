@@ -5,6 +5,7 @@ enum EMessage {
     None = 0;
     EnterGame = 1;
     Restart = 2;
+    PrintFrames = 3;
 }
 
 message C2SLogin{
@@ -30,6 +31,12 @@ message C2SFrameUpdate{
     int32 end = 3;
     int64 angle = 4;
     int32 input = 5;
+}
+
+message C2SPrintFrames{
+}
+
+message S2CPrintFrames{
 }
 
 message S2CFrameData{

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using C2SProtoInterface;
 using CenterBase;
 using Game;
+using Google.Protobuf.Reflection;
 using UnityEngine;
 namespace Script
 {
@@ -11,7 +13,10 @@ namespace Script
         
         [SerializeField]
         private ViewPlayer sampPlayeer;
+
+        private LogicMatch match;
         private List<ViewPlayer> players = new List<ViewPlayer>();
+        public PlayerInfo[] PlayerDatas;
 
         Transform _playersNode;
 
@@ -26,41 +31,87 @@ namespace Script
             
             players.Clear();
             ViewPlayer[] pls = GetComponentsInChildren<ViewPlayer>(true);
+
+            foreach (var vp in pls)
+            {
+                vp.gameObject.SetActive(false);
+            }
             players.AddRange(pls);
-            ResetPlayers();
+            gameObject.SetActive(false);
+            //ResetPlayers();
         }
 
-        public void ResetPlayers(LogicPlayer[] logicPlayers = null)
+        public void Init(S2CStartGame svInfo,LogicMatch match)
         {
-            int idx = 0;
-            if (logicPlayers!=null)
+            this.match = match;
+            gameObject.SetActive(true);
+            PlayerDatas = new PlayerInfo[this.match.viewPlayerInfo.Length];
+            foreach (var pl in players)
             {
-                for (; idx < logicPlayers.Length; idx++)
-                {
-                    var lgPl = logicPlayers[idx];
-                    ViewPlayer vpl;
-                    if (players.Count>idx)
-                    {
-                        vpl = players[idx];
-                    }
-                    else
-                    {
-                        vpl = GameObject.Instantiate(sampPlayeer);
-                        vpl.transform.SetParent(_playersNode);
-                        players.Add(vpl);
-                    }
-
-                    vpl.lgPlayer = lgPl;
-                    vpl.gameObject.SetActive(true);
-                    ++idx;
-                }
+                pl.gameObject.SetActive(false);
             }
             
-
-            for (; idx < players.Count; idx++)
+            for (int slot = 0; slot < svInfo.Players.Count; slot++)
             {
-                players[idx].gameObject.SetActive(false);
+                ViewPlayer vpl;
+
+                if (players.Count > slot)
+                {
+                    vpl = players[slot];
+                }
+                else
+                {
+                    vpl = GameObject.Instantiate(sampPlayeer);
+                    vpl.transform.SetParent(_playersNode);
+                    vpl.Init(slot);
+                    players.Add(vpl);
+                }
+                vpl.gameObject.SetActive(true);
             }
         }
+
+        private void Update()
+        {
+            lock (match.viewPlayerInfo)
+            {
+                for (int slot = 0; slot < match.viewPlayerInfo.Length; slot++)
+                {
+                    var viewInfo = match.viewPlayerInfo[slot];
+                    PlayerDatas[slot] = viewInfo;
+                }
+            }
+        }
+
+        // public void ResetPlayers(LogicPlayer[] logicPlayers = null)
+        // {
+        //     int idx = 0;
+        //     if (logicPlayers != null)
+        //     {
+        //         for (; idx < logicPlayers.Length; idx++)
+        //         {
+        //             var lgPl = logicPlayers[idx];
+        //             ViewPlayer vpl;
+        //             if (players.Count>idx)
+        //             {
+        //                 vpl = players[idx];
+        //             }
+        //             else
+        //             {
+        //                 vpl = GameObject.Instantiate(sampPlayeer);
+        //                 vpl.transform.SetParent(_playersNode);
+        //                 players.Add(vpl);
+        //             }
+        //
+        //             vpl.lgPlayer = lgPl;
+        //             vpl.gameObject.SetActive(true);
+        //         }
+        //     }
+        //     
+        //
+        //     for (; idx < players.Count; idx++)
+        //     {
+        //         players[idx].gameObject.SetActive(false);
+        //     }
+        // }
     }
 }

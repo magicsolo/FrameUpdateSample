@@ -8,6 +8,8 @@ namespace Game
     public class MatchingState:LogicState
     {
         private S2CStartGame startGameInfo;
+        private LogicDrive driver = new LogicDrive();
+
         public MatchingState( LogicFSM fsm) : base(ELogicType.Match, fsm)
         {
         }
@@ -24,6 +26,15 @@ namespace Game
             base.OnGUIUpdate();
             if (GUILayout.Button("重新开始",btnStyle))
                 ClientManager.instance.SendTCPInfo(EMessage.Restart);
+            if (GUILayout.Button("打印帧",btnStyle))
+                ClientManager.instance.SendTCPInfo(EMessage.PrintFrames, new C2SPrintFrames(), OnPrintFrames);
+            
+            GUILayout.Label($"Frame cli:{FrameManager.instance.curClientFrame} serv:{FrameManager.instance.curServerFrame}",btnStyle);
+        }
+
+        private void OnPrintFrames(TCPInfo obj)
+        {
+            FrameManager.instance.OnPrintFrames();
         }
 
         public override void Exit()
@@ -39,17 +50,9 @@ namespace Game
         }
         void Reset( )
         {
-            ClientManager.instance.UDPConnect(startGameInfo.Pot);
-            FrameManager.instance.ResetPlay(startGameInfo);
-            ViewModel.instance.ResetPlayers(FrameManager.instance.players);
-        }
-        
-
-        public override void Update()
-        {
-            base.Update();
-            FrameManager.instance.RequireFrameDatas();
-            FrameManager.instance.PlayFrames();
+            driver.Start(startGameInfo);
+            ViewModel.instance.Init(startGameInfo,driver.match);
+            //ViewModel.instance.ResetPlayers(FrameManager.instance.players);
         }
     }
 }
