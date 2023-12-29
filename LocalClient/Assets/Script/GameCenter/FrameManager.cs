@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using C2SProtoInterface;
 using CenterBase;
 using TrueSync;
@@ -71,41 +72,41 @@ namespace Game
                         frameDataInputs[frmDt.FrameIndex] = frmDt;
                     }
                 }
-
-                C2SFrameUpdate frmUpdate = new C2SFrameUpdate();
-
-                var requireStart = Math.Min(curClientFrame + 1, curServerFrame);
-                var requireEnd = curServerFrame;
-                if (!frameDataInputs.ContainsKey(requireStart))
-                {
-                    for (; requireEnd <= curServerFrame; requireEnd++)
-                    {
-                        if (frameDataInputs.ContainsKey(requireEnd))
-                        {
-                            requireEnd -= 1;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    requireStart = -1;
-                    requireEnd = -1;
-                }
-
-
-                frmUpdate.Start = requireStart;
-                frmUpdate.End = requireEnd;
-
-                frmUpdate.Angle = InputManager.instance.inputData.inputMoveAngle._serializedValue;
-                InputManager.instance.inputData.Clear();
-                ClientManager.instance.UDPSend(frmUpdate);
             }
-            
-            
         }
 
-        
+        public void SendFrameData()
+        {
+            C2SFrameUpdate frmUpdate = new C2SFrameUpdate();
+
+            var requireStart = Math.Min(curClientFrame + 1, curServerFrame);
+            var requireEnd = curServerFrame;
+            if (!frameDataInputs.ContainsKey(requireStart))
+            {
+                for (; requireEnd <= curServerFrame; requireEnd++)
+                {
+                    if (frameDataInputs.ContainsKey(requireEnd))
+                    {
+                        requireEnd -= 1;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                requireStart = -1;
+                requireEnd = -1;
+            }
+
+
+            frmUpdate.Start = requireStart;
+            frmUpdate.End = requireEnd;
+
+            frmUpdate.Angle = InputManager.instance.inputData.inputMoveAngle._serializedValue;
+            InputManager.instance.inputData.Clear();
+            Debug.LogError($"发送帧数据 {frmUpdate}");
+            ClientManager.instance.UDPSend(frmUpdate);
+        }
         
         public void OnPrintFrames()
         {

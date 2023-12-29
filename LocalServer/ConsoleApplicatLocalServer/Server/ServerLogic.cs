@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -86,6 +87,7 @@ namespace ConsoleApplicatLocalServer
 
         private int curFrame => _frameInputs.Count -1;
         private Socket _udpSocket;
+        private bool matchStarted;
 
         public void StartServer()
         {
@@ -136,8 +138,18 @@ namespace ConsoleApplicatLocalServer
         {
             lock (_frameInputs)
             {
-                if (curFrame > 0)
+                ///等待玩家就位
+                if (!matchStarted)
                 {
+                    foreach (var plInfo in allPlayers.Values)
+                        if (plInfo.udpEndPoint == null)
+                            return;
+                    matchStarted = true;
+                }
+
+                if (matchStarted && curFrame >= 0)
+                {
+                    
                     var frmDt = new S2CFrameUpdate();//ServerFrameManager.GetSendFrameData(curFrame,_frameInputs[_frameInputs.Count - 1]);
                     frmDt.CurServerFrame = curFrame;
                     AddFrameData(frmDt, _frameInputs.Count - 1, _frameInputs.Count - 1);
@@ -148,16 +160,13 @@ namespace ConsoleApplicatLocalServer
                         if (plInfo.udpEndPoint != null)
                         {
                             _udpSocket.SendTo(sendBytes, 0, sendBytes.Length, SocketFlags.None, plInfo.udpEndPoint);
-                            //Console.WriteLine($"发送当前帧 {curFrame} {DateTime.Now}");
+                            Console.WriteLine($"发送当前帧 {curFrame} {DateTime.Now}");
                         }
                 }
 
-                for (int i = 0; i < playerNum; i++)
-                {
-                    PlayerFrame input = new PlayerFrame();
-                    input.Init(_frameInputs.Count);
-                    _frameInputs.Add(input);
-                }
+                PlayerFrame input = new PlayerFrame();
+                input.Init(_frameInputs.Count);
+                _frameInputs.Add(input);
             }
             
         }
@@ -294,6 +303,8 @@ namespace ConsoleApplicatLocalServer
                     stGame.Pot = udpIPPoint.Port;
                     SendTCPData(kv.Value.stream, EMessage.Restart, stGame);
                 }
+
+                matchStarted = false;
             }
             lock (_frameInputs)
             {
@@ -357,8 +368,7 @@ namespace ConsoleApplicatLocalServer
 
             lock (_frameInputs)
             {
-                if (curFrame <= 0)
-                    return;
+                
 
                 fixed (void* p = data)
                 {
@@ -379,6 +389,9 @@ namespace ConsoleApplicatLocalServer
                         }
                     }
 
+                    if (true || curFrame <= 0)
+                        return;
+                    
                     var upData = C2SFrameUpdate.Parser.ParseFrom(data, _msgOffset, readLeng - _msgOffset);
 
                     //丢帧补帧

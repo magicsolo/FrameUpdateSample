@@ -43,7 +43,7 @@ namespace Game
             {
                 FrameManager.instance.RequireFrameDatas();
                 match.Update();
-                
+                FrameManager.instance.SendFrameData();
                 Thread.Sleep(spaceTime);
             }
         }
