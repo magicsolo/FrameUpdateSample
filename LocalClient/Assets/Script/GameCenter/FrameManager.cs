@@ -104,7 +104,7 @@ namespace Game
 
             frmUpdate.Angle = InputManager.instance.inputData.inputMoveAngle._serializedValue;
             InputManager.instance.inputData.Clear();
-            Debug.LogError($"发送帧数据 {frmUpdate}");
+            Debug.Log($"发送帧数据 {frmUpdate}");
             ClientManager.instance.UDPSend(frmUpdate);
         }
         

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using C2SProtoInterface;
 using TrueSync;
+using UnityEngine;
 
 namespace Game
 {
@@ -39,19 +40,26 @@ namespace Game
             var servFrame = FrameManager.instance.curServerFrame;
             while (clientFrame < servFrame && FrameManager.instance.frameDataInputs.TryGetValue(clientFrame + 1, out var curFrmData))
             {
+                if (clientFrame +1 != curFrmData.FrameIndex)
+                {
+                    Debug.LogError($"帧数据Idx与实际数据Idx不一致 第【{clientFrame + 1}】 数据上帧标记【{curFrmData.FrameIndex}】");
+                    break;
+                }
+                ++clientFrame;
                 for (int i = 0; i < curFrmData.Gids.Count; i++)
                 {
                     var gid = curFrmData.Gids[i];
                     var input = curFrmData.Inputs[i];
                     var angle = curFrmData.InputAngles[i];
-
+            
                     var player = dicPlayers[gid];
                     var inputData = new InputData() { input = (EInputEnum)input };
                     inputData.inputMoveAngle = angle;
                     player.UpdateInput(inputData);
                 }
-                FrameManager.instance.curClientFrame = curFrmData.FrameIndex;
             }
+
+            FrameManager.instance.curClientFrame = clientFrame;
 
             // lock (viewPlayerInfo)
             // {

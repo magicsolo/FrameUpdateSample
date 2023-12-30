@@ -89,10 +89,10 @@ namespace CenterBase
         {
             if (udpSocket.Available > 0)
             {
-                Debug.LogError($"Available {udpSocket.Available} {receiveDatas.Length}");
+                Debug.Log($"接收帧数据 Available {udpSocket.Available} {receiveDatas.Length}");
                 int len = udpSocket.Receive(receiveDatas, receiveDatas.Length, SocketFlags.None);
                 var s2CData = S2CFrameUpdate.Parser.ParseFrom(receiveDatas, 0, len);
-                Debug.LogError($"接收帧数据 {s2CData}");
+                Debug.Log($"接收帧数据 {s2CData}");
                 return s2CData;
 
             }

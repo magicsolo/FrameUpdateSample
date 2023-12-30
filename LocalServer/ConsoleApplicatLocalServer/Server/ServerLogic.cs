@@ -389,7 +389,7 @@ namespace ConsoleApplicatLocalServer
                         }
                     }
 
-                    if (true || curFrame <= 0)
+                    if ( curFrame <= 0)
                         return;
                     
                     var upData = C2SFrameUpdate.Parser.ParseFrom(data, _msgOffset, readLeng - _msgOffset);
