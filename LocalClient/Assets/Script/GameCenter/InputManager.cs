@@ -44,6 +44,10 @@ namespace Game
                     angle += 360;
                 inputData.inputMoveAngle = FP.FromFloat(angle);
             }
+            else
+            {
+                inputData.inputMoveAngle = -1;
+            }
         }
     }
 }

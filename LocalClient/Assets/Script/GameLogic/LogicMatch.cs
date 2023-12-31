@@ -53,22 +53,22 @@ namespace Game
                     var angle = curFrmData.InputAngles[i];
             
                     var player = dicPlayers[gid];
-                    var inputData = new InputData() { input = (EInputEnum)input };
-                    inputData.inputMoveAngle = angle;
+                    var inputData = new InputData() { input = (EInputEnum)input};
+                    inputData.inputMoveAngle._serializedValue = angle;
                     player.UpdateInput(inputData);
                 }
             }
 
             FrameManager.instance.curClientFrame = clientFrame;
 
-            // lock (viewPlayerInfo)
-            // {
-            //     for (int slot = 0; slot < allPlayers.Length; slot++)
-            //     {
-            //         var pl = allPlayers[slot];
-            //         viewPlayerInfo[slot] = pl.playerData;
-            //     }
-            // }
+            lock (viewPlayerInfo)
+            {
+                for (int slot = 0; slot < allPlayers.Length; slot++)
+                {
+                    var pl = allPlayers[slot];
+                    viewPlayerInfo[slot] = pl.playerData;
+                }
+            }
         }
     }
 }
