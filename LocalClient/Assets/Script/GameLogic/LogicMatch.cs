@@ -1,17 +1,19 @@
 ﻿using System.Collections.Generic;
 using C2SProtoInterface;
+using CenterBase;
 using TrueSync;
 using UnityEngine;
 
 namespace Game
 {
-    public class LogicMatch
+    public class LogicMatch:Single<LogicMatch>
     {
         private Dictionary<int, LogicPlayer> dicAllPlayers = new Dictionary<int, LogicPlayer>();
         private LogicPlayer[] allPlayers;
         public PlayerInfo[] viewPlayerInfo;
         private Dictionary<int, LogicPlayer> dicPlayers = new Dictionary<int, LogicPlayer>();
 
+        
         
         public void Init(S2CStartGame servDt)
         {
@@ -69,6 +71,12 @@ namespace Game
                     viewPlayerInfo[slot] = pl.playerData;
                 }
             }
+        }
+        
+        public LogicPlayer GetPlayer(int guid)
+        {
+            dicAllPlayers.TryGetValue(guid, out var findPlayer);
+            return findPlayer;
         }
     }
 }

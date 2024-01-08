@@ -13,12 +13,13 @@ namespace Game
 
         public TSVector pos;
         public TSQuaternion rot;
+        public InputData InputData;
     }
     public class LogicPlayer
     {
         public PlayerInfo playerData = new PlayerInfo();
-
-
+        private PlayerFSM fsm;
+        public EPlayerState curStateType => (EPlayerState)fsm.curState.stateType;
         public FP speed = 10f;
 
         public LogicPlayer(S2CPlayerData sPlData,int slot)
@@ -26,17 +27,13 @@ namespace Game
             playerData.guid = sPlData.Guid;
             playerData.name = sPlData.Name;
             playerData.slot = slot;
+            fsm = new PlayerFSM(this);
         }
         public void UpdateInput(InputData inputData)
         {
-            //移动
-            if (inputData.inputMoveAngle >= 0)
-            {
-                var moveDir = TSQuaternion.Euler(0, inputData.inputMoveAngle, 0) * TSVector.forward;
-
-                moveDir *= speed * FrameManager.instance.frameTime;
-                playerData.pos += moveDir;
-            }
+            playerData.InputData = inputData;
+            fsm.curState.Update();
+            
         }
     }
 }

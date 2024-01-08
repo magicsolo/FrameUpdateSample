@@ -7,7 +7,7 @@ namespace Script
 {
     public class ViewPlayer:MonoBehaviour
     {
-        private int slot;
+        public int slot;
         public void Init(int slot)
         {
             this.slot = slot;

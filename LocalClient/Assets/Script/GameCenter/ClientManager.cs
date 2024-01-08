@@ -48,7 +48,7 @@ namespace Game
         private Dictionary<EMessage, Action<TCPInfo>> _callBacks = new Dictionary<EMessage, Action<TCPInfo>>();
         private FP frameTime => FrameManager.instance.frameTime;
 
-        public string ip = "192.168.50.22";
+        public string ip = "192.168.50.23";
         public string pot = "8080";
         private int guid;
         public string playerName;

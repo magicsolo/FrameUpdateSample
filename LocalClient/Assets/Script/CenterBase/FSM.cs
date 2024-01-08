@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace CenterBase
 {
@@ -17,7 +18,7 @@ namespace CenterBase
 
         protected void ChgST(int stType,object param = null)
         {
-            if (states.TryGetValue(stType,out  var st) && (curState == null || curState.CanEnterState(st)) )
+            if (states.TryGetValue(stType,out  var st) && (curState == null || curState.CanEnterState(st)) && st.CanEnter() )
             {
                 if (curState!=null)
                     curState.Exit();
@@ -26,6 +27,13 @@ namespace CenterBase
                 st.Enter(curState,param);
 
             }
+        }
+
+        [CanBeNull]
+        protected T GetState(int stType)
+        {
+            states.TryGetValue(stType, out var st);
+            return st;
         }
     }
 
@@ -46,7 +54,13 @@ namespace CenterBase
 
         public virtual void Enter(FSMState<T> lstState,object param = null){}
 
-        public bool CanEnterState(T newSt)
+        //下一个状态
+        public virtual bool CanEnterState(T newSt)
+        {
+            return true;
+        }
+
+        public virtual bool CanEnter()
         {
             return true;
         }

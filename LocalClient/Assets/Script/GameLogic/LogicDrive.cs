@@ -11,7 +11,7 @@ namespace Game
         private int spaceTime = 1;
         private Thread ud;
         private S2CStartGame servDt;
-        public LogicMatch match = new LogicMatch();
+        public LogicMatch match => LogicMatch.instance;
         public void Start(S2CStartGame servDt)
         {
             this.servDt = servDt;

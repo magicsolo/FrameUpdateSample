@@ -82,6 +82,11 @@ namespace Script
             }
         }
 
+
+        public PlayerInfo GetPlayerInfo(int slot)
+        {
+            return (PlayerDatas != null && slot < PlayerDatas.Length) ? PlayerDatas[slot] : default;
+        }
         // public void ResetPlayers(LogicPlayer[] logicPlayers = null)
         // {
         //     int idx = 0;

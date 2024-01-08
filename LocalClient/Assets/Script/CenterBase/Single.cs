@@ -1,6 +1,6 @@
 ﻿namespace CenterBase
 {
-    public class Single<T> where T : Single<T>
+    public class Single<T> where T : Single<T>, new()
     {
         private static T ins;
 
@@ -9,8 +9,7 @@
             get
             {
                 if (ins == null)
-                    ins = new Single<T>() as T;
-
+                    ins = new T();
                 return ins;
             }
         }
