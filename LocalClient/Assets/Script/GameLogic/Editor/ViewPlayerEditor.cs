@@ -16,6 +16,9 @@ public class ViewPlayerEditor : Editor
         var playerInfo = ViewModel.instance.GetPlayerInfo(vPlayer.slot);
         var guid = playerInfo.guid;
         var logicPlayer = LogicMatch.instance.GetPlayer(guid);
-        GUILayout.Label($"State:{logicPlayer.curStateType}");
+        if (logicPlayer!=null)
+        {
+            GUILayout.Label($"State:{logicPlayer.curStateType}");
+        }
     }
 }

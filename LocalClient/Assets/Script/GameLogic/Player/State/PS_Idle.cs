@@ -6,9 +6,15 @@ namespace Game
     {
         public PS_Idle( FSM<PS_Base> fsm) : base(EPlayerState.Idle, fsm){}
 
-        public override void Update()
+        public override void Enter(FSMState<PS_Base> lstState, object param = null)
         {
-            base.Update();
+            base.Enter(lstState, param);
+            PlayState("Player_idle");
+        }
+
+        protected override void LogicUpdate()
+        {
+            base.LogicUpdate();
             if (owner.playerData.InputData.inputMoveAngle >-1)
             {
                 plfsm.ChangeState(EPlayerState.Move);

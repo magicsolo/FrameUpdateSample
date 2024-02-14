@@ -73,7 +73,7 @@ namespace ConsoleApplicatLocalServer
         public static int frameTime = 33;
         private static int playerNum = 1;
         private static int index = -1;
-        private string ip = "192.168.50.23";
+        private string ip = "192.168.50.22";
         private int tcpPot = 8080;
         IPEndPoint tcpIPPoint;
         private IPEndPoint udpIPPoint;

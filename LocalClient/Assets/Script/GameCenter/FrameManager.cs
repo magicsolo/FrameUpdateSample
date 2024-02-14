@@ -53,7 +53,7 @@ namespace Game
         private float timeCount;
         public int curServerFrame = -1;
         public int curClientFrame = -1;
-
+        public int curTime => Math.Max(curClientFrame * 33,0) ; 
 
         private int tracingFrameIndex;
         

@@ -14,7 +14,20 @@ namespace Game
         public TSVector pos;
         public TSQuaternion rot;
         public InputData InputData;
+
+        public PlayAnimInfo aniInfo;
+
+        public bool faceRight;
     }
+
+    public struct PlayAnimInfo
+    {
+        public string stateName;
+        public int totalTime;
+        public int curTime;
+        public int startTime;
+    }
+    
     public class LogicPlayer
     {
         public PlayerInfo playerData = new PlayerInfo();

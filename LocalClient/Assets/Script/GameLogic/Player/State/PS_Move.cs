@@ -1,4 +1,5 @@
-﻿using CenterBase;
+﻿using System;
+using CenterBase;
 using TrueSync;
 
 namespace Game
@@ -7,9 +8,16 @@ namespace Game
     {
         private int speed = 1;
         public PS_Move( FSM<PS_Base> fsm) : base(EPlayerState.Move, fsm){}
-        public override void Update()
+
+        public override void Enter(FSMState<PS_Base> lstState, object param = null)
         {
-            base.Update();
+            base.Enter(lstState, param);
+            PlayState("Player_move");
+        }
+
+        protected override void LogicUpdate()
+        {
+            base.LogicUpdate();
             var inputData = owner.playerData.InputData; 
             if (owner.playerData.InputData.inputMoveAngle >-1)
             {
@@ -17,6 +25,10 @@ namespace Game
 
                 moveDir *= speed * FrameManager.instance.frameTime;
                 owner.playerData.pos += moveDir;
+                if (TSMath.Abs(moveDir.x)>0 )
+                {
+                    owner.playerData.faceRight = moveDir.x > 0;
+                }
             }
             else
             {

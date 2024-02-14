@@ -5,6 +5,7 @@ namespace Game
 {
     public enum ELogicType
     {
+        none = 0,
         Login,
         Match
     }

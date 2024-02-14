@@ -45,11 +45,6 @@ namespace Game
         public LoginState( LogicFSM fsm) : base(ELogicType.Login, fsm)
         {
         }
-        
-        private void Login()
-        {
-            ClientManager.instance.Login();
-        }
 
         void ShowDisConnected()
         {
