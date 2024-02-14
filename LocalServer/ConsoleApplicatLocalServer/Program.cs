@@ -31,27 +31,27 @@ namespace ConsoleApplicatLocalServer
             update = new Thread(Updating);
             update.Start();
 
-            Thread receiveTcpDt = new Thread(ReceiveTCPData);
-            receiveTcpDt.Start();
+            // Thread receiveTcpDt = new Thread(ReceiveTCPData);
+            // receiveTcpDt.Start();
             
             Console.Write("ServerEnd\n");
         }
         static ServerLogic serverLogic = new ServerLogic();
 
-        public static void ReceiveTCPData()
-        {
-            while (true)
-            {
-                serverLogic.RecieveTCPInfo();
-                Thread.Sleep(0);
-            }
-        }
+        // public static void ReceiveTCPData()
+        // {
+        //     while (true)
+        //     {
+        //         Thread.Sleep(0);
+        //     }
+        // }
         
         public static void Updating()
         {
 
             while (true)
             {
+                serverLogic.RecieveTCPInfo();
                 serverLogic.Update();
                 Thread.Sleep(ServerLogic.frameTime);
             }

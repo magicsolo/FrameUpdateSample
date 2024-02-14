@@ -47,17 +47,19 @@ namespace Game
         public FP frameTime = 0.02f;
         public GameType gameType = GameType.Play;
 
-        private originalData lorData = new originalData() { orPos = TSVector.forward, orRotation = default };
-        private originalData rOrData = new originalData() { orPos = TSVector.back, orRotation = default };
         public Dictionary<int, S2CFrameData> frameDataInputs = new Dictionary<int, S2CFrameData>();
-        private float timeCount;
         public int curServerFrame = -1;
         public int curClientFrame = -1;
         public int curTime => Math.Max(curClientFrame * 33,0) ; 
 
         private int tracingFrameIndex;
-        
 
+        public void Init()
+        {
+            curServerFrame = -1;
+            curClientFrame = -1;
+        }
+        
         //TODO 晚点拆分挪到LogicMatch里
         public void RequireFrameDatas()
         {

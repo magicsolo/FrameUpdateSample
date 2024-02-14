@@ -18,6 +18,7 @@ namespace Game
         public void Init(S2CStartGame servDt)
         {
             ResetCharacters(servDt);   
+            FrameManager.instance.Init();
         }
 
         void ResetCharacters(S2CStartGame startData)
