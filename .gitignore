@@ -20,3 +20,6 @@ LocalServer/ConsoleApplicatLocalServer/obj/
 LocalServer/ConsoleApplicatLocalServer.sln.DotSettings.user
 LocalServer/ConsoleApplicatLocalServer/packages.config
 LocalClient/Packages/
+LocalClient/log.txt
+LocalClient/testVideo.bytes
+LocalClient/video.bytes

@@ -7,7 +7,8 @@ namespace Game
     {
         none = 0,
         Login,
-        Match
+        Match,
+        Video,
     }
     
     public class LogicFSM : FSM<LogicState>
@@ -19,6 +20,7 @@ namespace Game
             
             AddState(new LoginState(this));
             AddState(new MatchingState(this));
+            AddState(new VideoState(this));
             ChangeState(ELogicType.Login);
         }
 
@@ -40,9 +42,9 @@ namespace Game
                 if (_btnStyle == null)
                 {
                     _btnStyle = GUI.skin.button;
-                    _btnStyle.fontSize = 60;
+                    _btnStyle.fontSize = 30;
                     //_btnStyle.fixedWidth = 120;
-                    _btnStyle.fixedWidth = 600;
+                    _btnStyle.fixedWidth = 300;
                 }
 
                 return _btnStyle;

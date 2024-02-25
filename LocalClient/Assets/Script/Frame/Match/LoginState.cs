@@ -8,6 +8,7 @@ namespace Game
     public class LoginState:LogicState
     {
         private bool isConnecting = false;
+        private string videoName = "log";
         public override void OnGUIUpdate()
         {
             base.OnGUIUpdate();
@@ -57,10 +58,20 @@ namespace Game
             GUILayout.Label("Pot:", btnStyle);
             ClientManager.instance.pot = GUILayout.TextArea(ClientManager.instance.pot, btnStyle);
             GUILayout.EndHorizontal();
-            
-            if (GUILayout.Button("已断开 重连连接", btnStyle))
+
+            if (GUILayout.Button("已断开", btnStyle))
             {
-                    ClientManager.instance.ReConnect();
+                ClientManager.instance.ReConnect();
+            }
+            else
+            {
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button("看录像",btnStyle))
+                {
+                    logicFsm.ChangeState(ELogicType.Video,videoName);
+                }
+                videoName = GUILayout.TextArea(videoName, btnStyle);
+                GUILayout.EndHorizontal();
             }
         }
         

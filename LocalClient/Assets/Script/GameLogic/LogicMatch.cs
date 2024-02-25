@@ -12,13 +12,11 @@ namespace Game
         private LogicPlayer[] allPlayers;
         public PlayerInfo[] viewPlayerInfo;
         private Dictionary<int, LogicPlayer> dicPlayers = new Dictionary<int, LogicPlayer>();
-
-        
         
         public void Init(S2CStartGame servDt)
         {
             ResetCharacters(servDt);   
-            FrameManager.instance.Init();
+            FrameManager.instance.Init(servDt);
         }
 
         void ResetCharacters(S2CStartGame startData)
@@ -48,6 +46,8 @@ namespace Game
                     Debug.LogError($"帧数据Idx与实际数据Idx不一致 第【{clientFrame + 1}】 数据上帧标记【{curFrmData.FrameIndex}】");
                     break;
                 }
+                EventManager.instance.DispatchEvent(EventKeys.LogicMatchUpdate,curFrmData);
+                //FrameManager.instance.SaveFrameUpdate(curFrmData);
                 ++clientFrame;
                 for (int i = 0; i < curFrmData.Gids.Count; i++)
                 {

@@ -70,6 +70,11 @@ namespace Script
             }
         }
 
+        public void Unit()
+        {
+            gameObject.SetActive(false);
+        }
+
         private void Update()
         {
             lock (match.viewPlayerInfo)

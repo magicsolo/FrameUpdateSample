@@ -40,7 +40,7 @@ namespace ConsoleApplicatLocalServer
         public int guid;
         public int input;
         public long moveAngle;
-
+        
         public PlayerFrameInput Init(int gid)
         {
             guid = gid;
@@ -80,6 +80,8 @@ namespace ConsoleApplicatLocalServer
         private TcpListener tcpListener;
         private BinaryFormatter _serializer = new BinaryFormatter();
         private List<PlayerFrame> _frameInputs = new List<PlayerFrame>(10000);
+        public StreamWriter videoWriter;
+        public StreamWriter logWriter;
         
         private Dictionary<int, PlayerInfo> allPlayers = new Dictionary<int, PlayerInfo>();
         private Dictionary<TcpClient, PlayerInfo> clientCollection = new Dictionary<TcpClient, PlayerInfo>();
@@ -88,6 +90,11 @@ namespace ConsoleApplicatLocalServer
         private int curFrame => _frameInputs.Count -1;
         private Socket _udpSocket;
         private bool matchStarted;
+
+        public ServerLogic()
+        {
+            
+        }
 
         public void StartServer()
         {
@@ -144,6 +151,22 @@ namespace ConsoleApplicatLocalServer
                     foreach (var plInfo in allPlayers.Values)
                         if (plInfo.udpEndPoint == null)
                             return;
+                    string videoPath = Directory.GetCurrentDirectory() + "\\..\\SaveData\\video.bytes";
+                    if (videoWriter!=null)
+                        videoWriter.Close();
+                    File.Delete(videoPath);
+                    File.Create(videoPath).Dispose();
+                    videoWriter = new StreamWriter(videoPath);
+
+                    string logPath = Directory.GetCurrentDirectory() + "\\..\\SaveData\\log.txt";
+                    if (logWriter!=null)
+                    {
+                        logWriter.Close();   
+                    }
+                    File.Delete(logPath);
+                    File.Create(logPath).Dispose();
+                    logWriter = new StreamWriter(logPath);
+                    
                     matchStarted = true;
                 }
 
@@ -153,9 +176,8 @@ namespace ConsoleApplicatLocalServer
                     var frmDt = new S2CFrameUpdate();//ServerFrameManager.GetSendFrameData(curFrame,_frameInputs[_frameInputs.Count - 1]);
                     frmDt.CurServerFrame = curFrame;
                     AddFrameData(frmDt, _frameInputs.Count - 1, _frameInputs.Count - 1);
-
                     byte[] sendBytes = frmDt.ToByteArray();
-
+                    SaveFrameBytes(frmDt);
                     foreach (var plInfo in allPlayers.Values)
                         if (plInfo.udpEndPoint != null)
                         {
@@ -169,6 +191,25 @@ namespace ConsoleApplicatLocalServer
                 _frameInputs.Add(input);
             }
             
+        }
+
+        private void SaveFrameBytes(S2CFrameUpdate frmDt)
+        {
+            var sendBytes = frmDt.FrameDatas[0].ToByteArray();
+            var saveBytes = System.Text.Encoding.UTF8.GetString(sendBytes);
+            videoWriter.WriteLine(saveBytes);
+            videoWriter.Flush();
+
+            var frmUpdate = frmDt.FrameDatas[0];
+            logWriter.WriteLine($"frm:{frmUpdate.FrameIndex}");
+            for (int i = 0; i < frmUpdate.Gids.Count; i++)
+            {
+                var gid = frmUpdate.Gids[i];
+                var input = frmUpdate.Inputs[i];
+                var angle = frmUpdate.InputAngles[i];
+                logWriter.WriteLine($"{gid}:: input:{input} angle:{angle}");
+            }
+            logWriter.Flush();
         }
 
         public void Collecting()
@@ -249,9 +290,6 @@ namespace ConsoleApplicatLocalServer
                 case EMessage.Restart:
                     OnRestartGame(plInfo);
                     break;
-                case EMessage.PrintFrames:
-                    OnPrintFrame();
-                    break;
             }
         }
 
@@ -282,7 +320,7 @@ namespace ConsoleApplicatLocalServer
 
         void OnRestartGame(PlayerInfo plInfo)
         {
-            
+
             lock (clientCollection)
             {
                 S2CPlayerData[] pls = new S2CPlayerData[allPlayers.Count];
@@ -312,35 +350,35 @@ namespace ConsoleApplicatLocalServer
             }
         }
 
-        void OnPrintFrame()
-        {
-            foreach (var kv in allPlayers)
-            {
-                SendTCPData(kv.Value.stream, EMessage.PrintFrames, new S2CPrintFrames());
-            }
-            lock (_frameInputs)
-            {
-                var path = Directory.GetCurrentDirectory()+"\\FramesPrint.txt";
-                if (File.Exists(path))
-                {
-                    File.Delete(path);
-                }
-                using (StreamWriter c = new StreamWriter(path, true))
-                {
-
-                    for (int i = 0; i < _frameInputs.Count; i++)
-                    {
-                        string inputs = "";
-                        var frame = _frameInputs[i];
-                        foreach (var input in frame.inputs)
-                        {
-                            inputs += $" id:{input.guid} yaw{input.moveAngle} ";
-                        }
-                        c.WriteLine($"[{frame.frame}] {inputs}");
-                    }
-                }
-            }
-        }
+        // void OnPrintFrame()
+        // {
+        //     foreach (var kv in allPlayers)
+        //     {
+        //         SendTCPData(kv.Value.stream, EMessage.PrintFrames, new S2CPrintFrames());
+        //     }
+        //     lock (_frameInputs)
+        //     {
+        //         var path = Directory.GetCurrentDirectory()+"\\FramesPrint.txt";
+        //         if (File.Exists(path))
+        //         {
+        //             File.Delete(path);
+        //         }
+        //         using (StreamWriter c = new StreamWriter(path, true))
+        //         {
+        //
+        //             for (int i = 0; i < _frameInputs.Count; i++)
+        //             {
+        //                 string inputs = "";
+        //                 var frame = _frameInputs[i];
+        //                 foreach (var input in frame.inputs)
+        //                 {
+        //                     inputs += $" id:{input.guid} yaw{input.moveAngle} ";
+        //                 }
+        //                 c.WriteLine($"[{frame.frame}] {inputs}");
+        //             }
+        //         }
+        //     }
+        // }
 
         unsafe void UDPRecieveing()
         {

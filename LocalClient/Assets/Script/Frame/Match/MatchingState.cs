@@ -8,7 +8,7 @@ namespace Game
     public class MatchingState:LogicState
     {
         private S2CStartGame startGameInfo;
-        private LogicDrive driver = new LogicDrive();
+        private MatchDrive driver = new MatchDrive();
 
         public MatchingState( LogicFSM fsm) : base(ELogicType.Match, fsm)
         {
@@ -26,21 +26,19 @@ namespace Game
             base.OnGUIUpdate();
             if (GUILayout.Button("重新开始",btnStyle))
                 ClientManager.instance.SendTCPInfo(EMessage.Restart);
-            if (GUILayout.Button("打印帧",btnStyle))
-                ClientManager.instance.SendTCPInfo(EMessage.PrintFrames, new C2SPrintFrames(), OnPrintFrames);
+            if (GUILayout.Button("保存录像以及帧输出日志",btnStyle))
+                ClientManager.instance.SendTCPInfo(EMessage.PrintFrames, new C2SPrintFrames());
             
             GUILayout.Label($"Frame cli:{FrameManager.instance.curClientFrame} serv:{FrameManager.instance.curServerFrame}",btnStyle);
-        }
-
-        private void OnPrintFrames(TCPInfo obj)
-        {
-            FrameManager.instance.OnPrintFrames();
         }
 
         public override void Exit()
         {
             base.Exit();
+            driver.Stop();
             ClientManager.instance.UnRegistNoteListener(EMessage.Restart);
+            ClientManager.instance.UnRegistNoteListener(EMessage.PrintFrames);
+            ViewModel.instance.Unit();
         }
 
         void OnReset(TCPInfo tcpInfo)

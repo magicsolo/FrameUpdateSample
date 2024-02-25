@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using C2SProtoInterface;
 using CenterBase;
+using Google.Protobuf;
 using TrueSync;
 using UnityEngine;
 
@@ -53,11 +55,13 @@ namespace Game
         public int curTime => Math.Max(curClientFrame * 33,0) ; 
 
         private int tracingFrameIndex;
+        
 
-        public void Init()
+        public void Init(S2CStartGame enterInfo)
         {
             curServerFrame = -1;
             curClientFrame = -1;
+            
         }
         
         //TODO 晚点拆分挪到LogicMatch里
@@ -107,33 +111,55 @@ namespace Game
             frmUpdate.Angle = InputManager.instance.inputData.inputMoveAngle._serializedValue;
             ClientManager.instance.UDPSend(frmUpdate);
         }
+
         
-        public void OnPrintFrames()
+
+        public (S2CStartGame, List<S2CFrameData>) LoadVideo()
         {
-            //lock (frameDataInputs)
+            var path = Directory.GetCurrentDirectory() + "\\video.bytes";
+            List<S2CFrameData> frames = new List<S2CFrameData>();
+            S2CStartGame startInfo;
+            
+            var strm = new FileStream(path, FileMode.Open, FileAccess.Read);
+            byte[] rdBytes = new byte[1024 * 1024];
+            strm.Read(rdBytes, 0, sizeof(Int32));
+            int dataLength = BitConverter.ToInt32(rdBytes, 0);
+            strm.Read(rdBytes, 0, dataLength);
+            startInfo = S2CStartGame.Parser.ParseFrom(rdBytes,0,dataLength);
+            
+
+            while (strm.Read(rdBytes, 0, sizeof(Int32))>0)
             {
-                
-                var path = Directory.GetCurrentDirectory()+"\\FramesPrint.txt";
-                if (File.Exists(path))
+                dataLength = BitConverter.ToInt32(rdBytes, 0);
+                S2CFrameData frmDt;
+                if (dataLength > 0)
                 {
-                    File.Delete(path);
-                }
-                using (StreamWriter c = new StreamWriter(path, true))
-                {
-
-                    for (int i = 0; i < frameDataInputs.Count; i++)
+                    strm.Read(rdBytes, 0, dataLength);
+                    try
                     {
-                        string inputs = "";
-
-                        var frame = frameDataInputs[i];
-
-                        for (int j = 0; j < frame.Gids.Count; j++)
-                        {
-                            inputs += $" id:{frame.Gids[j]} yaw{frame.InputAngles[j]} ";
-                        }
-                        c.WriteLine($"[{frame.FrameIndex}] {inputs}");
+                        frmDt = S2CFrameData.Parser.ParseFrom(rdBytes, 0, dataLength);
+                    }
+                    catch
+                    {
+                        break;
                     }
                 }
+                else
+                {
+                    frmDt = new S2CFrameData();
+                }
+
+                frames.Add(frmDt);
+            }
+            return (startInfo, frames);
+        }
+
+        public void PlayVideoFrame(List<S2CFrameData> frames,int serverFrame)
+        {
+            curServerFrame = serverFrame;
+            foreach (var frm in frames)
+            {
+                frameDataInputs[frm.FrameIndex] = frm;
             }
         }
     }

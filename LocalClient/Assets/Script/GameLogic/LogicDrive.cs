@@ -1,52 +1,27 @@
-﻿using System.Threading;
+﻿using System;
+using System.IO;
+using System.Threading;
 using C2SProtoInterface;
 using Game;
+using Google.Protobuf;
 using UnityEditor.PackageManager;
 using UnityEngine.UIElements;
 
 namespace Game
 {
-    public class LogicDrive
+    public abstract class LogicDrive
     {
-        private int spaceTime = 1;
-        private Thread ud;
-        private S2CStartGame servDt;
+        protected int spaceTime = 1;
+        protected S2CStartGame servDt;
         public LogicMatch match => LogicMatch.instance;
-        public void Start(S2CStartGame servDt)
+        
+        public virtual void Start(S2CStartGame servDt)
         {
             this.servDt = servDt;
-            CloseThread();
-
             match.Init(this.servDt);
-
-            ud = new Thread(ThreadUpdate);
-            ud.Start();
         }
-
-        public void End()
+        public virtual void Stop()
         {
-            CloseThread();
         }
-        
-        void CloseThread()
-        {
-            if (ud!=null && ud.IsAlive)
-            {
-                ud.Abort();
-                ud = null;
-            }
-        }
-        void ThreadUpdate()
-        {
-            ClientManager.instance.UDPConnect(this.servDt.Pot);
-            while (true)
-            {
-                FrameManager.instance.RequireFrameDatas();
-                match.Update();
-                FrameManager.instance.SendFrameData();
-                Thread.Sleep(spaceTime);
-            }
-        }
-        
     }
 }
