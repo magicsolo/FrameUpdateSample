@@ -12,5 +12,7 @@ namespace Game
         public string controllerName;
         public int length;
         public string stateName;
+        public int fireFrame;
+        public TSVector4 skillCheckArea;
     }
 }

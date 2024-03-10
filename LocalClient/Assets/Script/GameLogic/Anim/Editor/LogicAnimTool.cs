@@ -62,13 +62,50 @@ namespace EditorGame
                 LogicAnimInfo newInfo = new LogicAnimInfo();
                 var animName = state.state.motion.name;
                 var clip = dic[animName];
+                if (clip.events.Length>0)
+                    newInfo.fireFrame =  (int)(Mathf.Ceil(clip.events[0].time * 1000));
+                var bindings = AnimationUtility.GetCurveBindings(clip);
+                var settings = AnimationUtility.GetAnimationClipSettings(clip);
+                Vector4 skillInfo = Vector4.zero;
+                foreach (var binding in bindings)
+                {
+                    int a = 0;
+                    switch (binding.propertyName)
+                    {
+                        case "skillInfo.x":
+                            skillInfo.x = GetCurveFrameFloatValue(clip, binding);
+                            break;
+                        case "skillInfo.y":
+                            skillInfo.y = GetCurveFrameFloatValue(clip, binding);
+                            break;
+                        case "skillInfo.z":
+                            skillInfo.z = GetCurveFrameFloatValue(clip, binding);
+                            break;
+                        case "skillInfo.w":
+                            skillInfo.w = GetCurveFrameFloatValue(clip, binding);
+                            break;
+                    }
+                }
 
+                newInfo.skillCheckArea.Set(skillInfo.x,skillInfo.y,skillInfo.z,skillInfo.w);
                 newInfo.controllerName = controller.name;
                 newInfo.stateName = state.state.name;
                 newInfo.key = $"{newInfo.controllerName}_{newInfo.stateName}";
                 newInfo.length = (int)(Mathf.Ceil(clip.length * 1000));
                 assets.Add(newInfo);
             }
+        }
+
+        float GetCurveFrameFloatValue(AnimationClip clip,EditorCurveBinding binding)
+        {
+            float value = default;
+            
+            var curve = AnimationUtility.GetEditorCurve(clip, binding);
+            var keys = curve.keys;
+            if (keys.Length>=0)
+                value = keys[0].value;
+            
+            return value;
         }
     }
 }

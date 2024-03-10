@@ -12,6 +12,7 @@ namespace Game
         Idle,
         Move,
         Total,
+        Attack,
     }
 
     public class PlayerFSM : FSM<PS_Base>
@@ -22,11 +23,12 @@ namespace Game
             this.owner = owner;
             AddState(new PS_Idle(this));
             AddState(new PS_Move(this));
+            AddState(new PS_Attack(this));
             ChangeState(EPlayerState.Idle);
         }
-        public void ChangeState(EPlayerState stateType,object param = null)
+        public bool ChangeState(EPlayerState stateType,object param = null)
         {
-            ChgST((int)stateType,param);
+             return ChgST((int)stateType,param);
         }
 
         public PS_Base GetStateByType(EPlayerState stateType)
@@ -38,14 +40,19 @@ namespace Game
     public abstract class PS_Base:FSMState<PS_Base>
     {
         protected PlayerFSM plfsm;
+        protected InputData input => owner.playerData.InputData;
         public LogicPlayer owner => plfsm.owner;
         public EPlayerState curState => (EPlayerState)stateType;
-        private bool _finished;
+        protected bool _finished;
         private int _enterTime;
         private int _totalTime;
         private object _nxtStateParam;
-        private EPlayerState _nxtStateType;
+        protected EPlayerState _nxtStateType;
         private int passedTime => FrameManager.instance.curTime - _enterTime;
+        private int _fireFrame;
+        private LogicAnimInfo _animLogicInfo;
+        protected TSVector2 Pos;
+        protected FP area;
         public PS_Base(EPlayerState stateType, FSM<PS_Base> fsm) : base((int)stateType, fsm)
         {
             this.plfsm = (PlayerFSM)fsm;
@@ -67,21 +74,26 @@ namespace Game
             owner.playerData.aniInfo.stateName = asset.stateName;
             owner.playerData.aniInfo.totalTime = _totalTime;
             owner.playerData.aniInfo.startTime = FrameManager.instance.curTime;
+            _fireFrame = asset.fireFrame;
+            Pos = asset.skillCheckArea.xy;
         }
 
         public override void Update()
         {
             base.Update();
             LogicUpdate();
-
+            InputCheck();
             owner.playerData.aniInfo.curTime = FrameManager.instance.curTime - _enterTime;
+            if (passedTime == _fireFrame)
+                OnFire();
+            
             if (passedTime > _totalTime)
                 _finished = true;
             if (_finished)
             {
-                if (_nxtStateType != 0)
+                if (_nxtStateType != 0 && plfsm.ChangeState(_nxtStateType, _nxtStateParam))
                 {
-                    plfsm.ChangeState(_nxtStateType, _nxtStateParam);
+                    _nxtStateType = 0;
                 }
                 else
                 {
@@ -97,6 +109,13 @@ namespace Game
             }
         }
 
+        public virtual void OnFire(){}
+
         protected virtual void LogicUpdate(){}
+
+        public virtual void InputCheck()
+        {
+            
+        }
     }
 }

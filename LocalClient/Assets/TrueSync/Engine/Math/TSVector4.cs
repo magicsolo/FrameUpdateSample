@@ -41,6 +41,9 @@ namespace TrueSync
         /// <summary>The W component of the vector.</summary>
         public FP w;
 
+        public TSVector2 xy => new TSVector2(x, y);
+        public TSVector2 zw => new TSVector2(z, w);
+
         #region Static readonly variables
         /// <summary>
         /// A vector with components (0,0,0,0);

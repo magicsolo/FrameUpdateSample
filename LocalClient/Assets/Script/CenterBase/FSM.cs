@@ -16,8 +16,9 @@ namespace CenterBase
             states.Add(st.stateType,st);
         }
 
-        protected void ChgST(int stType,object param = null)
+        protected bool ChgST(int stType,object param = null)
         {
+            bool succ = false;
             if (states.TryGetValue(stType,out  var st) && (curState == null || curState.CanEnterState(st)) && st.CanEnter() )
             {
                 if (curState!=null)
@@ -25,8 +26,10 @@ namespace CenterBase
 
                 curState = st;
                 st.Enter(curState,param);
-
+                succ = true;
             }
+
+            return succ;
         }
 
         [CanBeNull]

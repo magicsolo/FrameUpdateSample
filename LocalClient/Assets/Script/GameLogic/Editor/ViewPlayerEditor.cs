@@ -12,7 +12,26 @@ public class ViewPlayerEditor : Editor
     {
         var vPlayer = (ViewPlayer)target;
         if (ViewModel.instance == null || LogicMatch.instance==null)
-            return;
+        {
+            EditorMode(vPlayer);
+        }
+        else
+        {
+            Runinning(vPlayer);
+        }
+    }
+
+    void EditorMode(ViewPlayer vPlayer)
+    {
+        if (GUILayout.Button("绑定"))
+        {
+            vPlayer.BindObj();
+        }
+            
+    }
+
+    void Runinning(ViewPlayer vPlayer)
+    {
         var playerInfo = ViewModel.instance.GetPlayerInfo(vPlayer.slot);
         var guid = playerInfo.guid;
         var logicPlayer = LogicMatch.instance.GetPlayer(guid);

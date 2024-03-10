@@ -23,3 +23,5 @@ LocalClient/Packages/
 LocalClient/log.txt
 LocalClient/testVideo.bytes
 LocalClient/video.bytes
+LocalClient/Assets/Test/
+LocalClient/Assets/Plugins/

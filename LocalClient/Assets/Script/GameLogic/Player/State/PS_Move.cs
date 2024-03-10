@@ -4,7 +4,7 @@ using TrueSync;
 
 namespace Game
 {
-    public class PS_Move:PS_Base
+    public class PS_Move:PS_CommomState
     {
         private int speed = 1;
         public PS_Move( FSM<PS_Base> fsm) : base(EPlayerState.Move, fsm){}
@@ -14,11 +14,11 @@ namespace Game
             base.Enter(lstState, param);
             PlayState("Player_move");
         }
-
+        
         protected override void LogicUpdate()
         {
             base.LogicUpdate();
-            var inputData = owner.playerData.InputData; 
+            var inputData = input; 
             if (owner.playerData.InputData.inputMoveAngle >-1)
             {
                 var moveDir = TSQuaternion.Euler(0, inputData.inputMoveAngle, 0) * TSVector.forward;

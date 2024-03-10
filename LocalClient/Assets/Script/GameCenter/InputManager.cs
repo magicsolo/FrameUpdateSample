@@ -19,6 +19,7 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
+            inputData.Clear();
             Vector2 dir = Vector2.zero;
             if (Input.GetKey(KeyCode.A))
             {
@@ -47,6 +48,11 @@ namespace Game
             else
             {
                 inputData.inputMoveAngle = -1;
+            }
+
+            if (Input.GetKey(KeyCode.F))
+            {
+                inputData.input = EInputEnum.fire;
             }
         }
     }

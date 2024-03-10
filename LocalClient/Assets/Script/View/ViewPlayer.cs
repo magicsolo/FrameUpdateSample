@@ -15,6 +15,32 @@ namespace Script
         [NonSerialized]
         public int playAnimTime = -1;
 
+        private Vector4 skillCheckArea;
+        [SerializeField]
+        private ViewSkillInfo skillInfoAnimObj;
+        
+        private void OnDrawGizmos()
+        {
+            if (skillInfoAnimObj==null)
+            {
+                return;
+            }
+            skillCheckArea = skillInfoAnimObj.skillInfo;
+
+            var offset = new Vector3(skillCheckArea.x, skillCheckArea.y,0);
+
+            var worldPos = transform.localToWorldMatrix*(offset);
+            var color = Color.green;
+            
+            Gizmos.color = color;
+            Gizmos.DrawSphere(worldPos,skillCheckArea.z);
+        }
+
+        public void BindObj()
+        {
+            skillInfoAnimObj = transform.GetComponentInChildren<ViewSkillInfo>();
+        }
+        
         private void Awake()
         {
             animator = GetComponentInChildren<Animator>(true);

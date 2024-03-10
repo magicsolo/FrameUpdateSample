@@ -15,6 +15,7 @@ namespace Game
     public enum EInputEnum
     {
         none,
+        fire,
     }
 
     public struct TCPInfo

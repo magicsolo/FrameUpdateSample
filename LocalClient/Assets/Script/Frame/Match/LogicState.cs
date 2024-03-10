@@ -17,7 +17,6 @@ namespace Game
         
         public LogicFSM()
         {
-            
             AddState(new LoginState(this));
             AddState(new MatchingState(this));
             AddState(new VideoState(this));

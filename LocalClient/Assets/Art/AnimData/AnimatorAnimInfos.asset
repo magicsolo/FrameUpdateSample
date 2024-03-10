@@ -17,19 +17,69 @@ MonoBehaviour:
     controllerName: Player
     length: 267
     stateName: move
+    fireFrame: 0
+    skillCheckArea:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 0
+      z:
+        _serializedValue: 0
+      w:
+        _serializedValue: 0
   - key: Player_attack
     controllerName: Player
     length: 784
     stateName: attack
+    fireFrame: 334
+    skillCheckArea:
+      x:
+        _serializedValue: 1675037184
+      y:
+        _serializedValue: 687194752
+      z:
+        _serializedValue: 1030792128
+      w:
+        _serializedValue: 0
   - key: Player_idle
     controllerName: Player
     length: 434
     stateName: idle
+    fireFrame: 0
+    skillCheckArea:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 0
+      z:
+        _serializedValue: 0
+      w:
+        _serializedValue: 0
   - key: Player_hurt
     controllerName: Player
     length: 534
     stateName: hurt
+    fireFrame: 0
+    skillCheckArea:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 0
+      z:
+        _serializedValue: 0
+      w:
+        _serializedValue: 0
   - key: Player_death
     controllerName: Player
     length: 767
     stateName: death
+    fireFrame: 0
+    skillCheckArea:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 0
+      z:
+        _serializedValue: 0
+      w:
+        _serializedValue: 0

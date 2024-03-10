@@ -108,6 +108,7 @@ namespace Game
             frmUpdate.Start = requireStart;
             frmUpdate.End = requireEnd;
 
+            frmUpdate.Input = (int)InputManager.instance.inputData.input;
             frmUpdate.Angle = InputManager.instance.inputData.inputMoveAngle._serializedValue;
             ClientManager.instance.UDPSend(frmUpdate);
         }

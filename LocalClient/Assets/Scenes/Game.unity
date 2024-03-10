@@ -547,8 +547,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 212613968103510482, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
-      propertyPath: m_FlipX
+    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+      propertyPath: skillInfo.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+      propertyPath: skillInfo.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -558,6 +562,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4502334906131996, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
   m_PrefabInstance: {fileID: 865704386}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &865704388 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+  m_PrefabInstance: {fileID: 865704386}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bf8f9eef9c91e34b89ccd7b400adbde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1065566358
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,6 +933,7 @@ MonoBehaviour:
   curAnimState: 
   slot: 0
   guid: 0
+  skillInfoAnimObj: {fileID: 865704388}
 --- !u!1 &1816296361
 GameObject:
   m_ObjectHideFlags: 0
