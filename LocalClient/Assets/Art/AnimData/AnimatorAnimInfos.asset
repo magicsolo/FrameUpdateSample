@@ -15,9 +15,14 @@ MonoBehaviour:
   allInfos:
   - key: Player_move
     controllerName: Player
-    length: 267
+    length: 8
     stateName: move
     fireFrame: 0
+    skillCheckPos:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 0
     skillCheckArea:
       x:
         _serializedValue: 0
@@ -25,27 +30,35 @@ MonoBehaviour:
         _serializedValue: 0
       z:
         _serializedValue: 0
-      w:
-        _serializedValue: 0
+    test: 
   - key: Player_attack
     controllerName: Player
-    length: 784
+    length: 23
     stateName: attack
-    fireFrame: 334
-    skillCheckArea:
+    fireFrame: 10
+    skillCheckPos:
       x:
-        _serializedValue: 1675037184
+        _serializedValue: 2147483648
       y:
         _serializedValue: 687194752
+    skillCheckArea:
+      x:
+        _serializedValue: 4294967296
+      y:
+        _serializedValue: 4294967296
       z:
-        _serializedValue: 1030792128
-      w:
-        _serializedValue: 0
+        _serializedValue: 4294967296
+    test: 
   - key: Player_idle
     controllerName: Player
-    length: 434
+    length: 13
     stateName: idle
     fireFrame: 0
+    skillCheckPos:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 0
     skillCheckArea:
       x:
         _serializedValue: 0
@@ -53,13 +66,17 @@ MonoBehaviour:
         _serializedValue: 0
       z:
         _serializedValue: 0
-      w:
-        _serializedValue: 0
+    test: 
   - key: Player_hurt
     controllerName: Player
-    length: 534
+    length: 16
     stateName: hurt
     fireFrame: 0
+    skillCheckPos:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 0
     skillCheckArea:
       x:
         _serializedValue: 0
@@ -67,13 +84,17 @@ MonoBehaviour:
         _serializedValue: 0
       z:
         _serializedValue: 0
-      w:
-        _serializedValue: 0
+    test: 
   - key: Player_death
     controllerName: Player
-    length: 767
+    length: 23
     stateName: death
     fireFrame: 0
+    skillCheckPos:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 0
     skillCheckArea:
       x:
         _serializedValue: 0
@@ -81,5 +102,4 @@ MonoBehaviour:
         _serializedValue: 0
       z:
         _serializedValue: 0
-      w:
-        _serializedValue: 0
+    test: 

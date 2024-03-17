@@ -23,9 +23,9 @@ namespace Game
     public struct PlayAnimInfo
     {
         public string stateName;
-        public int totalTime;
-        public int curTime;
-        public int startTime;
+        public int totalFrame;
+        public int curFrame;
+        public int startFrame;
     }
     
     public class LogicPlayer

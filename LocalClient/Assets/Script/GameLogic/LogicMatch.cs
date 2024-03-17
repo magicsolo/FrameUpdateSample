@@ -8,8 +8,10 @@ namespace Game
 {
     public class LogicMatch:Single<LogicMatch>
     {
-        private Dictionary<int, LogicPlayer> dicAllPlayers = new Dictionary<int, LogicPlayer>();
-        private LogicPlayer[] allPlayers;
+        private Dictionary<int, LogicPlayer> _dicAllPlayers = new Dictionary<int, LogicPlayer>();
+        private LogicPlayer[] _allPlayers;
+        public LogicPlayer[] allPlayers => _allPlayers;
+        
         public PlayerInfo[] viewPlayerInfo;
         private Dictionary<int, LogicPlayer> dicPlayers = new Dictionary<int, LogicPlayer>();
         
@@ -21,18 +23,18 @@ namespace Game
 
         void ResetCharacters(S2CStartGame startData)
         {
-            allPlayers = new LogicPlayer[startData.Players.Count];
+            _allPlayers = new LogicPlayer[startData.Players.Count];
             viewPlayerInfo = new PlayerInfo[startData.Players.Count];
-            dicAllPlayers.Clear();
+            _dicAllPlayers.Clear();
             dicPlayers.Clear();
-            for (int slot = 0; slot < allPlayers.Length; slot++)
+            for (int slot = 0; slot < _allPlayers.Length; slot++)
             {
                 var lgPl = new LogicPlayer(startData.Players[slot],slot);
-                allPlayers[slot] = lgPl;
+                _allPlayers[slot] = lgPl;
                 lgPl.playerData.pos = TSVector.zero;
                 dicPlayers[lgPl.playerData.guid] = lgPl;
                 viewPlayerInfo[slot] = lgPl.playerData;
-                dicAllPlayers[lgPl.playerData.guid] = lgPl;
+                _dicAllPlayers[lgPl.playerData.guid] = lgPl;
             }
         }
         public void Update()
@@ -66,9 +68,9 @@ namespace Game
 
             lock (viewPlayerInfo)
             {
-                for (int slot = 0; slot < allPlayers.Length; slot++)
+                for (int slot = 0; slot < _allPlayers.Length; slot++)
                 {
-                    var pl = allPlayers[slot];
+                    var pl = _allPlayers[slot];
                     viewPlayerInfo[slot] = pl.playerData;
                 }
             }
@@ -76,7 +78,7 @@ namespace Game
         
         public LogicPlayer GetPlayer(int guid)
         {
-            dicAllPlayers.TryGetValue(guid, out var findPlayer);
+            _dicAllPlayers.TryGetValue(guid, out var findPlayer);
             return findPlayer;
         }
     }

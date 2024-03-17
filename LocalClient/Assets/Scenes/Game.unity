@@ -548,12 +548,40 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+      propertyPath: pos.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+      propertyPath: pos.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+      propertyPath: area.x
+      value: 0.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+      propertyPath: area.y
+      value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+      propertyPath: area.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
       propertyPath: skillInfo.w
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+      propertyPath: skillInfo.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+      propertyPath: skillInfo.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
       propertyPath: skillInfo.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}

@@ -63,35 +63,38 @@ namespace EditorGame
                 var animName = state.state.motion.name;
                 var clip = dic[animName];
                 if (clip.events.Length>0)
-                    newInfo.fireFrame =  (int)(Mathf.Ceil(clip.events[0].time * 1000));
+                    newInfo.fireFrame =  (clip.events[0].time / FrameManager.frameTime).AsInt();
                 var bindings = AnimationUtility.GetCurveBindings(clip);
-                var settings = AnimationUtility.GetAnimationClipSettings(clip);
-                Vector4 skillInfo = Vector4.zero;
+                Vector3 area = Vector3.zero;
+                Vector2 pos = Vector2.zero;
                 foreach (var binding in bindings)
                 {
-                    int a = 0;
                     switch (binding.propertyName)
                     {
-                        case "skillInfo.x":
-                            skillInfo.x = GetCurveFrameFloatValue(clip, binding);
+                        case "area.x":
+                            area.x = GetCurveFrameFloatValue(clip, binding);
                             break;
-                        case "skillInfo.y":
-                            skillInfo.y = GetCurveFrameFloatValue(clip, binding);
+                        case "area.y":
+                            area.y = GetCurveFrameFloatValue(clip, binding);
                             break;
-                        case "skillInfo.z":
-                            skillInfo.z = GetCurveFrameFloatValue(clip, binding);
+                        case "area.z":
+                            area.z = GetCurveFrameFloatValue(clip, binding);
                             break;
-                        case "skillInfo.w":
-                            skillInfo.w = GetCurveFrameFloatValue(clip, binding);
+                        case "pos.x":
+                            pos.x = GetCurveFrameFloatValue(clip, binding);
+                            break;
+                        case "pos.y":
+                            pos.y = GetCurveFrameFloatValue(clip, binding);
                             break;
                     }
                 }
 
-                newInfo.skillCheckArea.Set(skillInfo.x,skillInfo.y,skillInfo.z,skillInfo.w);
+                newInfo.skillCheckPos.Set(pos.x,pos.y);
+                newInfo.skillCheckArea.Set(area.x,area.y,area.z);
                 newInfo.controllerName = controller.name;
                 newInfo.stateName = state.state.name;
                 newInfo.key = $"{newInfo.controllerName}_{newInfo.stateName}";
-                newInfo.length = (int)(Mathf.Ceil(clip.length * 1000));
+                newInfo.length = (clip.length / FrameManager.frameTime).AsInt();
                 assets.Add(newInfo);
             }
         }

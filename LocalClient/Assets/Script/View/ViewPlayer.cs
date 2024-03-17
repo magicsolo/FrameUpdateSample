@@ -15,6 +15,7 @@ namespace Script
         [NonSerialized]
         public int playAnimTime = -1;
 
+        private Vector4 skillCheckPos;
         private Vector4 skillCheckArea;
         [SerializeField]
         private ViewSkillInfo skillInfoAnimObj;
@@ -25,15 +26,16 @@ namespace Script
             {
                 return;
             }
-            skillCheckArea = skillInfoAnimObj.skillInfo;
+            skillCheckArea = skillInfoAnimObj.area;
+            skillCheckPos = skillInfoAnimObj.pos;
 
-            var offset = new Vector3(skillCheckArea.x, skillCheckArea.y,0);
+            var offset = new Vector3(skillCheckPos.x, skillCheckPos.y,0);
 
-            var worldPos = transform.localToWorldMatrix*(offset);
+            var worldPos = transform.localToWorldMatrix *(offset);
             var color = Color.green;
-            
+            color.a = 0.7f;
             Gizmos.color = color;
-            Gizmos.DrawSphere(worldPos,skillCheckArea.z);
+            Gizmos.DrawCube(worldPos,skillCheckArea);//DrawSphere(worldPos,skillCheckArea.z);
         }
 
         public void BindObj()
@@ -70,10 +72,11 @@ namespace Script
             
             var aniInfo = vPlInfo.aniInfo;
 
-            if (!string.IsNullOrEmpty(aniInfo.stateName)&& playAnimTime!=aniInfo.startTime)
+            if (curAnimState != aniInfo.stateName || playAnimTime != aniInfo.startFrame)
             {
+                playAnimTime = aniInfo.startFrame;
                 curAnimState = aniInfo.stateName;
-                animator.Play(curAnimState, 0, aniInfo.curTime / (float)aniInfo.totalTime);
+                animator.Play(curAnimState, 0, aniInfo.curFrame / (float)aniInfo.totalFrame);
             }
 
             if (Math.Abs(dtMove.x)>0)

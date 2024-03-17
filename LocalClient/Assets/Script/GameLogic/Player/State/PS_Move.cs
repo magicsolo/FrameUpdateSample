@@ -23,7 +23,7 @@ namespace Game
             {
                 var moveDir = TSQuaternion.Euler(0, inputData.inputMoveAngle, 0) * TSVector.forward;
 
-                moveDir *= speed * FrameManager.instance.frameTime;
+                moveDir *= speed * FrameManager.frameTime;
                 owner.playerData.pos += moveDir;
                 if (TSMath.Abs(moveDir.x)>0 )
                 {

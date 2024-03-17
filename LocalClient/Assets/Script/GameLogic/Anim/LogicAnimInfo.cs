@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using TrueSync;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Game
 {
+
     [Serializable]
     public struct LogicAnimInfo
     {
@@ -13,6 +15,7 @@ namespace Game
         public int length;
         public string stateName;
         public int fireFrame;
-        public TSVector4 skillCheckArea;
+        public TSVector2 skillCheckPos;
+        public TSVector skillCheckArea;
     }
 }

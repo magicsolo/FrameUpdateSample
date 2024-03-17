@@ -46,13 +46,14 @@ namespace Game
 
     public class FrameManager : BasicMonoSingle<FrameManager>
     {
-        public FP frameTime = 0.02f;
+        //1帧33毫秒
+        public static readonly FP frameTime = (FP.One) * 33 / 1000;
         public GameType gameType = GameType.Play;
 
         public Dictionary<int, S2CFrameData> frameDataInputs = new Dictionary<int, S2CFrameData>();
-        public int curServerFrame = -1;
-        public int curClientFrame = -1;
-        public int curTime => Math.Max(curClientFrame * 33,0) ; 
+        public int curServerFrame { get; private set; }
+        public int curClientFrame { get; set; }
+        public FP curTime => Math.Max(curClientFrame,0)*frameTime ; 
 
         private int tracingFrameIndex;
         
@@ -162,6 +163,11 @@ namespace Game
             {
                 frameDataInputs[frm.FrameIndex] = frm;
             }
+        }
+
+        public static bool isInFrame(FP passedTime,FP checkFrameTime)
+        {
+            return passedTime >= checkFrameTime && passedTime < (checkFrameTime + frameTime);
         }
     }
 }

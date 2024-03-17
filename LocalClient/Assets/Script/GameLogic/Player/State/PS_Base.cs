@@ -44,15 +44,16 @@ namespace Game
         public LogicPlayer owner => plfsm.owner;
         public EPlayerState curState => (EPlayerState)stateType;
         protected bool _finished;
-        private int _enterTime;
-        private int _totalTime;
         private object _nxtStateParam;
         protected EPlayerState _nxtStateType;
-        private int passedTime => FrameManager.instance.curTime - _enterTime;
         private int _fireFrame;
         private LogicAnimInfo _animLogicInfo;
-        protected TSVector2 Pos;
-        protected FP area;
+        protected TSVector2 skillCheckPos;
+        protected TSVector skillCheckArea;
+
+        public int enterFrame { get; private set; }
+        public int passedFrame => FrameManager.instance.curClientFrame - enterFrame;
+        public int totalFrame => _animLogicInfo.length;
         public PS_Base(EPlayerState stateType, FSM<PS_Base> fsm) : base((int)stateType, fsm)
         {
             this.plfsm = (PlayerFSM)fsm;
@@ -60,9 +61,10 @@ namespace Game
 
         public override void Enter(FSMState<PS_Base> lstState, object param = null)
         {
+            _animLogicInfo = default;
             _nxtStateType = 0;
             _finished = false;
-            _enterTime = FrameManager.instance.curTime;
+            enterFrame = FrameManager.instance.curClientFrame;
             
             base.Enter(lstState, param);
         }
@@ -70,12 +72,13 @@ namespace Game
         protected void PlayState(string animName)
         {
             var asset = AssetLogicAnimAinfosManager.instance.GetAnimInfo(animName);
-            _totalTime = asset.length;
+            _animLogicInfo = asset;
             owner.playerData.aniInfo.stateName = asset.stateName;
-            owner.playerData.aniInfo.totalTime = _totalTime;
-            owner.playerData.aniInfo.startTime = FrameManager.instance.curTime;
+            owner.playerData.aniInfo.totalFrame = asset.length;
+            owner.playerData.aniInfo.startFrame = FrameManager.instance.curTime.AsInt();
             _fireFrame = asset.fireFrame;
-            Pos = asset.skillCheckArea.xy;
+            skillCheckPos = asset.skillCheckPos;
+            skillCheckArea = asset.skillCheckArea;
         }
 
         public override void Update()
@@ -83,11 +86,11 @@ namespace Game
             base.Update();
             LogicUpdate();
             InputCheck();
-            owner.playerData.aniInfo.curTime = FrameManager.instance.curTime - _enterTime;
-            if (passedTime == _fireFrame)
+            owner.playerData.aniInfo.curFrame = passedFrame;
+            if (passedFrame == _fireFrame )
                 OnFire();
             
-            if (passedTime > _totalTime)
+            if (passedFrame >= totalFrame)
                 _finished = true;
             if (_finished)
             {
