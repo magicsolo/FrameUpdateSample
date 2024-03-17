@@ -31,7 +31,7 @@ namespace Game
     public class LogicPlayer
     {
         public PlayerInfo playerData = new PlayerInfo();
-        private PlayerFSM fsm;
+        public PlayerFSM fsm;
         public EPlayerState curStateType => (EPlayerState)fsm.curState.stateType;
         public FP speed = 10f;
 
@@ -45,8 +45,7 @@ namespace Game
         public void UpdateInput(InputData inputData)
         {
             playerData.InputData = inputData;
-            fsm.curState.Update();
-            
+            fsm.Update();
         }
     }
 }

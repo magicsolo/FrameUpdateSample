@@ -4,7 +4,10 @@ namespace Game
 {
     public abstract class PS_CommomState : PS_Base
     {
-        protected PS_CommomState(EPlayerState stateType, FSM<PS_Base> fsm) : base(stateType, fsm){}
+        protected PS_CommomState(EPlayerState stateType, FSM<PS_Base> fsm) : base(stateType, fsm)
+        {
+            
+        }
         protected override void LogicUpdate()
         {
             base.LogicUpdate();
@@ -15,6 +18,7 @@ namespace Game
                 _finished = true;
             }
         }
+        
     }
     
     
@@ -33,7 +37,7 @@ namespace Game
             base.LogicUpdate();
             if (owner.playerData.InputData.inputMoveAngle >-1)
             {
-                plfsm.ChangeState(EPlayerState.Move);
+                plfsm.SetNextState(EPlayerState.Move);
             }
         }
     }

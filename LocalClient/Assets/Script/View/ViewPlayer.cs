@@ -79,10 +79,7 @@ namespace Script
                 animator.Play(curAnimState, 0, aniInfo.curFrame / (float)aniInfo.totalFrame);
             }
 
-            if (Math.Abs(dtMove.x)>0)
-            {
-                sprite.flipX = !vPlInfo.faceRight; //dtMove.x < 0;
-            }
+            sprite.flipX = !vPlInfo.faceRight;
         }
     }
 }

@@ -864,11 +864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc2b6b480dbc73545ba8c86d8fbd16fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameTime:
-    _serializedValue: 85899344
   gameType: 0
-  curServerFrame: -1
-  curClientFrame: -1
 --- !u!1 &1701205597
 GameObject:
   m_ObjectHideFlags: 0

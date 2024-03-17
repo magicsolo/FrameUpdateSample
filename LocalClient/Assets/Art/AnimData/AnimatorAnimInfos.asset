@@ -30,7 +30,6 @@ MonoBehaviour:
         _serializedValue: 0
       z:
         _serializedValue: 0
-    test: 
   - key: Player_attack
     controllerName: Player
     length: 23
@@ -48,7 +47,6 @@ MonoBehaviour:
         _serializedValue: 4294967296
       z:
         _serializedValue: 4294967296
-    test: 
   - key: Player_idle
     controllerName: Player
     length: 13
@@ -66,7 +64,6 @@ MonoBehaviour:
         _serializedValue: 0
       z:
         _serializedValue: 0
-    test: 
   - key: Player_hurt
     controllerName: Player
     length: 16
@@ -84,7 +81,6 @@ MonoBehaviour:
         _serializedValue: 0
       z:
         _serializedValue: 0
-    test: 
   - key: Player_death
     controllerName: Player
     length: 23
@@ -102,4 +98,3 @@ MonoBehaviour:
         _serializedValue: 0
       z:
         _serializedValue: 0
-    test: 

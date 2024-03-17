@@ -5,6 +5,12 @@ using UnityEngine.Playables;
 
 namespace Game
 {
+    public struct HurtInfo
+    {
+        public TSVector dir;
+        public LogicPlayer attacker;
+        public LogicPlayer suffer;
+    }
     public class PS_Attack:PS_Base
     {
         public PS_Attack( FSM<PS_Base> fsm) : base(EPlayerState.Attack, fsm){}
@@ -18,7 +24,7 @@ namespace Game
         {
             base.OnFire();
             var pos = owner.playerData.pos;
-            pos.x += skillCheckPos.x;
+            pos.x += skillCheckPos.x * (owner.playerData.faceRight ? 1 : -1);
             pos.y += skillCheckPos.y;
             var area = skillCheckArea;
 
@@ -47,7 +53,12 @@ namespace Game
                     tarMax.y += height / 2;
 
                     bool collide = IsCubeCollide(plMin, plMax, tarMin, tarMax);
-                    Debug.LogError("TriggerTarget");
+                    if (collide)
+                    {
+                        var suffer = new HurtInfo()
+                            {attacker = owner,suffer = target,dir = owner.playerData.faceRight? TSVector.right : TSVector.left};
+                        target.fsm.SetNextState(EPlayerState.Hurt,suffer);
+                    }
                 }
             }
             

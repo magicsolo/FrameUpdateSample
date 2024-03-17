@@ -11,22 +11,49 @@ namespace Game
         none = 0,
         Idle,
         Move,
-        Total,
         Attack,
+        Hurt,
+        Total,
+        
     }
 
     public class PlayerFSM : FSM<PS_Base>
     {
         public LogicPlayer owner;
+        private EPlayerState _nextState;
+        public EPlayerState nextState => _nextState;
+        private object _nextSateParam;
         public PlayerFSM(LogicPlayer owner)
         {
             this.owner = owner;
             AddState(new PS_Idle(this));
             AddState(new PS_Move(this));
             AddState(new PS_Attack(this));
+            AddState(new PS_Hurt(this));
             ChangeState(EPlayerState.Idle);
         }
-        public bool ChangeState(EPlayerState stateType,object param = null)
+
+        public void Update()
+        {
+            if (_nextState!= EPlayerState.none)
+            {
+                var nxtState = _nextState;
+                ChangeState(nxtState, _nextSateParam);
+                _nextState = EPlayerState.none;
+                _nextSateParam = null;
+            }
+            
+            if (curState!=null)
+                curState.Update();
+        }
+
+        public void SetNextState(EPlayerState nxtState,object param = null)
+        {
+            _nextState = nxtState;
+            _nextSateParam = param;
+        }
+        
+        private bool ChangeState(EPlayerState stateType,object param = null)
         {
              return ChgST((int)stateType,param);
         }
@@ -94,24 +121,28 @@ namespace Game
                 _finished = true;
             if (_finished)
             {
-                if (_nxtStateType != 0 && plfsm.ChangeState(_nxtStateType, _nxtStateParam))
+                if (plfsm.nextState== EPlayerState.none)
                 {
-                    _nxtStateType = 0;
-                }
-                else
-                {
-                    if (owner.playerData.InputData.inputMoveAngle > -1)
+                    if (_nxtStateType != 0)
                     {
-                        plfsm.ChangeState(EPlayerState.Move);
+                        plfsm.SetNextState(_nxtStateType, _nxtStateParam);
+                        _nxtStateType = 0;
                     }
                     else
                     {
-                        plfsm.ChangeState(EPlayerState.Idle);
+                        if (owner.playerData.InputData.inputMoveAngle > -1)
+                        {
+                            plfsm.SetNextState(EPlayerState.Move);
+                        }
+                        else
+                        {
+                            plfsm.SetNextState(EPlayerState.Idle);
+                        }
                     }
                 }
             }
         }
-
+        
         public virtual void OnFire(){}
 
         protected virtual void LogicUpdate(){}

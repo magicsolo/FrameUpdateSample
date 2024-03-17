@@ -22,7 +22,6 @@ namespace Game
             if (owner.playerData.InputData.inputMoveAngle >-1)
             {
                 var moveDir = TSQuaternion.Euler(0, inputData.inputMoveAngle, 0) * TSVector.forward;
-
                 moveDir *= speed * FrameManager.frameTime;
                 owner.playerData.pos += moveDir;
                 if (TSMath.Abs(moveDir.x)>0 )
@@ -32,7 +31,7 @@ namespace Game
             }
             else
             {
-                plfsm.ChangeState(EPlayerState.Idle);
+                plfsm.SetNextState(EPlayerState.Idle);
             }
         }
     }
