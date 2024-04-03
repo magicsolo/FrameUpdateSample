@@ -63,7 +63,8 @@ namespace TrueSync.Physics3D {
         }
 
         public FP AppliedImpulse { get { return accumulatedImpulse; } }
-
+        
+        
         /// <summary>
         /// Defines how big the applied impulses can get.
         /// </summary>
