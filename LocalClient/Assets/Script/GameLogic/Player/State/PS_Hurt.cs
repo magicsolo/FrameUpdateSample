@@ -4,9 +4,10 @@ namespace Game
 {
     public class PS_Hurt: PS_Base
     {
+
         public PS_Hurt(FSM<PS_Base> fsm) : base(EPlayerState.Hurt, fsm)
         {
-            
+            useAnimDrive = true;
         }
 
         public override void Enter(FSMState<PS_Base> lstState, object param = null)

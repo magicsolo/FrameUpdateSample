@@ -51,12 +51,12 @@ namespace EditorGame
 
         void SaveAnimatorInfo(AnimatorController controller)
         {
+           
             Dictionary<string, AnimationClip> dic = new Dictionary<string, AnimationClip>();
             foreach (var clip in controller.animationClips)
             {
                 dic[clip.name] = clip;
             }
-
             foreach (var state in controller.layers[0].stateMachine.states)
             {
                 LogicAnimInfo newInfo = new LogicAnimInfo();
@@ -69,28 +69,39 @@ namespace EditorGame
                 Vector2 pos = Vector2.zero;
                 foreach (var binding in bindings)
                 {
+                    AnimationUtility.GetEditorCurve(clip, binding);
                     switch (binding.propertyName)
                     {
                         case "area.x":
-                            area.x = GetCurveFrameFloatValue(clip, binding);
+                            newInfo.skillAreaX = GetCurveFrameFloatValue(clip, binding);
                             break;
                         case "area.y":
-                            area.y = GetCurveFrameFloatValue(clip, binding);
+                            newInfo.skillAreaY = GetCurveFrameFloatValue(clip, binding);
                             break;
                         case "area.z":
-                            area.z = GetCurveFrameFloatValue(clip, binding);
+                            newInfo.skillAreaZ = GetCurveFrameFloatValue(clip, binding);
                             break;
                         case "pos.x":
-                            pos.x = GetCurveFrameFloatValue(clip, binding);
+                            newInfo.skillPosX = GetCurveFrameFloatValue(clip, binding);
                             break;
                         case "pos.y":
-                            pos.y = GetCurveFrameFloatValue(clip, binding);
+                            newInfo.skillPosY = GetCurveFrameFloatValue(clip, binding);
+                            break;
+                        case "pos.z":
+                            newInfo.skillPosZ = GetCurveFrameFloatValue(clip, binding);
+                            break;
+                        case "m_LocalPosition.x":
+                            newInfo.posX = GetCurveFrameFloatValue(clip, binding);
+                            break;
+                        case "m_LocalPosition.y":
+                            newInfo.posY = GetCurveFrameFloatValue(clip, binding);
+                            break;
+                        case "m_LocalPosition.Z":
+                            newInfo.posZ = GetCurveFrameFloatValue(clip, binding);
                             break;
                     }
                 }
 
-                newInfo.skillCheckPos.Set(pos.x,pos.y);
-                newInfo.skillCheckArea.Set(area.x,area.y,area.z);
                 newInfo.controllerName = controller.name;
                 newInfo.stateName = state.state.name;
                 newInfo.key = $"{newInfo.controllerName}_{newInfo.stateName}";
@@ -99,16 +110,24 @@ namespace EditorGame
             }
         }
 
-        float GetCurveFrameFloatValue(AnimationClip clip,EditorCurveBinding binding)
+        LogicFrameCurveInfo[] GetCurveFrameFloatValue(AnimationClip clip,EditorCurveBinding binding)
         {
-            float value = default;
-            
+            //float value = default;
+            List<LogicFrameCurveInfo> lst = new List<LogicFrameCurveInfo>();
             var curve = AnimationUtility.GetEditorCurve(clip, binding);
             var keys = curve.keys;
-            if (keys.Length>=0)
-                value = keys[0].value;
+
+            foreach (var key in keys)
+            {
+                var newFrame = new LogicFrameCurveInfo();
+                newFrame.frame = (key.time / FrameManager.frameTime).AsInt();
+                newFrame.Value = key.value;
+                newFrame.inTan = key.inTangent;
+                newFrame.outTan = key.outTangent;
+                lst.Add(newFrame);
+            }
             
-            return value;
+            return lst.ToArray();
         }
     }
 }

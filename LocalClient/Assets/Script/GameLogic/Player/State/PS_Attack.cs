@@ -24,9 +24,9 @@ namespace Game
         {
             base.OnFire();
             var pos = owner.playerData.pos;
-            pos.x += skillCheckPos.x * (owner.playerData.faceRight ? 1 : -1);
-            pos.y += skillCheckPos.y;
-            var area = skillCheckArea;
+            pos.x += _curSkillPos.x * (owner.playerData.faceRight ? 1 : -1);
+            pos.y += _curSkillPos.y;
+            var area = _curSkillArea;
 
             TSVector plMin = pos;
             TSVector plMax = pos;

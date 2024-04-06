@@ -75,8 +75,11 @@ namespace Game
         protected EPlayerState _nxtStateType;
         private int _fireFrame;
         private LogicAnimInfo _animLogicInfo;
-        protected TSVector2 skillCheckPos;
-        protected TSVector skillCheckArea;
+        protected bool useAnimDrive;
+        protected TSVector2 _curSkillPos => _animLogicInfo.GetSkillPos(passedFrame);
+        protected TSVector _curSkillArea => _animLogicInfo.GetSkillArea(passedFrame);
+        protected TSVector _curAnimPos => _animLogicInfo.GetPos(passedFrame);
+        protected TSVector _enterPos;
 
         public int enterFrame { get; private set; }
         public int passedFrame => FrameManager.instance.curClientFrame - enterFrame;
@@ -88,6 +91,7 @@ namespace Game
 
         public override void Enter(FSMState<PS_Base> lstState, object param = null)
         {
+            _enterPos = owner.playerData.pos;
             _animLogicInfo = default;
             _nxtStateType = 0;
             _finished = false;
@@ -104,13 +108,18 @@ namespace Game
             owner.playerData.aniInfo.totalFrame = asset.length;
             owner.playerData.aniInfo.startFrame = FrameManager.instance.curTime.AsInt();
             _fireFrame = asset.fireFrame;
-            skillCheckPos = asset.skillCheckPos;
-            skillCheckArea = asset.skillCheckArea;
         }
 
         public override void Update()
         {
             base.Update();
+            if (useAnimDrive)
+            {
+                var animPos = _curAnimPos;
+                animPos.x *= owner.playerData.faceRight ? 1 : -1;
+                owner.playerData.pos = _enterPos + animPos;
+            }
+            
             LogicUpdate();
             InputCheck();
             owner.playerData.aniInfo.curFrame = passedFrame;

@@ -18,83 +18,152 @@ MonoBehaviour:
     length: 8
     stateName: move
     fireFrame: 0
-    skillCheckPos:
-      x:
-        _serializedValue: 0
-      y:
-        _serializedValue: 0
-    skillCheckArea:
-      x:
-        _serializedValue: 0
-      y:
-        _serializedValue: 0
-      z:
-        _serializedValue: 0
+    skillAreaX: []
+    skillAreaY: []
+    skillAreaZ: []
+    skillPosX: []
+    skillPosY: []
+    skillPosZ: []
+    posX: []
+    posY: []
+    posZ: []
   - key: Player_attack
     controllerName: Player
     length: 23
     stateName: attack
     fireFrame: 10
-    skillCheckPos:
-      x:
+    skillAreaX:
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 10
+      Value:
+        _serializedValue: 1717986944
+    skillAreaY:
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 10
+      Value:
+        _serializedValue: 1717986944
+    skillAreaZ:
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 10
+      Value:
+        _serializedValue: 2362232064
+    skillPosX:
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 10
+      Value:
         _serializedValue: 2147483648
-      y:
+    skillPosY:
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 10
+      Value:
         _serializedValue: 687194752
-    skillCheckArea:
-      x:
-        _serializedValue: 4294967296
-      y:
-        _serializedValue: 4294967296
-      z:
-        _serializedValue: 4294967296
+    skillPosZ: []
+    posX: []
+    posY: []
+    posZ: []
   - key: Player_idle
     controllerName: Player
     length: 13
     stateName: idle
     fireFrame: 0
-    skillCheckPos:
-      x:
-        _serializedValue: 0
-      y:
-        _serializedValue: 0
-    skillCheckArea:
-      x:
-        _serializedValue: 0
-      y:
-        _serializedValue: 0
-      z:
-        _serializedValue: 0
+    skillAreaX: []
+    skillAreaY: []
+    skillAreaZ: []
+    skillPosX: []
+    skillPosY: []
+    skillPosZ: []
+    posX: []
+    posY: []
+    posZ: []
   - key: Player_hurt
     controllerName: Player
     length: 16
     stateName: hurt
     fireFrame: 0
-    skillCheckPos:
-      x:
+    skillAreaX: []
+    skillAreaY: []
+    skillAreaZ: []
+    skillPosX: []
+    skillPosY: []
+    skillPosZ: []
+    posX:
+    - inTan:
         _serializedValue: 0
-      y:
+      outTan:
         _serializedValue: 0
-    skillCheckArea:
-      x:
+      frame: 0
+      Value:
         _serializedValue: 0
-      y:
+    - inTan:
+        _serializedValue: -8053063168
+      outTan:
+        _serializedValue: -8053063168
+      frame: 3
+      Value:
+        _serializedValue: -2936012544
+    - inTan:
         _serializedValue: 0
-      z:
+      outTan:
         _serializedValue: 0
+      frame: 16
+      Value:
+        _serializedValue: -4294967296
+    posY: []
+    posZ: []
   - key: Player_death
     controllerName: Player
     length: 23
     stateName: death
     fireFrame: 0
-    skillCheckPos:
-      x:
+    skillAreaX: []
+    skillAreaY: []
+    skillAreaZ: []
+    skillPosX: []
+    skillPosY: []
+    skillPosZ: []
+    posX: []
+    posY: []
+    posZ: []
+  - key: Player_maskAnim
+    controllerName: Player
+    length: 0
+    stateName: maskAnim
+    fireFrame: 0
+    skillAreaX: []
+    skillAreaY: []
+    skillAreaZ: []
+    skillPosX: []
+    skillPosY: []
+    skillPosZ: []
+    posX:
+    - inTan:
         _serializedValue: 0
-      y:
+      outTan:
         _serializedValue: 0
-    skillCheckArea:
-      x:
+      frame: 0
+      Value:
         _serializedValue: 0
-      y:
+    posY:
+    - inTan:
         _serializedValue: 0
-      z:
+      outTan:
         _serializedValue: 0
+      frame: 0
+      Value:
+        _serializedValue: 601295424
+    posZ: []
