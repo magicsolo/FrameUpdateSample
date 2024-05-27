@@ -32,13 +32,18 @@ namespace Game
 
         private LogicState state = LogicState.Login;
         public PlayerServData playerData = new PlayerServData() { index = -1 };
-        
+        public bool isStandAlone;
 
         private LogicFSM fsm;
         
         private void Start()
         {
             fsm = new LogicFSM();
+            if (isStandAlone)
+                fsm.ChangeState(ELogicType.StandAloneRoom);
+            else
+                fsm.ChangeState(ELogicType.Login);
+
         }
 
         private void OnGUI()

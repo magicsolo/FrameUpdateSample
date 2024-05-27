@@ -62,22 +62,17 @@ namespace Game
         {
             curServerFrame = -1;
             curClientFrame = -1;
-            
+            frameDataInputs.Clear();
         }
         
-        //TODO 晚点拆分挪到LogicMatch里
-        public void RequireFrameDatas()
+        public void UpdateFrameDatas(S2CFrameUpdate frmServerData)
         {
-            //lock (frameDataInputs)
+            if (frmServerData != null)
             {
-                S2CFrameUpdate frmServerData = ClientManager.instance.UDPReceive();
-                if (frmServerData != null)
+                curServerFrame = Math.Max(curServerFrame, frmServerData.CurServerFrame);
+                foreach (var frmDt in frmServerData.FrameDatas)
                 {
-                    curServerFrame = Math.Max(curServerFrame, frmServerData.CurServerFrame);
-                    foreach (var frmDt in frmServerData.FrameDatas)
-                    {
-                        frameDataInputs[frmDt.FrameIndex] = frmDt;
-                    }
+                    frameDataInputs[frmDt.FrameIndex] = frmDt;
                 }
             }
         }

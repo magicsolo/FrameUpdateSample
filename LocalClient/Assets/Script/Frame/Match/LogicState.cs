@@ -9,6 +9,8 @@ namespace Game
         Login,
         Match,
         Video,
+        StandAloneRoom,
+        StandAloneMatching,
     }
     
     public class LogicFSM : FSM<LogicState>
@@ -20,7 +22,8 @@ namespace Game
             AddState(new LoginState(this));
             AddState(new MatchingState(this));
             AddState(new VideoState(this));
-            ChangeState(ELogicType.Login);
+            AddState(new StandAloneRoom(this));
+            AddState(new StandAloneMatching(this));
         }
 
         public void ChangeState(ELogicType stType,object param = null)
@@ -47,6 +50,24 @@ namespace Game
                 }
 
                 return _btnStyle;
+            }
+        }
+
+        private GUIStyle _txtStyle;
+
+        public GUIStyle txtStyle
+        {
+            get
+            {
+                if (_txtStyle == null)
+                {
+                    _txtStyle = GUI.skin.label;
+                    _txtStyle.fontSize = 30;
+                    _txtStyle.fixedWidth = 300;
+                    _txtStyle.normal.textColor = Color.black;
+                }
+
+                return _txtStyle;
             }
         }
 

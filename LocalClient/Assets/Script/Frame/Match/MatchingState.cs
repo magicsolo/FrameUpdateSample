@@ -8,7 +8,7 @@ namespace Game
     public class MatchingState:LogicState
     {
         private S2CStartGame startGameInfo;
-        private MatchDrive driver = new MatchDrive();
+        private ServerMatchDrive driver = new ServerMatchDrive();
 
         public MatchingState( LogicFSM fsm) : base(ELogicType.Match, fsm)
         {

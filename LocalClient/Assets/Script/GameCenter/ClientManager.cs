@@ -50,7 +50,7 @@ namespace Game
 
         public string ip = "192.168.50.23";
         public string pot = "8080";
-        private int guid;
+        public int guid { get; private set; }
         public string playerName;
         private BinaryFormatter _serializer = new BinaryFormatter();
 

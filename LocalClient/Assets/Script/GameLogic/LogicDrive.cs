@@ -4,7 +4,7 @@ namespace Game
 {
     public abstract class LogicDrive
     {
-        protected int spaceTime = 1;
+        protected virtual int spaceTime => 1;
         protected S2CStartGame servDt;
         public LogicMatch match => LogicMatch.instance;
         
@@ -15,6 +15,11 @@ namespace Game
         }
         public virtual void Stop()
         {
+        }
+
+        public virtual void UpdateFrame()
+        {
+            
         }
     }
 }

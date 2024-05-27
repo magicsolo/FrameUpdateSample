@@ -6,7 +6,7 @@ using Google.Protobuf;
 
 namespace Game
 {
-    public class MatchDrive:LogicDrive
+    public class ServerMatchDrive:LogicDrive
     {
         private Thread ud;
         private StreamWriter logWriter;
@@ -77,7 +77,8 @@ namespace Game
             ClientManager.instance.UDPConnect(this.servDt.Pot);
             while (true)
             {
-                FrameManager.instance.RequireFrameDatas();
+                S2CFrameUpdate frmServerData = ClientManager.instance.UDPReceive();
+                FrameManager.instance.UpdateFrameDatas(frmServerData);
                 match.Update();
                 FrameManager.instance.SendFrameData();
                 Thread.Sleep(spaceTime);
