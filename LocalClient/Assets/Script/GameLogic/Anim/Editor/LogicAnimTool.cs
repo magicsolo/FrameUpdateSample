@@ -11,7 +11,7 @@ namespace EditorGame
     public class LogicAnimTool : EditorWindow
     {
         private string animatorPath = "Assets/Art/Animators";
-        private string savePath = "Assets/Art/AnimData/AnimatorAnimInfos.asset";
+        public static string savePath = "Assets/Art/AnimData/AnimatorAnimInfos.asset";
 
         private List<LogicAnimInfo> assets = new List<LogicAnimInfo>();
 
@@ -110,7 +110,7 @@ namespace EditorGame
             }
         }
 
-        LogicFrameCurveInfo[] GetCurveFrameFloatValue(AnimationClip clip,EditorCurveBinding binding)
+        public static LogicFrameCurveInfo[] GetCurveFrameFloatValue(AnimationClip clip,EditorCurveBinding binding)
         {
             //float value = default;
             List<LogicFrameCurveInfo> lst = new List<LogicFrameCurveInfo>();

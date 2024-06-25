@@ -64,20 +64,20 @@ namespace Game
             return vect;
         }
 
-        FP GetCurveValue(LogicFrameCurveInfo[] arr, int frame)
+        public FP GetCurveValue(LogicFrameCurveInfo[] arr, int frame)
         {
             var (lst, nxt) = getCurveInfo(arr, frame);
             int leng = nxt.frame - lst.frame;
             if (leng == 0)
                 return lst.Value;
 
-            FP t = frame / leng;
+            FP t = new FP(frame) / leng;
             FP t2 = TSMath.Pow(t, 2);
             FP t3 = TSMath.Pow(t, 3);
             FP p0 = lst.Value;
             FP p1 = nxt.Value;
-            FP m0 = lst.outTan * leng;
-            FP m1 = nxt.inTan * leng; 
+            FP m0 = lst.outTan * leng * FrameManager.frameTime;
+            FP m1 = nxt.inTan * leng * FrameManager.frameTime; 
             //P(t) =(2*t^3-3*t^2+1)*P_0+(t^3-2*t^2+t)*M_0+(t^3-t^2)*M_1+(-2*t^3+3*t^2)*P_1
             FP v = (2 * t3 - 3 * t2 + FP.One)*p0+(t3-2*t2+t)*m0+(t3-t2)*m1+(-2*t3+3*t2)*p1;
             return v;
