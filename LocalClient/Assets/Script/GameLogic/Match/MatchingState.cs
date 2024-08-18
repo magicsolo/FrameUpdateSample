@@ -1,5 +1,6 @@
 ﻿using C2SProtoInterface;
 using CenterBase;
+using FrameDrive;
 using Script;
 using UnityEngine;
 
@@ -49,7 +50,7 @@ namespace Game
         void Reset( )
         {
             driver.Start(startGameInfo);
-            ViewModel.instance.Init(startGameInfo,driver.match);
+            ViewModel.instance.Init();
             //ViewModel.instance.ResetPlayers(FrameManager.instance.players);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using CenterBase;
+using FrameDrive;
 using TrueSync;
 
 namespace Game
@@ -18,15 +19,15 @@ namespace Game
         protected override void LogicUpdate()
         {
             base.LogicUpdate();
-            var inputData = input; 
-            if (owner.playerData.InputData.inputMoveAngle >-1)
+            var inputData = FrameInput; 
+            if (owner.filed.data.inputData.inputMoveAngle >-1)
             {
                 var moveDir = TSQuaternion.Euler(0, inputData.inputMoveAngle, 0) * TSVector.forward;
                 moveDir *= speed * FrameManager.frameTime;
-                owner.playerData.pos += moveDir;
+                owner.filed.data.pos += moveDir;
                 if (TSMath.Abs(moveDir.x)>0 )
                 {
-                    owner.playerData.faceRight = moveDir.x > 0;
+                    owner.filed.data.faceRight = moveDir.x > 0;
                 }
             }
             else

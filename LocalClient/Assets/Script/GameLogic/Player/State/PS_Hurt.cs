@@ -14,7 +14,7 @@ namespace Game
         {
             base.Enter(lstState, param);
             var data = (HurtInfo)param;
-            owner.playerData.faceRight = data.dir.x < 0;
+            owner.filed.data.faceRight = data.dir.x < 0;
             PlayState("Player_hurt");
         }
     }

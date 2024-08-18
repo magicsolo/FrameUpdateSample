@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using CenterBase;
+using FrameDrive;
 using TrueSync;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Game
 {
     public class InputManager : BasicMonoSingle<InputManager>
     {
-        public InputData inputData = default;
+        public FrameInputData inputData = default;
 
         public override void OnAwake()
         {

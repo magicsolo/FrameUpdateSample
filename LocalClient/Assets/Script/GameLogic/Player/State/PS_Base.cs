@@ -1,8 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CenterBase;
+﻿using CenterBase;
+using FrameDrive;
 using TrueSync;
-using TrueSync.Physics2D;
-using UnityEngine;
+using InputData = TrueSync.InputData;
 
 namespace Game
 {
@@ -67,7 +66,7 @@ namespace Game
     public abstract class PS_Base:FSMState<PS_Base>
     {
         protected PlayerFSM plfsm;
-        protected InputData input => owner.playerData.InputData;
+        protected FrameInputData FrameInput => owner.filed.data.inputData;
         public LogicPlayer owner => plfsm.owner;
         public EPlayerState curState => (EPlayerState)stateType;
         protected bool _finished;
@@ -91,7 +90,7 @@ namespace Game
 
         public override void Enter(FSMState<PS_Base> lstState, object param = null)
         {
-            _enterPos = owner.playerData.pos;
+            _enterPos = owner.filed.data.pos;
             _animLogicInfo = default;
             _nxtStateType = 0;
             _finished = false;
@@ -104,9 +103,9 @@ namespace Game
         {
             var asset = AssetLogicAnimAinfosManager.instance.GetAnimInfo(animName);
             _animLogicInfo = asset;
-            owner.playerData.aniInfo.stateName = asset.stateName;
-            owner.playerData.aniInfo.totalFrame = asset.length;
-            owner.playerData.aniInfo.startFrame = FrameManager.instance.curTime.AsInt();
+            owner.filed.data.aniInfo.stateName = asset.stateName;
+            owner.filed.data.aniInfo.totalFrame = asset.length;
+            owner.filed.data.aniInfo.startFrame = FrameManager.instance.curTime.AsInt();
             _fireFrame = asset.fireFrame;
         }
 
@@ -116,13 +115,13 @@ namespace Game
             if (useAnimDrive)
             {
                 var animPos = _curAnimPos;
-                animPos.x *= owner.playerData.faceRight ? 1 : -1;
-                owner.playerData.pos = _enterPos + animPos;
+                animPos.x *= owner.filed.data.faceRight ? 1 : -1;
+                owner.filed.data.pos = _enterPos + animPos;
             }
             
             LogicUpdate();
             InputCheck();
-            owner.playerData.aniInfo.curFrame = passedFrame;
+            owner.filed.data.aniInfo.curFrame = passedFrame;
             if (passedFrame == _fireFrame )
                 OnFire();
             
@@ -139,7 +138,7 @@ namespace Game
                     }
                     else
                     {
-                        if (owner.playerData.InputData.inputMoveAngle > -1)
+                        if (owner.filed.data.inputData.inputMoveAngle > -1)
                         {
                             plfsm.SetNextState(EPlayerState.Move);
                         }

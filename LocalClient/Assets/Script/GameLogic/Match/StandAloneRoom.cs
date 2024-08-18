@@ -1,5 +1,6 @@
 ﻿using C2SProtoInterface;
 using CenterBase;
+using FrameDrive;
 using UnityEngine;
 
 namespace Game
@@ -30,17 +31,17 @@ namespace Game
             GUILayout.EndHorizontal();
             if (GUILayout.Button("开始测试",btnStyle))
             {
-                S2CStartGame startInfo = new S2CStartGame();
-                var pl = new S2CPlayerData();
-                pl.Guid = ClientManager.instance.guid;
-                pl.Name = ClientManager.instance.playerName;
-                startInfo.Players.Add(pl);
-                for (int i = 0; i < aiCount; i++)
+                PlayerFiled[] startInfo = new PlayerFiled[1 + aiCount];
+                var pl = new PlayerFiled();
+                pl.info.guid = ClientManager.instance.guid;
+                pl.info.name = ClientManager.instance.playerName;
+                startInfo[0] = pl;
+                for (int i = 1; i <= aiCount; i++)
                 {
-                    var aiInfo = new S2CPlayerData();
-                    aiInfo.Guid = i;
-                    aiInfo.Name = $"AI_{i}";
-                    startInfo.Players.Add(aiInfo);
+                    var aiInfo = new PlayerFiled();
+                    aiInfo.info.guid = i;
+                    aiInfo.info.name = $"AI_{i}";
+                    startInfo[i] = aiInfo;
                 }
 
                 logicFsm.ChangeState(ELogicType.StandAloneMatching, startInfo);

@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using C2SProtoInterface;
 using CenterBase;
-using Google.Protobuf;
 using TrueSync;
 using UnityEngine;
 
 
-namespace Game
+namespace FrameDrive
 {
+    public enum EInputEnum
+    {
+        none,
+        fire,
+    }
+
     public struct originalData
     {
         public TSVector orPos;
         public TSQuaternion orRotation;
     }
 
-    public struct InputData
+    public struct FrameInputData
     {
+        public int slot;
         public FP inputMoveAngle;
         public EInputEnum input;
 
@@ -28,19 +32,25 @@ namespace Game
             inputMoveAngle = -1;
             input = EInputEnum.none;
         }
+    }
 
-        public InputData(long iAngle, int iInput)
+    public class FrameData
+    {
+        public int frameIndex;
+        public FrameInputData[] InputData;
+
+        public FrameData(int frameIndex,LogicPlayer[] allplayers)
         {
-            inputMoveAngle = FP.FromRaw(iAngle);
-            input = (EInputEnum)iInput;
+            this.frameIndex = frameIndex;
+            InputData = new FrameInputData[allplayers.Length];
         }
     }
 
     public static class ExProto
     {
-        public static InputData GetInputData(this S2CFrameData frmInputData, int idx)
+        public static FrameInputData GetInputData(this S2CFrameData frmInputData, int idx)
         {
-            return new InputData { input = (EInputEnum)frmInputData.Inputs[idx], inputMoveAngle = FP.FromRaw(frmInputData.InputAngles[idx]) };
+            return new FrameInputData { input = (EInputEnum)frmInputData.Inputs[idx], inputMoveAngle = FP.FromRaw(frmInputData.InputAngles[idx]) };
         }
     }
 
@@ -48,68 +58,54 @@ namespace Game
     {
         //1帧33毫秒
         public static readonly FP frameTime = (FP.One) * 33 / 1000;
-        public GameType gameType = GameType.Play;
 
-        public Dictionary<int, S2CFrameData> frameDataInputs = new Dictionary<int, S2CFrameData>();
+        public Dictionary<int, FrameData> frameDataInputs = new Dictionary<int, FrameData>();
         public int curServerFrame { get; private set; }
         public int curClientFrame { get; set; }
         public FP curTime => Math.Max(curClientFrame,0)*frameTime ; 
 
         private int tracingFrameIndex;
+        public int playerCount => match.playerCount;
+        public LogicMatch match = new LogicMatch();
         
 
-        public void Init(S2CStartGame enterInfo)
+        public void Init(PlayerFiled[] playerFileds )
         {
-            curServerFrame = -1;
             curClientFrame = -1;
             frameDataInputs.Clear();
+            match.Init(playerFileds);
+        }
+
+        public void Unit()
+        {
+            curClientFrame = -1;
+            frameDataInputs.Clear();
+            match.Unit();
+        }
+
+        public FrameData AddFrameData(int frameIndex)
+        {
+            if (frameDataInputs.ContainsKey(frameIndex))
+            {
+                Debug.LogError($"FrameDrive -> TryAddContainedFrame {frameIndex}");
+                return default;
+            }
+
+            var nFrm = new FrameData(frameIndex,match.allPlayers);
+            frameDataInputs[frameIndex] = nFrm;
+
+            return nFrm;
         }
         
-        public void UpdateFrameDatas(S2CFrameUpdate frmServerData)
+        public void UpdateFrameData()
         {
-            if (frmServerData != null)
+            while (frameDataInputs.ContainsKey(curClientFrame+1))
             {
-                curServerFrame = Math.Max(curServerFrame, frmServerData.CurServerFrame);
-                foreach (var frmDt in frmServerData.FrameDatas)
-                {
-                    frameDataInputs[frmDt.FrameIndex] = frmDt;
-                }
+                ++curClientFrame;
+                var frmDat = frameDataInputs[curClientFrame];
+                match.Update(frmDat);
             }
         }
-
-        public void SendFrameData()
-        {
-            C2SFrameUpdate frmUpdate = new C2SFrameUpdate();
-
-            var requireStart = Math.Min(curClientFrame + 1, curServerFrame);
-            var requireEnd = curServerFrame;
-            if (!frameDataInputs.ContainsKey(requireStart))
-            {
-                for (; requireEnd <= curServerFrame; requireEnd++)
-                {
-                    if (frameDataInputs.ContainsKey(requireEnd))
-                    {
-                        requireEnd -= 1;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                requireStart = -1;
-                requireEnd = -1;
-            }
-
-
-            frmUpdate.Start = requireStart;
-            frmUpdate.End = requireEnd;
-
-            frmUpdate.Input = (int)InputManager.instance.inputData.input;
-            frmUpdate.Angle = InputManager.instance.inputData.inputMoveAngle._serializedValue;
-            ClientManager.instance.UDPSend(frmUpdate);
-        }
-
-        
 
         public (S2CStartGame, List<S2CFrameData>) LoadVideo()
         {
@@ -153,16 +149,17 @@ namespace Game
 
         public void PlayVideoFrame(List<S2CFrameData> frames,int serverFrame)
         {
-            curServerFrame = serverFrame;
-            foreach (var frm in frames)
-            {
-                frameDataInputs[frm.FrameIndex] = frm;
-            }
+            // curServerFrame = serverFrame;
+            // foreach (var frm in frames)
+            // {
+            //     frameDataInputs[frm.FrameIndex] = frm;
+            // }
         }
 
         public static bool isInFrame(FP passedTime,FP checkFrameTime)
         {
             return passedTime >= checkFrameTime && passedTime < (checkFrameTime + frameTime);
         }
+        
     }
 }

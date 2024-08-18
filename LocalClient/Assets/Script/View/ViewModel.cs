@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using C2SProtoInterface;
 using CenterBase;
+using FrameDrive;
 using Game;
 using Google.Protobuf.Reflection;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Script
 
         private LogicMatch match;
         private List<ViewPlayer> players = new List<ViewPlayer>();
-        public PlayerInfo[] PlayerDatas;
+        public ViewPlayerInfo[] playerInfos;
 
         Transform _playersNode;
 
@@ -41,17 +42,17 @@ namespace Script
             //ResetPlayers();
         }
 
-        public void Init(S2CStartGame svInfo,LogicMatch match)
+        public void Init()
         {
-            this.match = match;
+            this.match = FrameManager.instance.match;
             gameObject.SetActive(true);
-            PlayerDatas = new PlayerInfo[this.match.viewPlayerInfo.Length];
+            playerInfos = new ViewPlayerInfo[match.playerCount];
             foreach (var pl in players)
             {
                 pl.gameObject.SetActive(false);
             }
             
-            for (int slot = 0; slot < svInfo.Players.Count; slot++)
+            for (int slot = 0; slot < FrameManager.instance.playerCount; slot++)
             {
                 ViewPlayer vpl;
 
@@ -82,15 +83,15 @@ namespace Script
                 for (int slot = 0; slot < match.viewPlayerInfo.Length; slot++)
                 {
                     var viewInfo = match.viewPlayerInfo[slot];
-                    PlayerDatas[slot] = viewInfo;
+                    playerInfos[slot] = viewInfo;
                 }
             }
         }
 
 
-        public PlayerInfo GetPlayerInfo(int slot)
+        public ViewPlayerInfo GetPlayerInfo(int slot)
         {
-            return (PlayerDatas != null && slot < PlayerDatas.Length) ? PlayerDatas[slot] : default;
+            return (playerInfos != null && slot < playerInfos.Length) ? playerInfos[slot] : default;
         }
         // public void ResetPlayers(LogicPlayer[] logicPlayers = null)
         // {

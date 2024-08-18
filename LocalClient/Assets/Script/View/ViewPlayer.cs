@@ -1,10 +1,32 @@
 ﻿using System;
 using Game;
+using Script;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Script
+namespace FrameDrive
 {
+    public struct ViewPlayerInfo
+    {
+        public PlayerInfo info;
+        
+        public Vector3 pos;
+        public Quaternion rot;
+        public FrameInputData FrameInputData;
+        public PlayAnimInfo aniInfo;
+        public bool faceRight;
+
+        public ViewPlayerInfo(PlayerInfo info,PlayerLogicData data)
+        {
+            this.info = info;
+            
+            pos = data.pos.ToVector();
+            rot = data.rot.ToQuaternion();
+            FrameInputData = data.inputData;
+            aniInfo = data.aniInfo;
+            faceRight = data.faceRight;
+        }
+    }
     public class ViewPlayer:MonoBehaviour
     {
         private Animator animator;
@@ -57,17 +79,17 @@ namespace Script
 
         private void Update()
         {
-            if (slot >= ViewModel.instance.PlayerDatas.Length)
+            if (slot >= ViewModel.instance.playerInfos.Length)
             {
                 gameObject.SetActive(false);
                 return;
             }
 
-            PlayerInfo vPlInfo = ViewModel.instance.PlayerDatas[slot];
+            ViewPlayerInfo vPlInfo = ViewModel.instance.GetPlayerInfo(slot);
             var oldPosition = transform.position;
-            transform.position = Vector3.Lerp(transform.position, vPlInfo.pos.ToVector(),0.5f);
+            transform.position = Vector3.Lerp(transform.position, vPlInfo.pos,0.5f);
             var dtMove = transform.position - oldPosition;
-            var eulerAngle = vPlInfo.rot.ToQuaternion().eulerAngles;
+            var eulerAngle = vPlInfo.rot.eulerAngles;
             //transform.rotation = Quaternion.Lerp(transform.rotation,vPlInfo.rot.ToQuaternion(),0.5f); 
             
             var aniInfo = vPlInfo.aniInfo;

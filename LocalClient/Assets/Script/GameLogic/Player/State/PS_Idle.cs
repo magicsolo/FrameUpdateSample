@@ -1,4 +1,5 @@
 ﻿using CenterBase;
+using FrameDrive;
 
 namespace Game
 {
@@ -11,7 +12,7 @@ namespace Game
         protected override void LogicUpdate()
         {
             base.LogicUpdate();
-            var inputData = input;
+            var inputData = FrameInput;
             if (inputData.input == EInputEnum.fire)
             {
                 _nxtStateType = EPlayerState.Attack;
@@ -35,7 +36,7 @@ namespace Game
         protected override void LogicUpdate()
         {
             base.LogicUpdate();
-            if (owner.playerData.InputData.inputMoveAngle >-1)
+            if (owner.filed.data.inputData.inputMoveAngle >-1)
             {
                 plfsm.SetNextState(EPlayerState.Move);
             }

@@ -12,11 +12,6 @@ using Google.Protobuf;
 
 namespace Game
 {
-    public enum EInputEnum
-    {
-        none,
-        fire,
-    }
 
     public struct TCPInfo
     {
@@ -177,5 +172,7 @@ namespace Game
         {
             _callBacks[mesgType] = null;
         }
+        
+        
     }
 }

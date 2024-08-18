@@ -17,15 +17,15 @@ namespace Game
         {
             base.Enter(lstState, param);
             fileName = param as string;
-            var (startInfo, frames) = FrameManager.instance.LoadVideo();
-            driver.Start(startInfo,frames);
-            ViewModel.instance.Init(startInfo,driver.match);
+            // var (startInfo, frames) = FrameManager.instance.LoadVideo();
+            // driver.Start(startInfo,frames);
+            // ViewModel.instance.Init(startInfo,driver.match);
         }
 
         public override void Exit()
         {
             base.Exit();
-            driver.Stop();
+            //driver.Stop();
             ViewModel.instance.Unit();
         }
 

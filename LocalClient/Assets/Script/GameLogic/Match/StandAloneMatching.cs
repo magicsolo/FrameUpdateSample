@@ -1,5 +1,6 @@
 ﻿using C2SProtoInterface;
 using CenterBase;
+using FrameDrive;
 using Script;
 using UnityEngine;
 
@@ -15,8 +16,8 @@ namespace Game
         public override void Enter(FSMState<LogicState> lstState, object param = null)
         {
             base.Enter(lstState, param);
-            driver.Start((S2CStartGame) param);
-            ViewModel.instance.Init((S2CStartGame) param,driver.match);
+            driver.Start((PlayerFiled[]) param);
+            ViewModel.instance.Init();
         }
 
         public override void OnGUIUpdate()
@@ -26,6 +27,12 @@ namespace Game
             {
                 logicFsm.ChangeState(ELogicType.StandAloneRoom);
             }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            driver.Update();
         }
 
         public override void Exit()

@@ -16,7 +16,6 @@ namespace Game
 
         public void Start(S2CStartGame startInfo, List<S2CFrameData> frames)
         {
-            base.Start(startInfo);
             this.startInfo = startInfo;
             allFrames = frames;
             curServerFrameIndex = -1;
@@ -32,9 +31,6 @@ namespace Game
             for (int i = 1; i <= udFrames; i++)
                 curFrameFrames.Add(allFrames[curServerFrameIndex + i]);
             curServerFrameIndex += curFrameFrames.Count;
-
-            FrameManager.instance.PlayVideoFrame(allFrames,curServerFrameIndex);
-            match.Update();
         }
     }
 }

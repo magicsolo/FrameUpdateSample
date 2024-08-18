@@ -82,25 +82,25 @@ namespace Game
 
         private void ShowGaming()
         {
-            switch (FrameManager.instance.gameType)
-            {
-                case GameType.Play:
-
-
-                    break;
-                // case GameType.PlayBack:
-                //     if (GUILayout.Button("开始",btnStyle))
-                //     {
-                //         FrameManager.instance.Play();
-                //     }
-                //     break;
-                // case GameType.Pause:
-                //     if (GUILayout.Button("继续",btnStyle))
-                //     {
-                //         FrameManager.instance.Continue();
-                //     }
-                //     break;
-            }
+            // switch (FrameManager.instance.gameType)
+            // {
+            //     case GameType.Play:
+            //
+            //
+            //         break;
+            //     // case GameType.PlayBack:
+            //     //     if (GUILayout.Button("开始",btnStyle))
+            //     //     {
+            //     //         FrameManager.instance.Play();
+            //     //     }
+            //     //     break;
+            //     // case GameType.Pause:
+            //     //     if (GUILayout.Button("继续",btnStyle))
+            //     //     {
+            //     //         FrameManager.instance.Continue();
+            //     //     }
+            //     //     break;
+            // }
         }
 
         // Start is called before the first frame updat

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FrameDrive;
 using Game;
 using Script;
 using UnityEditor;
@@ -33,7 +34,7 @@ public class ViewPlayerEditor : Editor
     void Runinning(ViewPlayer vPlayer)
     {
         var playerInfo = ViewModel.instance.GetPlayerInfo(vPlayer.slot);
-        var guid = playerInfo.guid;
+        var guid = playerInfo.info.guid;
         var logicPlayer = LogicMatch.instance.GetPlayer(guid);
         if (logicPlayer!=null)
         {

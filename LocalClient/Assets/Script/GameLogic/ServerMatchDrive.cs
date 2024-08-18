@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using C2SProtoInterface;
+using FrameDrive;
 using Google.Protobuf;
 
 namespace Game
@@ -11,10 +12,11 @@ namespace Game
         private Thread ud;
         private StreamWriter logWriter;
         private FileStream videoWriter;
+        private S2CStartGame servDt;
 
-        public override void Start(S2CStartGame servDt)
+        public void Start(S2CStartGame servDt)
         {
-            base.Start(servDt);
+            this.servDt = servDt;
             CloseThread();
 
             ud = new Thread(ThreadUpdate);
@@ -65,9 +67,8 @@ namespace Game
             File.Delete(path);
             File.Create(path).Dispose();
         }
-        public override void Stop()
+        public void Stop()
         {
-            base.Stop();
             EventManager.instance.UnRegEvent(EventKeys.LogicMatchUpdate,SaveFrameUpdate);
             CloseThread();
         }
@@ -78,9 +79,18 @@ namespace Game
             while (true)
             {
                 S2CFrameUpdate frmServerData = ClientManager.instance.UDPReceive();
-                FrameManager.instance.UpdateFrameDatas(frmServerData);
-                match.Update();
-                FrameManager.instance.SendFrameData();
+                foreach (var sFrmData in frmServerData.FrameDatas)
+                {
+                    FrameData dt = FrameManager.instance.AddFrameData(sFrmData.FrameIndex);
+                    for (int i = 0; i < FrameManager.instance.playerCount; i++)
+                    {
+                        var inputData = dt.InputData[i];
+                        inputData.input = (EInputEnum)sFrmData.Inputs[i];
+                        inputData.inputMoveAngle._serializedValue = sFrmData.InputAngles[i];
+                    }
+                }
+                FrameManager.instance.UpdateFrameData();
+                SendFrameData();
                 Thread.Sleep(spaceTime);
             }
         }
@@ -92,6 +102,38 @@ namespace Game
                 ud.Abort();
                 ud = null;
             }
+        }
+        
+        public void SendFrameData()
+        {
+            C2SFrameUpdate frmUpdate = new C2SFrameUpdate();
+
+            var requireStart = Math.Min(curClientFrame + 1, curServerFrame);
+            var requireEnd = curServerFrame;
+            if (!FrameManager.instance.frameDataInputs.ContainsKey(requireStart))
+            {
+                for (; requireEnd <= curServerFrame; requireEnd++)
+                {
+                    if (FrameManager.instance.frameDataInputs.ContainsKey(requireEnd))
+                    {
+                        requireEnd -= 1;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                requireStart = -1;
+                requireEnd = -1;
+            }
+
+
+            frmUpdate.Start = requireStart;
+            frmUpdate.End = requireEnd;
+
+            frmUpdate.Input = (int)InputManager.instance.inputData.input;
+            frmUpdate.Angle = InputManager.instance.inputData.inputMoveAngle._serializedValue;
+            ClientManager.instance.UDPSend(frmUpdate);
         }
     }
 }

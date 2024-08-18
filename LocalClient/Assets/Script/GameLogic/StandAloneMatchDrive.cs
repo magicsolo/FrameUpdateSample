@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using C2SProtoInterface;
+using FrameDrive;
 using Google.Protobuf;
 using TrueSync;
 
@@ -15,13 +16,13 @@ namespace Game
         private int _spaceTime;
         protected override int spaceTime => _spaceTime;
         
-        public override void Start(S2CStartGame servDt)
+        public void Start(PlayerFiled[] playerFileds)
         {
-            base.Start(servDt);
+            FrameManager.instance.Init(playerFileds);
             _spaceTime = (FrameManager.frameTime*1000).AsInt();
             CloseThread();
 
-            ud = new Thread(ThreadUpdate);
+            ud = new Thread(Update);
             ud.Start();
             
             var logPath = Directory.GetCurrentDirectory() + "\\log.txt";
@@ -32,15 +33,10 @@ namespace Game
             if (videoWriter!=null)
                 videoWriter.Close();
             videoWriter = new FileStream(videoPath,FileMode.Create,FileAccess.Write);
-            var startBytes = servDt.ToByteArray();
-            Int32 length = startBytes.Length;
-            var lengthBytes = BitConverter.GetBytes(length);
-            videoWriter.Write(lengthBytes,0,lengthBytes.Length);
-            videoWriter.Write(startBytes,0,startBytes.Length);
-            
             EventManager.instance.RegEvent(EventKeys.LogicMatchUpdate,SaveFrameUpdate);
         }
-
+        
+        
         public void SaveFrameUpdate(object obj)
         {
             S2CFrameData frmUpdate = (S2CFrameData)obj;
@@ -69,40 +65,18 @@ namespace Game
             File.Delete(path);
             File.Create(path).Dispose();
         }
-        public override void Stop()
+        public void Stop()
         {
-            base.Stop();
             EventManager.instance.UnRegEvent(EventKeys.LogicMatchUpdate,SaveFrameUpdate);
             CloseThread();
         }
 
-        void ThreadUpdate()
+        public void Update()
         {
-            ClientManager.instance.UDPConnect(this.servDt.Pot);
-            while (true)
-            {
-                S2CFrameUpdate frmServerData = new S2CFrameUpdate();//ClientManager.instance.UDPReceive();
-                frmServerData.CurServerFrame = FrameManager.instance.curClientFrame + 2;
-                var newFrame = new S2CFrameData();
-                newFrame.FrameIndex = FrameManager.instance.curClientFrame + 1;
-                for (int i = 0; i < match.allPlayers.Length; i++)
-                {
-                    var player = match.allPlayers[i];
-                    newFrame.Gids.Add(player.playerData.guid);
-                    if (i == 0)
-                    {
-                        newFrame.Inputs.Add((int)InputManager.instance.inputData.input);
-                        newFrame.InputAngles.Add(InputManager.instance.inputData.inputMoveAngle._serializedValue);
-                    }
-                    newFrame.Inputs.Add(0);
-                    newFrame.InputAngles.Add((new FP(-1))._serializedValue);
-                }
-                
-                frmServerData.FrameDatas.Add(newFrame);
-                FrameManager.instance.UpdateFrameDatas(frmServerData);
-                match.Update();
-                Thread.Sleep(spaceTime);
-            }
+            var nxtFrame = FrameManager.instance.AddFrameData(FrameManager.instance.curClientFrame + 1);
+            nxtFrame.InputData[0].input = InputManager.instance.inputData.input;
+            nxtFrame.InputData[0].inputMoveAngle = InputManager.instance.inputData.inputMoveAngle;
+            FrameManager.instance.UpdateFrameData();
         }
         
         void CloseThread()

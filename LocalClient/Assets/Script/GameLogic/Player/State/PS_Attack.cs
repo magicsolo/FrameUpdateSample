@@ -1,4 +1,5 @@
 ﻿using CenterBase;
+using FrameDrive;
 using TrueSync;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -23,8 +24,8 @@ namespace Game
         public override void OnFire()
         {
             base.OnFire();
-            var pos = owner.playerData.pos;
-            pos.x += _curSkillPos.x * (owner.playerData.faceRight ? 1 : -1);
+            var pos = owner.filed.data.pos;
+            pos.x += _curSkillPos.x * (owner.filed.data.faceRight ? 1 : -1);
             pos.y += _curSkillPos.y;
             var area = _curSkillArea;
 
@@ -37,11 +38,11 @@ namespace Game
             plMax.y += area.y / 2;
             plMin.z -= area.z/2;
             plMax.z += area.z / 2;
-            foreach (var target in LogicMatch.instance.allPlayers)
+            foreach (var target in owner.match.allPlayers)
             {
-                if (target.playerData.guid != owner.playerData.guid)
+                if (target.filed.info.guid != owner.filed.info.guid)
                 {
-                    var tarMin = target.playerData.pos;
+                    var tarMin = target.filed.data.pos;
                     tarMin.y += FP.One*2/10;
                     var tarMax = tarMin;
                     FP width = FP.One * 48 / 100;
@@ -56,7 +57,7 @@ namespace Game
                     if (collide)
                     {
                         var suffer = new HurtInfo()
-                            {attacker = owner,suffer = target,dir = owner.playerData.faceRight? TSVector.right : TSVector.left};
+                            {attacker = owner,suffer = target,dir = owner.filed.data.faceRight? TSVector.right : TSVector.left};
                         target.fsm.SetNextState(EPlayerState.Hurt,suffer);
                     }
                 }
