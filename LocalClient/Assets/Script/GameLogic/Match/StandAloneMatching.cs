@@ -29,16 +29,10 @@ namespace Game
             }
         }
 
-        public override void Update()
-        {
-            base.Update();
-            driver.Update();
-        }
-
         public override void Exit()
         {
             base.Exit();
-            driver.Stop();
+            driver.StopDrive();
             ViewModel.instance.Unit();
         }
     }

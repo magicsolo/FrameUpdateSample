@@ -20,7 +20,7 @@ namespace Game
         {
             base.LogicUpdate();
             var inputData = FrameInput; 
-            if (owner.filed.data.inputData.inputMoveAngle >-1)
+            if (owner.filed.data.inputData.inputMoveAngle >=0)
             {
                 var moveDir = TSQuaternion.Euler(0, inputData.inputMoveAngle, 0) * TSVector.forward;
                 moveDir *= speed * FrameManager.frameTime;

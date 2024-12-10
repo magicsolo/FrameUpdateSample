@@ -36,7 +36,7 @@ namespace Game
         protected override void LogicUpdate()
         {
             base.LogicUpdate();
-            if (owner.filed.data.inputData.inputMoveAngle >-1)
+            if (owner.filed.data.inputData.inputMoveAngle >= 0)
             {
                 plfsm.SetNextState(EPlayerState.Move);
             }

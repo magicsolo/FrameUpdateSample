@@ -32,15 +32,11 @@ namespace Game
             if (GUILayout.Button("开始测试",btnStyle))
             {
                 PlayerFiled[] startInfo = new PlayerFiled[1 + aiCount];
-                var pl = new PlayerFiled();
-                pl.info.guid = ClientManager.instance.guid;
-                pl.info.name = ClientManager.instance.playerName;
+                var pl = new PlayerFiled(new PlayerInfo(){guid = ClientManager.instance.guid,name = ClientManager.instance.playerName });
                 startInfo[0] = pl;
                 for (int i = 1; i <= aiCount; i++)
                 {
-                    var aiInfo = new PlayerFiled();
-                    aiInfo.info.guid = i;
-                    aiInfo.info.name = $"AI_{i}";
+                    var aiInfo = new PlayerFiled(new PlayerInfo(){guid = i,name = $"AI_{i}" });
                     startInfo[i] = aiInfo;
                 }
 

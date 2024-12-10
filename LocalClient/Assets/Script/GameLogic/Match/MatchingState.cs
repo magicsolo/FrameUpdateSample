@@ -30,13 +30,13 @@ namespace Game
             if (GUILayout.Button("保存录像以及帧输出日志",btnStyle))
                 ClientManager.instance.SendTCPInfo(EMessage.PrintFrames, new C2SPrintFrames());
             
-            GUILayout.Label($"Frame cli:{FrameManager.instance.curClientFrame} serv:{FrameManager.instance.curServerFrame}",btnStyle);
+            GUILayout.Label($"Frame cli:{FrameManager.instance.curClientFrame} serv:{FrameManager.instance.curServerFrame} ri:{FrameManager.instance.clientRuningFrame}",btnStyle);
         }
 
         public override void Exit()
         {
             base.Exit();
-            driver.Stop();
+            driver.StopDrive();
             ClientManager.instance.UnRegistNoteListener(EMessage.Restart);
             ClientManager.instance.UnRegistNoteListener(EMessage.PrintFrames);
             ViewModel.instance.Unit();
@@ -49,6 +49,7 @@ namespace Game
         }
         void Reset( )
         {
+            
             driver.Start(startGameInfo);
             ViewModel.instance.Init();
             //ViewModel.instance.ResetPlayers(FrameManager.instance.players);

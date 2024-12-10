@@ -7,12 +7,24 @@ namespace FrameDrive
     {
         public PlayerInfo info;
         public PlayerLogicData data = new PlayerLogicData();
+
+        public PlayerFiled(PlayerInfo plInfo)
+        {
+            info = plInfo;
+        }
     }
     public struct PlayerInfo
     {
         public int guid;
         public string name;
         public int slot;
+
+        public PlayerInfo(int gid, string name, int slot)
+        {
+            guid = gid;
+            this.name = name;
+            this.slot = slot;
+        }
     }
 
     public class PlayerLogicData

@@ -81,7 +81,7 @@ namespace Game
         protected TSVector _enterPos;
 
         public int enterFrame { get; private set; }
-        public int passedFrame => FrameManager.instance.curClientFrame - enterFrame;
+        public int passedFrame => FrameManager.instance.clientRuningFrame - enterFrame;
         public int totalFrame => _animLogicInfo.length;
         public PS_Base(EPlayerState stateType, FSM<PS_Base> fsm) : base((int)stateType, fsm)
         {
@@ -94,7 +94,7 @@ namespace Game
             _animLogicInfo = default;
             _nxtStateType = 0;
             _finished = false;
-            enterFrame = FrameManager.instance.curClientFrame;
+            enterFrame = FrameManager.instance.clientRuningFrame;
             
             base.Enter(lstState, param);
         }
@@ -138,7 +138,7 @@ namespace Game
                     }
                     else
                     {
-                        if (owner.filed.data.inputData.inputMoveAngle > -1)
+                        if (owner.filed.data.inputData.inputMoveAngle >= 0)
                         {
                             plfsm.SetNextState(EPlayerState.Move);
                         }

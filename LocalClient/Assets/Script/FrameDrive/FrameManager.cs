@@ -29,8 +29,9 @@ namespace FrameDrive
 
         public void Clear()
         {
-            inputMoveAngle = -1;
+            inputMoveAngle = 0;
             input = EInputEnum.none;
+            inputMoveAngle = -1;
         }
     }
 
@@ -43,14 +44,11 @@ namespace FrameDrive
         {
             this.frameIndex = frameIndex;
             InputData = new FrameInputData[allplayers.Length];
-        }
-    }
 
-    public static class ExProto
-    {
-        public static FrameInputData GetInputData(this S2CFrameData frmInputData, int idx)
-        {
-            return new FrameInputData { input = (EInputEnum)frmInputData.Inputs[idx], inputMoveAngle = FP.FromRaw(frmInputData.InputAngles[idx]) };
+            for (int i = 0; i < InputData.Length; i++)
+            {
+                InputData[i].Clear();
+            }
         }
     }
 
@@ -60,25 +58,27 @@ namespace FrameDrive
         public static readonly FP frameTime = (FP.One) * 33 / 1000;
 
         public Dictionary<int, FrameData> frameDataInputs = new Dictionary<int, FrameData>();
-        public int curServerFrame { get; private set; }
-        public int curClientFrame { get; set; }
-        public FP curTime => Math.Max(curClientFrame,0)*frameTime ; 
+        public int curServerFrame { get; set; }
+        public int curClientFrame { get; private set; }
+        public int clientRuningFrame { get; private set; }
+        public FP curTime => Math.Max(clientRuningFrame,0)*frameTime ; 
 
         private int tracingFrameIndex;
         public int playerCount => match.playerCount;
-        public LogicMatch match = new LogicMatch();
+        public LogicMatch match => LogicMatch.instance;
         
 
         public void Init(PlayerFiled[] playerFileds )
         {
+            clientRuningFrame = -1;
             curClientFrame = -1;
+            curServerFrame = -1;
             frameDataInputs.Clear();
             match.Init(playerFileds);
         }
 
         public void Unit()
         {
-            curClientFrame = -1;
             frameDataInputs.Clear();
             match.Unit();
         }
@@ -93,16 +93,17 @@ namespace FrameDrive
 
             var nFrm = new FrameData(frameIndex,match.allPlayers);
             frameDataInputs[frameIndex] = nFrm;
+            ++curClientFrame;
 
             return nFrm;
         }
         
         public void UpdateFrameData()
         {
-            while (frameDataInputs.ContainsKey(curClientFrame+1))
+            while (frameDataInputs.ContainsKey(clientRuningFrame+1))
             {
-                ++curClientFrame;
-                var frmDat = frameDataInputs[curClientFrame];
+                ++clientRuningFrame;
+                var frmDat = frameDataInputs[clientRuningFrame];
                 match.Update(frmDat);
             }
         }

@@ -25,3 +25,8 @@ LocalClient/testVideo.bytes
 LocalClient/video.bytes
 LocalClient/Assets/Test/
 LocalClient/Assets/Plugins/
+LocalServer/Server/Server/obj/
+LocalServer/Server/Server/bin/
+LocalServer/Server/.idea/
+LocalServer/Server/global.json
+LocalServer/Server/Server.sln
