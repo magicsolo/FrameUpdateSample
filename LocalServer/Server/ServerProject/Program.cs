@@ -59,7 +59,7 @@ namespace ConsoleApplicatLocalServer
             Console.Write("Updating Strat\n");
             while (true)
             {
-                serverLogic.RecieveTCPInfo();
+                serverLogic.UpdateTCPInfo();
                 serverLogic.Update();
                 Thread.Sleep(ServerLogic.frameTime);
             }

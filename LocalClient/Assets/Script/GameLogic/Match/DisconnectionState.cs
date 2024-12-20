@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Game
 {
 
-    public class LoginState:LogicState
+    public class DisconnectionState:LogicState
     {
         private bool isConnecting = false;
         private string videoName = "log";
@@ -29,13 +29,13 @@ namespace Game
         public override void Enter(FSMState<LogicState> lstState, object param = null)
         {
             base.Enter(lstState, param);
-            ClientManager.instance.RegistNoteListener(EMessage.Restart,OnLogin);
+            ClientManager.instance.RegistNoteListener(EMessage.Connected,OnConnected);
         }
 
         public override void Exit()
         {
             base.Exit();
-            ClientManager.instance.UnRegistNoteListener(EMessage.Restart);
+            ClientManager.instance.UnRegistNoteListener(EMessage.Connected);
         }
 
         public override void Update()
@@ -43,7 +43,7 @@ namespace Game
             
         }
 
-        public LoginState( LogicFSM fsm) : base(ELogicType.Login, fsm)
+        public DisconnectionState( LogicFSM fsm) : base(ELogicType.Disconnection, fsm)
         {
         }
 
@@ -59,9 +59,9 @@ namespace Game
             ClientManager.instance.pot = GUILayout.TextArea(ClientManager.instance.pot, btnStyle);
             GUILayout.EndHorizontal();
 
-            if (GUILayout.Button("已断开", btnStyle))
+            if (GUILayout.Button("链接", btnStyle))
             {
-                ClientManager.instance.ReConnect();
+                ClientManager.instance.Connect();
             }
             else
             {
@@ -85,7 +85,7 @@ namespace Game
             if (GUILayout.Button("登录",btnStyle))
                 ClientManager.instance.Login();
         }
-        void OnLogin(TCPInfo servDat)
+        void OnConnected(TCPInfo servDat)
         {
             logicFsm.ChangeState(ELogicType.Match,servDat);
         }

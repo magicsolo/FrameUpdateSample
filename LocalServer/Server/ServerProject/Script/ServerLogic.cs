@@ -12,7 +12,7 @@ namespace ConsoleApplicatLocalServer
         public int index = -1;
         public int guid = -1;
         public string name;
-        public float lastHeartTime = -1;
+        public long lastHeartTime = -1;
         public TcpClient client;
         public NetworkStream stream;
         public EndPoint udpEndPoint;
@@ -22,6 +22,7 @@ namespace ConsoleApplicatLocalServer
         {
             guid = -1;
             client = cl;
+            lastHeartTime = DateTime.Now.Ticks;
             stream = cl.GetStream();
             enabled = true;
         }
@@ -61,6 +62,7 @@ namespace ConsoleApplicatLocalServer
 
     public class ServerLogic
     {
+        private const int outlineTimeSeconds = 10;
         //毫秒
         public static int frameTime = 33;
         private static int playerNum = 1;
@@ -234,9 +236,9 @@ namespace ConsoleApplicatLocalServer
             }
         }
 
-        unsafe void SendTCPData(Stream stream, EMessage messageType, IMessage obj)
+        unsafe void SendTCPData(Stream stream, EMessage messageType, IMessage obj = null)
         {
-            byte[] data = new byte[sizeof(EMessage) + sizeof(int) + obj.CalculateSize()]; //` Encoding.UTF8.GetBytes(jsn);
+            byte[] data = new byte[sizeof(EMessage) + sizeof(int) + obj?.CalculateSize() ?? 0];
             var infoBytes = obj.ToByteArray();
             int offset = 0;
             fixed (byte* p = data)
@@ -251,14 +253,16 @@ namespace ConsoleApplicatLocalServer
             stream.Write(data, 0, data.Length);
         }
 
-        public void RecieveTCPInfo()
+        public void UpdateTCPInfo()
         {
             lock (clientCollection)
             {
                 foreach (var kv in clientCollection)
                 {
-                    if (kv.Value.enabled)
+                    var plInfo = kv.Value;
+                    if (plInfo.enabled)
                         OnRecieveTCPInfo(kv.Value);
+                    CheckPlayerOffline(plInfo);
                 }
 
                 if (tmpRemovedClient.Count > 0)
@@ -275,6 +279,7 @@ namespace ConsoleApplicatLocalServer
 
         unsafe void OnRecieveTCPInfo(PlayerInfo plInfo)
         {
+            
             byte[] streamBuffer = new byte[1024 * 1024];
 
             var stream = plInfo.stream;
@@ -284,13 +289,26 @@ namespace ConsoleApplicatLocalServer
             var readLen = stream.Read(streamBuffer, 0, streamBuffer.Length);
             if (readLen <= 0)
                 return;
+            plInfo.lastHeartTime = DateTime.Now.Ticks;
+
+            if (readLen == 1)
+            {
+                switch (streamBuffer[0])
+                {
+                    case 1:
+                        streamBuffer[0] = 1;
+                        stream.Write(streamBuffer, 0, 1);
+                        break;
+                }
+                return;
+            }
+            
             EMessage msgType = default;
             fixed (void* p = streamBuffer)
                 msgType = *(EMessage*)p;
 
             if (msgType != EMessage.EnterGame && plInfo.guid == 0)
                 return;
-
             switch (msgType)
             {
                 case EMessage.Login:
@@ -333,6 +351,7 @@ namespace ConsoleApplicatLocalServer
         {
             rmPlInfo.enabled = false;
             tmpRemovedClient.Add(rmPlInfo.client);
+            Console.WriteLine($"RemovePlayer:{rmPlInfo.name} guid:{rmPlInfo.guid} tcp:{rmPlInfo.client.Client.RemoteEndPoint}");
         }
 
         private int[] playerIds;
@@ -518,6 +537,15 @@ namespace ConsoleApplicatLocalServer
                 }
 
                 toC.FrameDatas.Add(frmDt);
+            }
+        }
+
+        //超时检测
+        void CheckPlayerOffline(PlayerInfo player)
+        {
+            if (DateTime.Now.Ticks - player.lastHeartTime >outlineTimeSeconds * 10000000)
+            {
+                RemoveClient(player);
             }
         }
     }

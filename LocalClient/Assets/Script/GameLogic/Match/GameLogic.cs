@@ -42,7 +42,7 @@ namespace Game
             if (isStandAlone)
                 fsm.ChangeState(ELogicType.StandAloneRoom);
             else
-                fsm.ChangeState(ELogicType.Login);
+                fsm.ChangeState(ELogicType.Disconnection);
 
         }
 

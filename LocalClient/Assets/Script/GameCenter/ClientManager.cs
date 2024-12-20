@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -55,8 +56,7 @@ namespace Game
         private TCPConnecter tcp;
         private UDPConnecter udp;
         public EConnecterState tcpState => tcp.CurState;
-
-
+        
         private void OnEnable()
         {
             playerName = PlayerPrefs.GetString("name");
@@ -68,17 +68,15 @@ namespace Game
             udp = new UDPConnecter();
         }
 
-        public void ReConnect()
+        public void Connect()
         {
-            IPAddress ipAddress = IPAddress.Parse(ip);
             tcp.Connect(ip, pot);
             PlayerPrefs.SetString("ip",ip);
             PlayerPrefs.SetString("pot",pot);
             Init();
-            // Thread TCP = new Thread(TCPUpdate);
-            // TCP.Start();
         }
 
+        
         private void Update()
         {
             TCPUpdate();
@@ -90,10 +88,16 @@ namespace Game
             if (tcp.CurState != EConnecterState.Connected)
                 return;
 
-            if (!tcp.Stream.DataAvailable)
-                return;
-            
-            var readLength = tcp.Stream.Read(readBytes, 0, readBytes.Length);
+            var readLength = 0;
+            try
+            {
+                tcp.Receive(readBytes);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
             if (readLength <= 0)
                 return;
             RecieveTCPInfo(readBytes);
@@ -101,6 +105,10 @@ namespace Game
 
         void RecieveTCPInfo(byte[] data)
         {
+            if (data == null || data.Length < 1)
+            {
+                return;
+            }
             var tcpData = new TCPInfo();
             tcpData.Init(data);
 
@@ -113,9 +121,8 @@ namespace Game
             guid = playerName.GetHashCode();
             PlayerPrefs.SetString("name",playerName);
             PlayerPrefs.SetInt("guid",guid);
-            ClientManager.instance.SendTCPInfo(EMessage.EnterGame, new C2SLogin() { Name = playerName, GId = guid });
+            SendTCPInfo(EMessage.EnterGame, new C2SLogin() { Name = playerName, GId = guid });
         }
-
 
         public unsafe void SendTCPInfo(EMessage mesgType, IMessage data = null, Action<TCPInfo> callBack = null)
         {
@@ -130,7 +137,15 @@ namespace Game
             var infoBytes = data?.ToByteArray();
             if (infoBytes!=null)
                 Buffer.BlockCopy(infoBytes, 0, bytes, sizeof(EMessage), infoBytes.Length);
-            tcp.Stream.Write(bytes, 0, bytes.Length);
+            try
+            {
+                tcp.SendData(bytes);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private void Init()

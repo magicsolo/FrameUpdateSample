@@ -6,7 +6,7 @@ namespace Game
     public enum ELogicType
     {
         none = 0,
-        Login,
+        Disconnection,
         Match,
         Video,
         StandAloneRoom,
@@ -19,7 +19,7 @@ namespace Game
         
         public LogicFSM()
         {
-            AddState(new LoginState(this));
+            AddState(new DisconnectionState(this));
             AddState(new MatchingState(this));
             AddState(new VideoState(this));
             AddState(new StandAloneRoom(this));

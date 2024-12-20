@@ -30,3 +30,4 @@ LocalServer/Server/Server/bin/
 LocalServer/Server/.idea/
 LocalServer/Server/global.json
 LocalServer/Server/Server.sln
+*.sln

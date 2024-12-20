@@ -101,28 +101,26 @@ namespace CenterBase
 
     public class TCPConnecter : BaseConnecter
     {
-        public override EConnecterState CurState
-        {
-            get
-            {
-                if (isConnecting)
-                    return EConnecterState.Connecting;
+        private EConnecterState _curState { get;set; }
+        public override EConnecterState CurState=>_curState;
 
-
-                if (tcp != null && tcp.Connected)
-                    return EConnecterState.Connected;
-
-
-                return EConnecterState.DisConnect;
-            }
-        }
-
-        private bool isConnecting = false;
         private TcpClient tcp;
 
         private Thread thrdConnect;
+        private Action connectionEnd;
+        private int heartSpaceTime;
+        private long heartTickBeatCheckSpaceTime => heartSpaceTime * 10000000;
+        private long disconnectTickSpaceTime;
+        private long lastRecvTime;
 
-
+        public TCPConnecter(int heartCheckTime = 1,int disconnectSpaceTime = 10,Action onConnectionEnd = null)
+        {
+            _curState = EConnecterState.DisConnect;
+            heartSpaceTime = heartCheckTime;
+            this.disconnectTickSpaceTime = disconnectSpaceTime * 10000000;
+            connectionEnd = onConnectionEnd;
+        }
+        
         public override void Close()
         {
             if (thrdConnect != null)
@@ -140,20 +138,25 @@ namespace CenterBase
             {
                 tcp.Close();
                 tcp = null;
+                if (connectionEnd!=null)
+                {
+                    connectionEnd();
+                }
             }
 
-            isConnecting = false;
+            _curState = EConnecterState.DisConnect;
         }
-
+        
         public override void Connect(string ip, string pot)
         {
+            this.connectionEnd = null;
             base.Connect(ip, pot);
-            thrdConnect = new Thread(Connecting);
-            isConnecting = true;
+            thrdConnect = new Thread(TCPConnect);
+            _curState = EConnecterState.Connecting;
             thrdConnect.Start();
         }
 
-        void Connecting()
+        void TCPConnect()
         {
             tcp = new TcpClient();
 
@@ -169,7 +172,40 @@ namespace CenterBase
             }
 
             Stream = tcp.GetStream();
-            isConnecting = false;
+            _curState = EConnecterState.Connected;
+            lastRecvTime = DateTime.Now.Ticks;
+            while (_curState == EConnecterState.Connected)
+            {
+                var spaceTime = DateTime.Now.Ticks - lastRecvTime; 
+                if (spaceTime > disconnectTickSpaceTime)
+                {
+                    CloseTCP();
+                    break;
+                }else if (spaceTime > heartTickBeatCheckSpaceTime)
+                {
+                    SendData(new byte[] { 1 });
+                }
+                Thread.Sleep(this.heartSpaceTime *1000);
+            }
+        }
+
+        public void SendData(byte[] byts)
+        {
+            Stream.Write(byts, 0, byts.Length);
+        }
+
+        public int Receive(byte[] byts)
+        {
+            if (!Stream.DataAvailable)
+            {
+                return 0;
+            }
+            var len = Stream.Read(byts, 0, byts.Length);
+            if (len > 0)
+            {
+                lastRecvTime = DateTime.Now.Ticks;
+            }
+            return len;
         }
     }
 }

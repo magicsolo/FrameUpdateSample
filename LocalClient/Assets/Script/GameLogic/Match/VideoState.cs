@@ -40,7 +40,7 @@ namespace Game
             base.OnGUIUpdate();
             if (GUILayout.Button("停止"))
             {
-                logicFsm.ChangeState(ELogicType.Login);
+                logicFsm.ChangeState(ELogicType.Disconnection);
             }
         }
         

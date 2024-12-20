@@ -35,9 +35,10 @@ namespace C2SProtoInterface {
             "RGF0YRISCgpmcmFtZUluZGV4GAEgASgFEgwKBGdpZHMYAiADKAUSDgoGaW5w",
             "dXRzGAMgAygFEhMKC2lucHV0QW5nbGVzGAQgAygDIl0KDlMyQ0ZyYW1lVXBk",
             "YXRlEhYKDmN1clNlcnZlckZyYW1lGAEgASgFEjMKCmZyYW1lRGF0YXMYAiAD",
-            "KAsyHy5DMlNQcm90b0ludGVyZmFjZS5TMkNGcmFtZURhdGEqWAoIRU1lc3Nh",
-            "Z2USCAoETm9uZRAAEgkKBUxvZ2luEAESCgoGTG9nb3V0EAISDQoJRW50ZXJH",
-            "YW1lEAMSCwoHUmVzdGFydBAEEg8KC1ByaW50RnJhbWVzEAViBnByb3RvMw=="));
+            "KAsyHy5DMlNQcm90b0ludGVyZmFjZS5TMkNGcmFtZURhdGEqdgoIRU1lc3Nh",
+            "Z2USCAoETm9uZRAAEg0KCUhlYXJ0QmVhdBABEg0KCUNvbm5lY3RlZBACEgkK",
+            "BUxvZ2luEAMSCgoGTG9nb3V0EAQSDQoJRW50ZXJHYW1lEAUSCwoHUmVzdGFy",
+            "dBAGEg8KC1ByaW50RnJhbWVzEAdiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::C2SProtoInterface.EMessage), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -58,11 +59,13 @@ namespace C2SProtoInterface {
   #region Enums
   public enum EMessage {
     [pbr::OriginalName("None")] None = 0,
-    [pbr::OriginalName("Login")] Login = 1,
-    [pbr::OriginalName("Logout")] Logout = 2,
-    [pbr::OriginalName("EnterGame")] EnterGame = 3,
-    [pbr::OriginalName("Restart")] Restart = 4,
-    [pbr::OriginalName("PrintFrames")] PrintFrames = 5,
+    [pbr::OriginalName("HeartBeat")] HeartBeat = 1,
+    [pbr::OriginalName("Connected")] Connected = 2,
+    [pbr::OriginalName("Login")] Login = 3,
+    [pbr::OriginalName("Logout")] Logout = 4,
+    [pbr::OriginalName("EnterGame")] EnterGame = 5,
+    [pbr::OriginalName("Restart")] Restart = 6,
+    [pbr::OriginalName("PrintFrames")] PrintFrames = 7,
   }
 
   #endregion
