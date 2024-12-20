@@ -35,9 +35,9 @@ namespace C2SProtoInterface {
             "RGF0YRISCgpmcmFtZUluZGV4GAEgASgFEgwKBGdpZHMYAiADKAUSDgoGaW5w",
             "dXRzGAMgAygFEhMKC2lucHV0QW5nbGVzGAQgAygDIl0KDlMyQ0ZyYW1lVXBk",
             "YXRlEhYKDmN1clNlcnZlckZyYW1lGAEgASgFEjMKCmZyYW1lRGF0YXMYAiAD",
-            "KAsyHy5DMlNQcm90b0ludGVyZmFjZS5TMkNGcmFtZURhdGEqQQoIRU1lc3Nh",
-            "Z2USCAoETm9uZRAAEg0KCUVudGVyR2FtZRABEgsKB1Jlc3RhcnQQAhIPCgtQ",
-            "cmludEZyYW1lcxADYgZwcm90bzM="));
+            "KAsyHy5DMlNQcm90b0ludGVyZmFjZS5TMkNGcmFtZURhdGEqWAoIRU1lc3Nh",
+            "Z2USCAoETm9uZRAAEgkKBUxvZ2luEAESCgoGTG9nb3V0EAISDQoJRW50ZXJH",
+            "YW1lEAMSCwoHUmVzdGFydBAEEg8KC1ByaW50RnJhbWVzEAViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::C2SProtoInterface.EMessage), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -58,9 +58,11 @@ namespace C2SProtoInterface {
   #region Enums
   public enum EMessage {
     [pbr::OriginalName("None")] None = 0,
-    [pbr::OriginalName("EnterGame")] EnterGame = 1,
-    [pbr::OriginalName("Restart")] Restart = 2,
-    [pbr::OriginalName("PrintFrames")] PrintFrames = 3,
+    [pbr::OriginalName("Login")] Login = 1,
+    [pbr::OriginalName("Logout")] Logout = 2,
+    [pbr::OriginalName("EnterGame")] EnterGame = 3,
+    [pbr::OriginalName("Restart")] Restart = 4,
+    [pbr::OriginalName("PrintFrames")] PrintFrames = 5,
   }
 
   #endregion

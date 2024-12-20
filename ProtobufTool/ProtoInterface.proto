@@ -3,9 +3,11 @@ package C2SProtoInterface;
 
 enum EMessage {
     None = 0;
-    EnterGame = 1;
-    Restart = 2;
-    PrintFrames = 3;
+    Login = 1;
+    Logout = 2;
+    EnterGame = 3;
+    Restart = 4;
+    PrintFrames = 5;
 }
 
 message C2SLogin{

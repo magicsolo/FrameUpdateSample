@@ -229,6 +229,7 @@ namespace ConsoleApplicatLocalServer
                 lock (clientCollection)
                 {
                     clientCollection.Add(tcpClient, new PlayerInfo(tcpClient));
+                    Console.WriteLine($"Add Collect {tcpClient.Client.RemoteEndPoint}");
                 }
             }
         }
@@ -292,8 +293,14 @@ namespace ConsoleApplicatLocalServer
 
             switch (msgType)
             {
-                case EMessage.EnterGame:
+                case EMessage.Login:
                     OnPlayerLogin(plInfo, streamBuffer, sizeof(EMessage), readLen);
+                    break;
+                case EMessage.Logout:
+                    OnPlayerLogout(plInfo);
+                    break;
+                case EMessage.EnterGame:
+                    
                     break;
                 case EMessage.Restart:
                     OnRestartGame(plInfo);
@@ -315,9 +322,13 @@ namespace ConsoleApplicatLocalServer
                 plInfo.name = c2SLog.Name;
             }
             Console.WriteLine($"PlayerLogin:{plInfo.name} guid:{guid}");
-            OnRestartGame(plInfo);
         }
 
+        void OnPlayerLogout(PlayerInfo plInfo)
+        {
+            RemoveClient(plInfo);
+            Console.WriteLine($"PlayerLogout:{plInfo.name} guid:{plInfo.guid}");
+        }
         void RemoveClient(PlayerInfo rmPlInfo)
         {
             rmPlInfo.enabled = false;
@@ -328,7 +339,6 @@ namespace ConsoleApplicatLocalServer
 
         void OnRestartGame(PlayerInfo plInfo)
         {
-
             lock (clientCollection)
             {
                 S2CPlayerData[] pls = new S2CPlayerData[allPlayers.Count];
