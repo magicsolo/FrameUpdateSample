@@ -31,3 +31,5 @@ LocalServer/Server/.idea/
 LocalServer/Server/global.json
 LocalServer/Server/Server.sln
 *.sln
+LocalServer/Server/ServerProject/bin/Debug/SaveData/log.txt
+LocalServer/Server/ServerProject/bin/Debug/SaveData/video.bytes

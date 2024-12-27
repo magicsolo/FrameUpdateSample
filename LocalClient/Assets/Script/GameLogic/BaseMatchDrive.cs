@@ -12,6 +12,7 @@ namespace Game
         private StreamWriter logWriter;
         private FileStream videoWriter;
         private Thread ud;
+        private EventRegister eventRegister = new EventRegister();
         public void StartDrive(PlayerFiled[] playerFileds)
         {
             FrameManager.instance.Init(playerFileds);
@@ -23,8 +24,7 @@ namespace Game
             if (videoWriter!=null)
                 videoWriter.Close();
             videoWriter = new FileStream(videoPath,FileMode.Create,FileAccess.Write);
-            EventManager.instance.RegEvent(EventKeys.LogicMatchUpdate,SaveFrameUpdate);
-            
+            eventRegister.AddRegister(EventKeys.LogicMatchUpdate,SaveFrameUpdate);
             CloseThread();
             ud = new Thread(Update);
             ud.Start();
@@ -32,7 +32,7 @@ namespace Game
 
         public void StopDrive()
         {
-            EventManager.instance.UnRegEvent(EventKeys.LogicMatchUpdate,SaveFrameUpdate);
+            eventRegister.UnregistAll();
             CloseThread();
         }
 

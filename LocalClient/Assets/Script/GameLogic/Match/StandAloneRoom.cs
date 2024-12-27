@@ -13,9 +13,9 @@ namespace Game
         {
         }
 
-        public override void Enter(FSMState<LogicState> lstState, object param = null)
+        protected override void BeforeEnter()
         {
-            base.Enter(lstState, param);
+            base.BeforeEnter();
             aiCount = 0;
         }
 

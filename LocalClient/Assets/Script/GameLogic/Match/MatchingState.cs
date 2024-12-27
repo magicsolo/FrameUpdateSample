@@ -15,10 +15,14 @@ namespace Game
         {
         }
 
-        public override void Enter(FSMState<LogicState> lstState, object param = null)
+        protected override void BeforeEnter()
         {
-            ClientManager.instance.RegistNoteListener(EMessage.Restart,OnReset);
-            base.Enter(lstState, param);
+            base.BeforeEnter();
+            RegistTCPListener(EMessage.Restart,OnReset);
+        }
+
+        public  void Enter()
+        {
             OnReset((param as TCPInfo?)?? default);
         }
 

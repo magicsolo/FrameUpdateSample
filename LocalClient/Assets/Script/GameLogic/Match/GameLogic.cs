@@ -24,13 +24,7 @@ namespace Game
 
     public class GameLogic : MonoBehaviour
     {
-        enum LogicState
-        {
-            Login,
-            Gaming,
-        }
-
-        private LogicState state = LogicState.Login;
+        
         public PlayerServData playerData = new PlayerServData() { index = -1 };
         public bool isStandAlone;
 
@@ -111,6 +105,7 @@ namespace Game
         {
             fsm.curState.Update();
         }
+
         
     }
 }

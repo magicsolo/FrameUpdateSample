@@ -1,26 +1,24 @@
-﻿
+﻿//#define CheckOutLine
+
+using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using C2SProtoInterface;
 using Google.Protobuf;
 
-namespace ConsoleApplicatLocalServer
+namespace GameServer
 {
-    class PlayerInfo
+    public class TCPInfo
     {
-        public int index = -1;
-        public int guid = -1;
-        public string name;
         public long lastHeartTime = -1;
         public TcpClient client;
         public NetworkStream stream;
         public EndPoint udpEndPoint;
         public bool enabled;
 
-        public PlayerInfo(TcpClient cl)
+        public TCPInfo(TcpClient cl)
         {
-            guid = -1;
             client = cl;
             lastHeartTime = DateTime.Now.Ticks;
             stream = cl.GetStream();
@@ -77,8 +75,8 @@ namespace ConsoleApplicatLocalServer
         public StreamWriter videoWriter;
         public StreamWriter logWriter;
         
-        private Dictionary<int, PlayerInfo> allPlayers = new Dictionary<int, PlayerInfo>();
-        private Dictionary<TcpClient, PlayerInfo> clientCollection = new Dictionary<TcpClient, PlayerInfo>();
+        private Dictionary<int, TCPInfo> allPlayers = new Dictionary<int, TCPInfo>();
+        private Dictionary<TcpClient, TCPInfo> clientCollection = new Dictionary<TcpClient, TCPInfo>();
         private List<TcpClient> tmpRemovedClient = new List<TcpClient>();
 
         private int curFrame => _frameInputs.Count -1;
@@ -92,7 +90,7 @@ namespace ConsoleApplicatLocalServer
 
         public void StartServer(string inputIp)
         {
-            allPlayers = new Dictionary<int, PlayerInfo>();
+            allPlayers = new Dictionary<int, TCPInfo>();
 
             if (!string.IsNullOrEmpty(inputIp))
             {
@@ -230,28 +228,13 @@ namespace ConsoleApplicatLocalServer
                 var tcpClient = tcpListener.AcceptTcpClient();
                 lock (clientCollection)
                 {
-                    clientCollection.Add(tcpClient, new PlayerInfo(tcpClient));
+                    clientCollection.Add(tcpClient, new TCPInfo(tcpClient));
                     Console.WriteLine($"Add Collect {tcpClient.Client.RemoteEndPoint}");
                 }
             }
         }
 
-        unsafe void SendTCPData(Stream stream, EMessage messageType, IMessage obj = null)
-        {
-            byte[] data = new byte[sizeof(EMessage) + sizeof(int) + obj?.CalculateSize() ?? 0];
-            var infoBytes = obj.ToByteArray();
-            int offset = 0;
-            fixed (byte* p = data)
-            {
-                *(EMessage*)p = messageType;
-                offset += sizeof(EMessage);
-                *(int*)(p + offset) = infoBytes.Length;
-                offset += sizeof(int);
-            }
-
-            Buffer.BlockCopy(infoBytes, 0, data, offset, infoBytes.Length);
-            stream.Write(data, 0, data.Length);
-        }
+        
 
         public void UpdateTCPInfo()
         {
@@ -270,6 +253,7 @@ namespace ConsoleApplicatLocalServer
                     foreach (var client in tmpRemovedClient)
                     {
                         clientCollection.Remove(client);
+                        Console.WriteLine($"TCP DisConnected:{client.Client.RemoteEndPoint}");
                     }
                 }
 
@@ -277,7 +261,7 @@ namespace ConsoleApplicatLocalServer
             }
         }
 
-        unsafe void OnRecieveTCPInfo(PlayerInfo plInfo)
+        unsafe void OnRecieveTCPInfo(TCPInfo plInfo)
         {
             
             byte[] streamBuffer = new byte[1024 * 1024];
@@ -307,8 +291,7 @@ namespace ConsoleApplicatLocalServer
             fixed (void* p = streamBuffer)
                 msgType = *(EMessage*)p;
 
-            if (msgType != EMessage.EnterGame && plInfo.guid == 0)
-                return;
+            
             switch (msgType)
             {
                 case EMessage.Login:
@@ -317,75 +300,74 @@ namespace ConsoleApplicatLocalServer
                 case EMessage.Logout:
                     OnPlayerLogout(plInfo);
                     break;
-                case EMessage.EnterGame:
-                    
-                    break;
-                case EMessage.Restart:
-                    OnRestartGame(plInfo);
+                // case EMessage.EnterGame:
+                //     
+                //     break;
+                // case EMessage.Restart:
+                //     OnRestartGame(plInfo);
+                //     break;
+                default:
+                    var player = PlayerManager.instance.GetPlayerByTCPInfo(plInfo);
+                    if (player != null)
+                    {
+                        player.ReceiveTCPMessage(msgType,streamBuffer, readLen);
+                    }
                     break;
             }
         }
 
-        void OnPlayerLogin(PlayerInfo plInfo, byte[] streamBuffer, int offset, int len)
+        void OnPlayerLogin(TCPInfo tcpInfo, byte[] streamBuffer, int offset, int len)
         {
             var c2SLog = C2SLogin.Parser.ParseFrom(streamBuffer, offset, len - offset);
-            var guid = c2SLog.GId;
-            if (guid != 0)
-            {
-                if (allPlayers.TryGetValue(guid, out var oldPlInfo))
-                    RemoveClient(oldPlInfo);
-                else
-                    plInfo.guid = guid;
-                allPlayers[guid] = plInfo;
-                plInfo.name = c2SLog.Name;
-            }
-            Console.WriteLine($"PlayerLogin:{plInfo.name} guid:{guid}");
+            Console.WriteLine($"TCP Connected:{tcpInfo.client.Client.RemoteEndPoint}");
+            var oldTCP = PlayerManager.instance.PrlayerLogin(tcpInfo, c2SLog); 
+            RemoveClient(oldTCP);
         }
 
-        void OnPlayerLogout(PlayerInfo plInfo)
+        void OnPlayerLogout(TCPInfo plInfo)
         {
-            RemoveClient(plInfo);
-            Console.WriteLine($"PlayerLogout:{plInfo.name} guid:{plInfo.guid}");
+            PlayerManager.instance.RemovePlayerByTCPInfo(plInfo);
         }
-        void RemoveClient(PlayerInfo rmPlInfo)
+        void RemoveClient(TCPInfo rmPlInfo)
         {
+            if (rmPlInfo == null)
+                return;
             rmPlInfo.enabled = false;
             tmpRemovedClient.Add(rmPlInfo.client);
-            Console.WriteLine($"RemovePlayer:{rmPlInfo.name} guid:{rmPlInfo.guid} tcp:{rmPlInfo.client.Client.RemoteEndPoint}");
         }
 
         private int[] playerIds;
 
-        void OnRestartGame(PlayerInfo plInfo)
-        {
-            lock (clientCollection)
-            {
-                S2CPlayerData[] pls = new S2CPlayerData[allPlayers.Count];
-                int[] playerIds = new int[allPlayers.Count];
-                int idx = 0;
-                foreach (var kv in allPlayers)
-                {
-                    pls[idx] = new S2CPlayerData() { Guid = kv.Key, Name = kv.Value.name };
-                    kv.Value.udpEndPoint = default;
-                    playerIds[idx] = kv.Key;
-                    ++idx;
-                }
-
-                foreach (var kv in allPlayers)
-                {
-                    var stGame = new S2CStartGame();
-                    stGame.Players.AddRange(pls);
-                    stGame.Pot = udpIPPoint.Port;
-                    SendTCPData(kv.Value.stream, EMessage.Restart, stGame);
-                }
-
-                matchStarted = false;
-            }
-            lock (_frameInputs)
-            {
-                _frameInputs.Clear();
-            }
-        }
+        // void OnRestartGame(TCPInfo plInfo)
+        // {
+        //     lock (clientCollection)
+        //     {
+        //         S2CPlayerData[] pls = new S2CPlayerData[allPlayers.Count];
+        //         int[] playerIds = new int[allPlayers.Count];
+        //         int idx = 0;
+        //         foreach (var kv in allPlayers)
+        //         {
+        //             pls[idx] = new S2CPlayerData() { Guid = kv.Key, Name = kv.Value.name };
+        //             kv.Value.udpEndPoint = default;
+        //             playerIds[idx] = kv.Key;
+        //             ++idx;
+        //         }
+        //
+        //         foreach (var kv in allPlayers)
+        //         {
+        //             var stGame = new S2CStartGame();
+        //             stGame.Players.AddRange(pls);
+        //             stGame.Pot = udpIPPoint.Port;
+        //             SendTCPData(kv.Value.stream, EMessage.Restart, stGame);
+        //         }
+        //
+        //         matchStarted = false;
+        //     }
+        //     lock (_frameInputs)
+        //     {
+        //         _frameInputs.Clear();
+        //     }
+        // }
 
         // void OnPrintFrame()
         // {
@@ -541,11 +523,12 @@ namespace ConsoleApplicatLocalServer
         }
 
         //超时检测
-        void CheckPlayerOffline(PlayerInfo player)
+        [Conditional("CheckOutLine")]
+        void CheckPlayerOffline(TCPInfo player)
         {
             if (DateTime.Now.Ticks - player.lastHeartTime >outlineTimeSeconds * 10000000)
             {
-                RemoveClient(player);
+                OnPlayerLogout(player);
             }
         }
     }

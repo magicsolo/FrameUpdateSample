@@ -13,13 +13,10 @@ namespace Game
         public VideoState( LogicFSM fsm) : base(ELogicType.Video, fsm){}
         private VideoDrive driver = new VideoDrive();
 
-        public override void Enter(FSMState<LogicState> lstState, object param = null)
+        protected override void BeforeEnter()
         {
-            base.Enter(lstState, param);
+            base.BeforeEnter();
             fileName = param as string;
-            // var (startInfo, frames) = FrameManager.instance.LoadVideo();
-            // driver.Start(startInfo,frames);
-            // ViewModel.instance.Init(startInfo,driver.match);
         }
 
         public override void Exit()

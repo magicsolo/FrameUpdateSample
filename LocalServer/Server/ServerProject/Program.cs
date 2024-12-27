@@ -10,7 +10,7 @@ using C2SProtoInterface;
 using Google.Protobuf;
 using ThreadState = System.Threading.ThreadState;
 
-namespace ConsoleApplicatLocalServer
+namespace GameServer
 {
     internal class Program
     {

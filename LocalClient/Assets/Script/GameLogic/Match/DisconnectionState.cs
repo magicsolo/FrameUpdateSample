@@ -26,16 +26,9 @@ namespace Game
             }
         }
 
-        public override void Enter(FSMState<LogicState> lstState, object param = null)
-        {
-            base.Enter(lstState, param);
-            ClientManager.instance.RegistNoteListener(EMessage.Connected,OnConnected);
-        }
-
         public override void Exit()
         {
             base.Exit();
-            ClientManager.instance.UnRegistNoteListener(EMessage.Connected);
         }
 
         public override void Update()
@@ -83,11 +76,12 @@ namespace Game
             GUILayout.EndHorizontal();
             
             if (GUILayout.Button("登录",btnStyle))
-                ClientManager.instance.Login();
+                ClientManager.instance.Login(OnLogin);
         }
-        void OnConnected(TCPInfo servDat)
+
+        void OnLogin(TCPInfo param)
         {
-            logicFsm.ChangeState(ELogicType.Match,servDat);
+            logicFsm.ChangeState(ELogicType.Lobby);
         }
     }
 }

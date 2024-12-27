@@ -25,6 +25,7 @@ namespace CenterBase
                     curState.Exit();
 
                 curState = st;
+                st.BeforeEnter();
                 st.Enter(curState,param);
                 succ = true;
             }
@@ -54,7 +55,7 @@ namespace CenterBase
         public virtual void Update(){}
 
         public virtual void Exit(){}
-
+        public virtual void BeforeEnter(){}
         public virtual void Enter(FSMState<T> lstState,object param = null){}
 
         //下一个状态

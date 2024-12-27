@@ -13,9 +13,9 @@ namespace Game
         {
         }
 
-        public override void Enter(FSMState<LogicState> lstState, object param = null)
+        protected override void OnEnter()
         {
-            base.Enter(lstState, param);
+            base.OnEnter();
             driver.Start((PlayerFiled[]) param);
             ViewModel.instance.Init();
         }

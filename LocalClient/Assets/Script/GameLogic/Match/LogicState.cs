@@ -1,4 +1,6 @@
-﻿using CenterBase;
+﻿using System;
+using C2SProtoInterface;
+using CenterBase;
 using UnityEngine;
 
 namespace Game
@@ -7,6 +9,8 @@ namespace Game
     {
         none = 0,
         Disconnection,
+        Lobby,
+        Room,
         Match,
         Video,
         StandAloneRoom,
@@ -20,6 +24,8 @@ namespace Game
         public LogicFSM()
         {
             AddState(new DisconnectionState(this));
+            AddState(new Lobby(this));
+            AddState(new Room(this));
             AddState(new MatchingState(this));
             AddState(new VideoState(this));
             AddState(new StandAloneRoom(this));
@@ -34,6 +40,8 @@ namespace Game
     
     public abstract class LogicState : FSMState<LogicState>
     {
+        EventRegister eventRegister = new EventRegister();
+        TCPListener tcpListener = new TCPListener();
         protected LogicFSM logicFsm => (LogicFSM)fsm;
         private GUIStyle _btnStyle;
 
@@ -71,12 +79,59 @@ namespace Game
             }
         }
 
+        protected FSMState<LogicState> lstState;
+        protected object param;
     
         protected LogicState(ELogicType stType, LogicFSM fsm) : base((int)stType, fsm)
         {
         }
+
+        public sealed override void Enter(FSMState<LogicState> lstState, object param = null)
+        {
+            base.Enter(lstState, param);
+            this.lstState = lstState;
+            this.param = param;
+            BeforeEnter();
+            OnEnter();
+            AfterEnter();
+        }
+
+        protected virtual void BeforeEnter()
+        {
+            
+        }
+        protected virtual void OnEnter()
+        {
+            
+        }
         
+        
+        protected virtual void AfterEnter()
+        {
+            eventRegister.RegistAll();
+            tcpListener.RegistAll();
+        }
+
+        public override void Exit()
+        {
+            eventRegister.UnregistAll();
+            tcpListener.UnRegistAll();
+            base.Exit();
+        }
+
+
         public virtual void OnGUIUpdate(){}
+        
+        protected void RegistEvent(string eventName, Action<object> action)
+        {
+            eventRegister.AddRegister(eventName,action);
+        }
+
+        protected void RegistTCPListener(EMessage message, Action<TCPInfo> action)
+        {
+            tcpListener.AddHandler(message,action);
+        }
+
     }
 
 }

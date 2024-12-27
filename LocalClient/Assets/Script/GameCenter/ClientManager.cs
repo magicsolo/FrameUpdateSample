@@ -40,6 +40,33 @@ namespace Game
         }
     }
 
+    public class TCPListener
+    {
+        Dictionary<EMessage,Action<TCPInfo>> _handlers = new Dictionary<EMessage, Action<TCPInfo>>();
+
+        public void AddHandler(EMessage key, Action<TCPInfo> handler)
+        {
+            _handlers.Add(key, handler);
+        }
+
+        public void RegistAll()
+        {
+            foreach (var kv in _handlers)
+            {
+                ClientManager.instance.RegistNoteListener(kv.Key,kv.Value);
+            }
+        }
+
+        public void UnRegistAll()
+        {
+            foreach (var kv in _handlers)
+            {
+                ClientManager.instance.UnRegistNoteListener(kv.Key);
+            }
+            _handlers.Clear();
+        }
+    }
+
     public class ClientManager : BasicMonoSingle<ClientManager>
     {
         private Dictionary<EMessage, Action<TCPInfo>> _callBacks = new Dictionary<EMessage, Action<TCPInfo>>();
@@ -64,7 +91,7 @@ namespace Game
             ip = PlayerPrefs.GetString("ip");
             pot = PlayerPrefs.GetString("pot");
 
-            tcp = new TCPConnecter();
+            tcp = new TCPConnecter(onConnectionEnd:OnConnectionEnd);
             udp = new UDPConnecter();
         }
 
@@ -91,7 +118,7 @@ namespace Game
             var readLength = 0;
             try
             {
-                tcp.Receive(readBytes);
+                readLength = tcp.Receive(readBytes);
             }
             catch (Exception e)
             {
@@ -116,12 +143,31 @@ namespace Game
                 func(tcpData);
         }
 
-        public void Login()
+        public void Login(Action<TCPInfo> OnLogin = null)
         {
             guid = playerName.GetHashCode();
             PlayerPrefs.SetString("name",playerName);
             PlayerPrefs.SetInt("guid",guid);
-            SendTCPInfo(EMessage.EnterGame, new C2SLogin() { Name = playerName, GId = guid });
+            SendTCPInfo(EMessage.Login, new C2SLogin() { Name = playerName, GId = guid },OnLogin);
+        }
+
+        public void LogOut()
+        {
+            SendTCPInfo(EMessage.Logout, null,OnLogOut);
+        }
+
+        private void OnLogOut(TCPInfo obj)
+        {
+            OnConnectionEnd();
+        }
+        
+        
+        private void OnConnectionEnd()
+        {
+            udp.Close();
+            tcp.Close();
+            EventManager.instance.DispatchEvent(EventKeys.OnOffLine);
+
         }
 
         public unsafe void SendTCPInfo(EMessage mesgType, IMessage data = null, Action<TCPInfo> callBack = null)
@@ -185,7 +231,7 @@ namespace Game
 
         public void UnRegistNoteListener(EMessage mesgType)
         {
-            _callBacks[mesgType] = null;
+            _callBacks.Remove(mesgType);
         }
         
         

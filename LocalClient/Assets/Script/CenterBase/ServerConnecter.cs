@@ -1,4 +1,5 @@
-﻿using System;
+﻿//#define  CheckOutLine
+using System;
 using System.Collections;
 using System.Net;
 using System.Net.Sockets;
@@ -101,8 +102,21 @@ namespace CenterBase
 
     public class TCPConnecter : BaseConnecter
     {
-        private EConnecterState _curState { get;set; }
-        public override EConnecterState CurState=>_curState;
+        private EConnecterState _state;
+        private EConnecterState _curState
+        {
+            get => _state;
+            set
+            {
+                if (_state == EConnecterState.DisConnect)
+                {
+                    return;
+                }
+
+                _state = value;
+            }
+        }
+        public override EConnecterState CurState { get => _curState; }
 
         private TcpClient tcp;
 
@@ -123,12 +137,6 @@ namespace CenterBase
         
         public override void Close()
         {
-            if (thrdConnect != null)
-            {
-                thrdConnect.Abort();
-                thrdConnect = null;
-            }
-
             CloseTCP();
         }
 
@@ -136,26 +144,27 @@ namespace CenterBase
         {
             if (tcp != null)
             {
-                tcp.Close();
-                tcp = null;
-                if (connectionEnd!=null)
+                lock (tcp)
                 {
-                    connectionEnd();
+                    tcp.Close();
+                    tcp = null;    
+                    _curState = EConnecterState.DisConnect;
                 }
             }
-
-            _curState = EConnecterState.DisConnect;
+            else
+            {
+                _curState = EConnecterState.DisConnect;
+            }
         }
         
         public override void Connect(string ip, string pot)
         {
-            this.connectionEnd = null;
             base.Connect(ip, pot);
             thrdConnect = new Thread(TCPConnect);
-            _curState = EConnecterState.Connecting;
+            _state = EConnecterState.Connecting;
             thrdConnect.Start();
         }
-
+        
         void TCPConnect()
         {
             tcp = new TcpClient();
@@ -174,38 +183,77 @@ namespace CenterBase
             Stream = tcp.GetStream();
             _curState = EConnecterState.Connected;
             lastRecvTime = DateTime.Now.Ticks;
+#if CheckOutLine
             while (_curState == EConnecterState.Connected)
             {
                 var spaceTime = DateTime.Now.Ticks - lastRecvTime; 
                 if (spaceTime > disconnectTickSpaceTime)
                 {
-                    CloseTCP();
-                    break;
+                    if (connectionEnd!=null)
+                    {
+                        connectionEnd();
+                    }
+                    return;
                 }else if (spaceTime > heartTickBeatCheckSpaceTime)
                 {
                     SendData(new byte[] { 1 });
                 }
                 Thread.Sleep(this.heartSpaceTime *1000);
             }
+#endif
+            
         }
 
         public void SendData(byte[] byts)
         {
-            Stream.Write(byts, 0, byts.Length);
+            if (tcp == null)
+            {
+                return;
+            }
+            
+            lock (tcp)
+            {
+                if (_curState!= EConnecterState.Connected)
+                {
+                    return;
+                }
+                
+                try
+                {
+                    Stream.Write(byts, 0, byts.Length);
+                }
+                catch (Exception e)
+                {
+                    if (connectionEnd!=null)
+                    {
+                        connectionEnd();
+                    }
+                }
+            }
         }
 
         public int Receive(byte[] byts)
         {
-            if (!Stream.DataAvailable)
+            lock (tcp)
             {
-                return 0;
+                if (_curState!= EConnecterState.Connected)
+                {
+                    return 0;
+                }
+                if (!Stream.DataAvailable)
+                {
+                    return 0;
+                }
+                var len = Stream.Read(byts, 0, byts.Length);
+                if (len > 0)
+                {
+                    lastRecvTime = DateTime.Now.Ticks;
+                }
+                return len;
             }
-            var len = Stream.Read(byts, 0, byts.Length);
-            if (len > 0)
-            {
-                lastRecvTime = DateTime.Now.Ticks;
-            }
-            return len;
+            
         }
+        
+
     }
 }

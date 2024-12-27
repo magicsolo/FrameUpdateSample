@@ -7,9 +7,15 @@ enum EMessage {
     Connected = 2;
     Login = 3;
     Logout = 4;
-    EnterGame = 5;
-    Restart = 6;
-    PrintFrames = 7;
+    C2S_CreateRoom = 5;
+    C2S_JoinRoom = 6;
+    C2S_LeaveRoom = 7;
+    S2C_RoomInfoRefresh = 8;
+    S2C_LeaveRoom = 9;
+    ReqRoomInfos = 10;
+    EnterGame = 11;
+    Restart = 12;
+    PrintFrames = 13;
 }
 
 message C2SLogin{
@@ -19,15 +25,6 @@ message C2SLogin{
 
 message C2SStartGame{}
 
-message S2CPlayerData{
-    int32 guid = 1;
-    string name = 2;
-}
-
-message S2CStartGame{
-    int32 pot = 1;
-    repeated S2CPlayerData players = 2;
-}
 
 message C2SFrameUpdate{
     int32 index = 1;
@@ -39,6 +36,27 @@ message C2SFrameUpdate{
 
 message C2SPrintFrames{
 }
+
+message C2SJoinRoom
+{
+    int32 roomGuid = 1;
+}
+
+message S2CPlayerData{
+    int32 guid = 1;
+    string name = 2;
+}
+
+message S2CStartGame{
+    int32 pot = 1;
+    repeated S2CPlayerData players = 2;
+}
+
+message S2CRoomInfo{
+    int32 roomGuid = 1;
+    repeated C2SLogin allPlayers = 2;
+}
+
 
 message S2CPrintFrames{
 }
@@ -54,4 +72,9 @@ message S2CFrameUpdate
 {
     int32 curServerFrame = 1;
     repeated S2CFrameData frameDatas = 2;
+}
+
+message S2CAllRoomInfo
+{
+    repeated S2CRoomInfo allRooms = 1;
 }
