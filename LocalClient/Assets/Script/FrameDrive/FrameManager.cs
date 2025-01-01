@@ -23,7 +23,6 @@ namespace FrameDrive
 
     public struct FrameInputData
     {
-        public int slot;
         public FP inputMoveAngle;
         public EInputEnum input;
 
@@ -108,45 +107,45 @@ namespace FrameDrive
             }
         }
 
-        public (S2CStartGame, List<S2CFrameData>) LoadVideo()
-        {
-            var path = Directory.GetCurrentDirectory() + "\\video.bytes";
-            List<S2CFrameData> frames = new List<S2CFrameData>();
-            S2CStartGame startInfo;
-            
-            var strm = new FileStream(path, FileMode.Open, FileAccess.Read);
-            byte[] rdBytes = new byte[1024 * 1024];
-            strm.Read(rdBytes, 0, sizeof(Int32));
-            int dataLength = BitConverter.ToInt32(rdBytes, 0);
-            strm.Read(rdBytes, 0, dataLength);
-            startInfo = S2CStartGame.Parser.ParseFrom(rdBytes,0,dataLength);
-            
-
-            while (strm.Read(rdBytes, 0, sizeof(Int32))>0)
-            {
-                dataLength = BitConverter.ToInt32(rdBytes, 0);
-                S2CFrameData frmDt;
-                if (dataLength > 0)
-                {
-                    strm.Read(rdBytes, 0, dataLength);
-                    try
-                    {
-                        frmDt = S2CFrameData.Parser.ParseFrom(rdBytes, 0, dataLength);
-                    }
-                    catch
-                    {
-                        break;
-                    }
-                }
-                else
-                {
-                    frmDt = new S2CFrameData();
-                }
-
-                frames.Add(frmDt);
-            }
-            return (startInfo, frames);
-        }
+        // public (S2CStartGame, List<S2CFrameData>) LoadVideo()
+        // {
+        //     var path = Directory.GetCurrentDirectory() + "\\video.bytes";
+        //     List<S2CFrameData> frames = new List<S2CFrameData>();
+        //     S2CStartGame startInfo;
+        //     
+        //     var strm = new FileStream(path, FileMode.Open, FileAccess.Read);
+        //     byte[] rdBytes = new byte[1024 * 1024];
+        //     strm.Read(rdBytes, 0, sizeof(Int32));
+        //     int dataLength = BitConverter.ToInt32(rdBytes, 0);
+        //     strm.Read(rdBytes, 0, dataLength);
+        //     startInfo = S2CStartGame.Parser.ParseFrom(rdBytes,0,dataLength);
+        //     
+        //
+        //     while (strm.Read(rdBytes, 0, sizeof(Int32))>0)
+        //     {
+        //         dataLength = BitConverter.ToInt32(rdBytes, 0);
+        //         S2CFrameData frmDt;
+        //         if (dataLength > 0)
+        //         {
+        //             strm.Read(rdBytes, 0, dataLength);
+        //             try
+        //             {
+        //                 frmDt = S2CFrameData.Parser.ParseFrom(rdBytes, 0, dataLength);
+        //             }
+        //             catch
+        //             {
+        //                 break;
+        //             }
+        //         }
+        //         else
+        //         {
+        //             frmDt = new S2CFrameData();
+        //         }
+        //
+        //         frames.Add(frmDt);
+        //     }
+        //     return (startInfo, frames);
+        // }
 
         public void PlayVideoFrame(List<S2CFrameData> frames,int serverFrame)
         {

@@ -26,36 +26,37 @@ namespace C2SProtoInterface {
           string.Concat(
             "ChRQcm90b0ludGVyZmFjZS5wcm90bxIRQzJTUHJvdG9JbnRlcmZhY2UiJQoI",
             "QzJTTG9naW4SCwoDZ0lkGAEgASgFEgwKBG5hbWUYAiABKAkiDgoMQzJTU3Rh",
-            "cnRHYW1lIlkKDkMyU0ZyYW1lVXBkYXRlEg0KBWluZGV4GAEgASgFEg0KBXN0",
-            "YXJ0GAIgASgFEgsKA2VuZBgDIAEoBRINCgVhbmdsZRgEIAEoAxINCgVpbnB1",
-            "dBgFIAEoBSIQCg5DMlNQcmludEZyYW1lcyIfCgtDMlNKb2luUm9vbRIQCghy",
-            "b29tR3VpZBgBIAEoBSIrCg1TMkNQbGF5ZXJEYXRhEgwKBGd1aWQYASABKAUS",
-            "DAoEbmFtZRgCIAEoCSJOCgxTMkNTdGFydEdhbWUSCwoDcG90GAEgASgFEjEK",
-            "B3BsYXllcnMYAiADKAsyIC5DMlNQcm90b0ludGVyZmFjZS5TMkNQbGF5ZXJE",
-            "YXRhIlAKC1MyQ1Jvb21JbmZvEhAKCHJvb21HdWlkGAEgASgFEi8KCmFsbFBs",
-            "YXllcnMYAiADKAsyGy5DMlNQcm90b0ludGVyZmFjZS5DMlNMb2dpbiIQCg5T",
-            "MkNQcmludEZyYW1lcyJVCgxTMkNGcmFtZURhdGESEgoKZnJhbWVJbmRleBgB",
-            "IAEoBRIMCgRnaWRzGAIgAygFEg4KBmlucHV0cxgDIAMoBRITCgtpbnB1dEFu",
-            "Z2xlcxgEIAMoAyJdCg5TMkNGcmFtZVVwZGF0ZRIWCg5jdXJTZXJ2ZXJGcmFt",
-            "ZRgBIAEoBRIzCgpmcmFtZURhdGFzGAIgAygLMh8uQzJTUHJvdG9JbnRlcmZh",
-            "Y2UuUzJDRnJhbWVEYXRhIkIKDlMyQ0FsbFJvb21JbmZvEjAKCGFsbFJvb21z",
-            "GAEgAygLMh4uQzJTUHJvdG9JbnRlcmZhY2UuUzJDUm9vbUluZm8q7QEKCEVN",
-            "ZXNzYWdlEggKBE5vbmUQABINCglIZWFydEJlYXQQARINCglDb25uZWN0ZWQQ",
-            "AhIJCgVMb2dpbhADEgoKBkxvZ291dBAEEhIKDkMyU19DcmVhdGVSb29tEAUS",
-            "EAoMQzJTX0pvaW5Sb29tEAYSEQoNQzJTX0xlYXZlUm9vbRAHEhcKE1MyQ19S",
-            "b29tSW5mb1JlZnJlc2gQCBIRCg1TMkNfTGVhdmVSb29tEAkSEAoMUmVxUm9v",
-            "bUluZm9zEAoSDQoJRW50ZXJHYW1lEAsSCwoHUmVzdGFydBAMEg8KC1ByaW50",
-            "RnJhbWVzEA1iBnByb3RvMw=="));
+            "cnRHYW1lIkoKDkMyU0ZyYW1lVXBkYXRlEg0KBXN0YXJ0GAEgASgFEgsKA2Vu",
+            "ZBgCIAEoBRINCgVhbmdsZRgDIAEoAxINCgVpbnB1dBgEIAEoBSIQCg5DMlNQ",
+            "cmludEZyYW1lcyIfCgtDMlNKb2luUm9vbRIQCghyb29tR3VpZBgBIAEoBSIr",
+            "Cg1TMkNQbGF5ZXJEYXRhEgwKBGd1aWQYASABKAUSDAoEbmFtZRgCIAEoCSJg",
+            "CgxTMkNNYXRjaEluZm8SCwoDcG90GAEgASgFEhAKCHJvb21HdWlkGAIgASgF",
+            "EjEKB3BsYXllcnMYAyADKAsyIC5DMlNQcm90b0ludGVyZmFjZS5TMkNQbGF5",
+            "ZXJEYXRhIlUKC1MyQ1Jvb21JbmZvEhAKCHJvb21HdWlkGAEgASgFEjQKCmFs",
+            "bFBsYXllcnMYAiADKAsyIC5DMlNQcm90b0ludGVyZmFjZS5TMkNQbGF5ZXJE",
+            "YXRhIhAKDlMyQ1ByaW50RnJhbWVzIlUKDFMyQ0ZyYW1lRGF0YRISCgpmcmFt",
+            "ZUluZGV4GAEgASgFEgwKBGdpZHMYAiADKAUSDgoGaW5wdXRzGAMgAygFEhMK",
+            "C2lucHV0QW5nbGVzGAQgAygDIl0KDlMyQ0ZyYW1lVXBkYXRlEhYKDmN1clNl",
+            "cnZlckZyYW1lGAEgASgFEjMKCmZyYW1lRGF0YXMYAiADKAsyHy5DMlNQcm90",
+            "b0ludGVyZmFjZS5TMkNGcmFtZURhdGEiQgoOUzJDQWxsUm9vbUluZm8SMAoI",
+            "YWxsUm9vbXMYASADKAsyHi5DMlNQcm90b0ludGVyZmFjZS5TMkNSb29tSW5m",
+            "byqGAgoIRU1lc3NhZ2USCAoETm9uZRAAEg0KCUhlYXJ0QmVhdBABEg0KCUNv",
+            "bm5lY3RlZBACEgkKBUxvZ2luEAMSCgoGTG9nb3V0EAQSEgoOQzJTX0NyZWF0",
+            "ZVJvb20QBRIQCgxDMlNfSm9pblJvb20QBhIRCg1DMlNfTGVhdmVSb29tEAcS",
+            "FwoTUzJDX1Jvb21JbmZvUmVmcmVzaBAIEhEKDVMyQ19MZWF2ZVJvb20QCRIQ",
+            "CgxSZXFSb29tSW5mb3MQChISCg5DMlNfU3RhcnRNYXRjaBALEhIKDlMyQ19T",
+            "dGFydE1hdGNoEAwSCwoHUmVzdGFydBANEg8KC1ByaW50RnJhbWVzEA5iBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::C2SProtoInterface.EMessage), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SLogin), global::C2SProtoInterface.C2SLogin.Parser, new[]{ "GId", "Name" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SStartGame), global::C2SProtoInterface.C2SStartGame.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SFrameUpdate), global::C2SProtoInterface.C2SFrameUpdate.Parser, new[]{ "Index", "Start", "End", "Angle", "Input" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SFrameUpdate), global::C2SProtoInterface.C2SFrameUpdate.Parser, new[]{ "Start", "End", "Angle", "Input" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SPrintFrames), global::C2SProtoInterface.C2SPrintFrames.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SJoinRoom), global::C2SProtoInterface.C2SJoinRoom.Parser, new[]{ "RoomGuid" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CPlayerData), global::C2SProtoInterface.S2CPlayerData.Parser, new[]{ "Guid", "Name" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CStartGame), global::C2SProtoInterface.S2CStartGame.Parser, new[]{ "Pot", "Players" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CMatchInfo), global::C2SProtoInterface.S2CMatchInfo.Parser, new[]{ "Pot", "RoomGuid", "Players" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CRoomInfo), global::C2SProtoInterface.S2CRoomInfo.Parser, new[]{ "RoomGuid", "AllPlayers" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CPrintFrames), global::C2SProtoInterface.S2CPrintFrames.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CFrameData), global::C2SProtoInterface.S2CFrameData.Parser, new[]{ "FrameIndex", "Gids", "Inputs", "InputAngles" }, null, null, null, null),
@@ -79,9 +80,10 @@ namespace C2SProtoInterface {
     [pbr::OriginalName("S2C_RoomInfoRefresh")] S2CRoomInfoRefresh = 8,
     [pbr::OriginalName("S2C_LeaveRoom")] S2CLeaveRoom = 9,
     [pbr::OriginalName("ReqRoomInfos")] ReqRoomInfos = 10,
-    [pbr::OriginalName("EnterGame")] EnterGame = 11,
-    [pbr::OriginalName("Restart")] Restart = 12,
-    [pbr::OriginalName("PrintFrames")] PrintFrames = 13,
+    [pbr::OriginalName("C2S_StartMatch")] C2SStartMatch = 11,
+    [pbr::OriginalName("S2C_StartMatch")] S2CStartMatch = 12,
+    [pbr::OriginalName("Restart")] Restart = 13,
+    [pbr::OriginalName("PrintFrames")] PrintFrames = 14,
   }
 
   #endregion
@@ -370,7 +372,6 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public C2SFrameUpdate(C2SFrameUpdate other) : this() {
-      index_ = other.index_;
       start_ = other.start_;
       end_ = other.end_;
       angle_ = other.angle_;
@@ -383,19 +384,8 @@ namespace C2SProtoInterface {
       return new C2SFrameUpdate(this);
     }
 
-    /// <summary>Field number for the "index" field.</summary>
-    public const int IndexFieldNumber = 1;
-    private int index_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Index {
-      get { return index_; }
-      set {
-        index_ = value;
-      }
-    }
-
     /// <summary>Field number for the "start" field.</summary>
-    public const int StartFieldNumber = 2;
+    public const int StartFieldNumber = 1;
     private int start_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Start {
@@ -406,7 +396,7 @@ namespace C2SProtoInterface {
     }
 
     /// <summary>Field number for the "end" field.</summary>
-    public const int EndFieldNumber = 3;
+    public const int EndFieldNumber = 2;
     private int end_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int End {
@@ -417,7 +407,7 @@ namespace C2SProtoInterface {
     }
 
     /// <summary>Field number for the "angle" field.</summary>
-    public const int AngleFieldNumber = 4;
+    public const int AngleFieldNumber = 3;
     private long angle_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long Angle {
@@ -428,7 +418,7 @@ namespace C2SProtoInterface {
     }
 
     /// <summary>Field number for the "input" field.</summary>
-    public const int InputFieldNumber = 5;
+    public const int InputFieldNumber = 4;
     private int input_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Input {
@@ -451,7 +441,6 @@ namespace C2SProtoInterface {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Index != other.Index) return false;
       if (Start != other.Start) return false;
       if (End != other.End) return false;
       if (Angle != other.Angle) return false;
@@ -462,7 +451,6 @@ namespace C2SProtoInterface {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Index != 0) hash ^= Index.GetHashCode();
       if (Start != 0) hash ^= Start.GetHashCode();
       if (End != 0) hash ^= End.GetHashCode();
       if (Angle != 0L) hash ^= Angle.GetHashCode();
@@ -480,24 +468,20 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Index != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(Index);
-      }
       if (Start != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(8);
         output.WriteInt32(Start);
       }
       if (End != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteInt32(End);
       }
       if (Angle != 0L) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteInt64(Angle);
       }
       if (Input != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteInt32(Input);
       }
       if (_unknownFields != null) {
@@ -508,9 +492,6 @@ namespace C2SProtoInterface {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Index != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Index);
-      }
       if (Start != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Start);
       }
@@ -533,9 +514,6 @@ namespace C2SProtoInterface {
     public void MergeFrom(C2SFrameUpdate other) {
       if (other == null) {
         return;
-      }
-      if (other.Index != 0) {
-        Index = other.Index;
       }
       if (other.Start != 0) {
         Start = other.Start;
@@ -561,22 +539,18 @@ namespace C2SProtoInterface {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            Index = input.ReadInt32();
-            break;
-          }
-          case 16: {
             Start = input.ReadInt32();
             break;
           }
-          case 24: {
+          case 16: {
             End = input.ReadInt32();
             break;
           }
-          case 32: {
+          case 24: {
             Angle = input.ReadInt64();
             break;
           }
-          case 40: {
+          case 32: {
             Input = input.ReadInt32();
             break;
           }
@@ -973,11 +947,11 @@ namespace C2SProtoInterface {
 
   }
 
-  public sealed partial class S2CStartGame : pb::IMessage<S2CStartGame> {
-    private static readonly pb::MessageParser<S2CStartGame> _parser = new pb::MessageParser<S2CStartGame>(() => new S2CStartGame());
+  public sealed partial class S2CMatchInfo : pb::IMessage<S2CMatchInfo> {
+    private static readonly pb::MessageParser<S2CMatchInfo> _parser = new pb::MessageParser<S2CMatchInfo>(() => new S2CMatchInfo());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<S2CStartGame> Parser { get { return _parser; } }
+    public static pb::MessageParser<S2CMatchInfo> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -990,22 +964,23 @@ namespace C2SProtoInterface {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S2CStartGame() {
+    public S2CMatchInfo() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S2CStartGame(S2CStartGame other) : this() {
+    public S2CMatchInfo(S2CMatchInfo other) : this() {
       pot_ = other.pot_;
+      roomGuid_ = other.roomGuid_;
       players_ = other.players_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S2CStartGame Clone() {
-      return new S2CStartGame(this);
+    public S2CMatchInfo Clone() {
+      return new S2CMatchInfo(this);
     }
 
     /// <summary>Field number for the "pot" field.</summary>
@@ -1019,10 +994,21 @@ namespace C2SProtoInterface {
       }
     }
 
+    /// <summary>Field number for the "roomGuid" field.</summary>
+    public const int RoomGuidFieldNumber = 2;
+    private int roomGuid_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int RoomGuid {
+      get { return roomGuid_; }
+      set {
+        roomGuid_ = value;
+      }
+    }
+
     /// <summary>Field number for the "players" field.</summary>
-    public const int PlayersFieldNumber = 2;
+    public const int PlayersFieldNumber = 3;
     private static readonly pb::FieldCodec<global::C2SProtoInterface.S2CPlayerData> _repeated_players_codec
-        = pb::FieldCodec.ForMessage(18, global::C2SProtoInterface.S2CPlayerData.Parser);
+        = pb::FieldCodec.ForMessage(26, global::C2SProtoInterface.S2CPlayerData.Parser);
     private readonly pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData> players_ = new pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData> Players {
@@ -1031,11 +1017,11 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as S2CStartGame);
+      return Equals(other as S2CMatchInfo);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(S2CStartGame other) {
+    public bool Equals(S2CMatchInfo other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -1043,6 +1029,7 @@ namespace C2SProtoInterface {
         return true;
       }
       if (Pot != other.Pot) return false;
+      if (RoomGuid != other.RoomGuid) return false;
       if(!players_.Equals(other.players_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1051,6 +1038,7 @@ namespace C2SProtoInterface {
     public override int GetHashCode() {
       int hash = 1;
       if (Pot != 0) hash ^= Pot.GetHashCode();
+      if (RoomGuid != 0) hash ^= RoomGuid.GetHashCode();
       hash ^= players_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1069,6 +1057,10 @@ namespace C2SProtoInterface {
         output.WriteRawTag(8);
         output.WriteInt32(Pot);
       }
+      if (RoomGuid != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(RoomGuid);
+      }
       players_.WriteTo(output, _repeated_players_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1081,6 +1073,9 @@ namespace C2SProtoInterface {
       if (Pot != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Pot);
       }
+      if (RoomGuid != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RoomGuid);
+      }
       size += players_.CalculateSize(_repeated_players_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1089,12 +1084,15 @@ namespace C2SProtoInterface {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(S2CStartGame other) {
+    public void MergeFrom(S2CMatchInfo other) {
       if (other == null) {
         return;
       }
       if (other.Pot != 0) {
         Pot = other.Pot;
+      }
+      if (other.RoomGuid != 0) {
+        RoomGuid = other.RoomGuid;
       }
       players_.Add(other.players_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -1112,7 +1110,11 @@ namespace C2SProtoInterface {
             Pot = input.ReadInt32();
             break;
           }
-          case 18: {
+          case 16: {
+            RoomGuid = input.ReadInt32();
+            break;
+          }
+          case 26: {
             players_.AddEntriesFrom(input, _repeated_players_codec);
             break;
           }
@@ -1170,11 +1172,11 @@ namespace C2SProtoInterface {
 
     /// <summary>Field number for the "allPlayers" field.</summary>
     public const int AllPlayersFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::C2SProtoInterface.C2SLogin> _repeated_allPlayers_codec
-        = pb::FieldCodec.ForMessage(18, global::C2SProtoInterface.C2SLogin.Parser);
-    private readonly pbc::RepeatedField<global::C2SProtoInterface.C2SLogin> allPlayers_ = new pbc::RepeatedField<global::C2SProtoInterface.C2SLogin>();
+    private static readonly pb::FieldCodec<global::C2SProtoInterface.S2CPlayerData> _repeated_allPlayers_codec
+        = pb::FieldCodec.ForMessage(18, global::C2SProtoInterface.S2CPlayerData.Parser);
+    private readonly pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData> allPlayers_ = new pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::C2SProtoInterface.C2SLogin> AllPlayers {
+    public pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData> AllPlayers {
       get { return allPlayers_; }
     }
 

@@ -18,7 +18,7 @@ namespace Game
             for (int i = 0; i < roomInfo.AllPlayers.Count; i++)
             {
                 var pl = roomInfo.AllPlayers[i];
-                players.Add(new PlayerInfo(){ name = pl.Name, guid = pl.GId,slot = i});
+                players.Add(new PlayerInfo(){ name = pl.Name, guid = pl.Guid,slot = i});
             }
         }
     }
@@ -39,13 +39,19 @@ namespace Game
             SetRoomInfo(tcpInfo);
             RegistTCPListener(EMessage.S2CRoomInfoRefresh,SetRoomInfo);
             RegistTCPListener(EMessage.S2CLeaveRoom,OnLeaveRoom);
+            RegistTCPListener(EMessage.S2CStartMatch,OnEnterGame);
         }
+
 
         public override void OnGUIUpdate()
         {
             base.OnGUIUpdate();
             GUILayout.BeginHorizontal();
             GUILayout.Label(guid.ToString());
+            if (players[0].guid == ClientManager.instance.guid && GUILayout.Button("开始"))
+            {
+                ClientManager.instance.SendTCPInfo(EMessage.C2SStartMatch);
+            }
             if (GUILayout.Button("退出"))
             {
                 ClientManager.instance.SendTCPInfo(EMessage.C2SLeaveRoom);
@@ -69,6 +75,14 @@ namespace Game
         private void OnLeaveRoom(TCPInfo obj)
         {
             logicFsm.ChangeState(ELogicType.Lobby);
+        }
+        
+        
+        private void OnEnterGame(TCPInfo obj)
+        {
+            var MatchInfo = new MatchInfo();
+            MatchInfo.Init(obj.ParseMsgData(S2CMatchInfo.Parser));
+            logicFsm.ChangeState(ELogicType.Match,MatchInfo);
         }
     }
 }

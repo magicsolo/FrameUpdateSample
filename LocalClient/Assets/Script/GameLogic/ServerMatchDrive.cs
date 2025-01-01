@@ -2,29 +2,30 @@
 using System.Threading;
 using C2SProtoInterface;
 using FrameDrive;
+using UnityEngine;
 
 namespace Game
 {
-    public class ServerMatchDrive:BaseMatchDrive
+    public class ServerMatchDrive : BaseMatchDrive
     {
-        private S2CStartGame servDt;
+        private MatchInfo matchInfo;
 
-        public void Start(S2CStartGame servDt)
+        public void Start(MatchInfo matchInfo)
         {
-            this.servDt = servDt;
-            PlayerFiled[] playerFileds = new PlayerFiled[this.servDt.Players.Count];
+            this.matchInfo = matchInfo;
+            PlayerFiled[] playerFileds = new PlayerFiled[this.matchInfo.players.Count];
 
             for (int i = 0; i < playerFileds.Length; i++)
             {
-                var plData = this.servDt.Players[i];
-                var plFiled = new PlayerFiled(new PlayerInfo(plData.Guid,plData.Name,i));
+                var plData = this.matchInfo.players[i];
+                var plFiled = new PlayerFiled(new PlayerInfo(plData.guid, plData.name, i));
                 plFiled.data = new PlayerLogicData();
                 playerFileds[i] = plFiled;
             }
 
             StartDrive(playerFileds);
         }
-        
+
         protected override void Update()
         {
             ClientManager.instance.UDPConnect(8091);
@@ -51,17 +52,17 @@ namespace Game
                         }
                     }
                 }
-                
+
                 FrameManager.instance.UpdateFrameData();
                 SendFrameData();
                 Thread.Sleep(spaceTime);
             }
         }
-        
+
         public void SendFrameData()
         {
             C2SFrameUpdate frmUpdate = new C2SFrameUpdate();
-            
+
             var requireStart = Math.Min(curClientFrame + 1, curServerFrame);
             var requireEnd = curServerFrame;
             if (!FrameManager.instance.frameDataInputs.ContainsKey(requireStart))

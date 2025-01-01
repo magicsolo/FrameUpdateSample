@@ -38,6 +38,9 @@ namespace GameServer
                 case EMessage.ReqRoomInfos:
                     RoomManager.instance.ReqRoomInfo(this);
                     break;
+                case EMessage.C2SStartMatch:
+                    RoomManager.instance.ReqStartMatch(this);
+                    break;
             }
         }
 
@@ -59,7 +62,7 @@ namespace GameServer
             Buffer.BlockCopy(infoBytes, 0, data, offset, infoBytes.Length);
             stream.Write(data, 0, data.Length);
         }
-
+        
         public void OnLogin()
         {
             SendTCPData(EMessage.Login);
@@ -70,6 +73,11 @@ namespace GameServer
             Console.WriteLine($"Player Logout:{name} guid:{guid}");
             SendTCPData(EMessage.Logout);
             tcpInfo = null;
+        }
+
+        public S2CPlayerData GetS2CPlayerData()
+        {
+            return new S2CPlayerData() { Guid = guid, Name = name };
         }
     }
 
@@ -91,21 +99,27 @@ namespace GameServer
         /// <returns></returns>
         public TCPInfo PrlayerLogin(TCPInfo tcpInfo,C2SLogin login)
         {
+            PlayerAgent player;
             TCPInfo oldTCP = null;
-            if (guidplayersContainer.TryGetValue(login.GId,out var player))
+            lock (guidplayersContainer)
             {
-                oldTCP = player.tcpInfo;
-                player.Init(tcpInfo);
-                Console.WriteLine($"Player ReLogin:{login.Name} guid:{login.GId}");
-            }
-            else
-            {
-                player = new PlayerAgent(login);
-                player.Init(tcpInfo);
-                Console.WriteLine($"Player Login:{login.Name} guid:{login.GId}");
-            }
+                if (guidplayersContainer.TryGetValue(login.GId, out player))
+                {
+                    oldTCP = player.tcpInfo;
+                    player.Init(tcpInfo);
+                    guidplayersContainer.Remove(player.guid);
+                    Console.WriteLine($"Player ReLogin:{login.Name} guid:{login.GId}");
+                }
+                else
+                {
+                    player = new PlayerAgent(login);
+                    player.Init(tcpInfo);
+                    Console.WriteLine($"Player Login:{login.Name} guid:{login.GId}");
+                }
+
             
-            guidplayersContainer.Add(player.guid,player);
+                guidplayersContainer.Add(player.guid,player);
+            }
             playerTcpInfos[tcpInfo] = player;
 
             player.OnLogin();
@@ -119,7 +133,10 @@ namespace GameServer
             if (playerTcpInfos.TryGetValue(tcpInfo,out var player))
             {
                 playerTcpInfos.Remove(tcpInfo);
-                guidplayersContainer.Remove(player.guid);
+                lock (guidplayersContainer)
+                {
+                    guidplayersContainer.Remove(player.guid);
+                }
                 player.OnLogout();
             }
         }

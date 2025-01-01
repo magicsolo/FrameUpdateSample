@@ -50,7 +50,6 @@ namespace Game
             {
                 inputData.inputMoveAngle = -1;
             }
-
             if (Input.GetKey(KeyCode.F))
             {
                 inputData.input = EInputEnum.fire;

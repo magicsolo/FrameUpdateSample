@@ -67,6 +67,8 @@ namespace Script
                     vpl.Init(slot);
                     players.Add(vpl);
                 }
+
+                vpl.name = LogicMatch.instance.allPlayers[slot].filed.info.name;
                 vpl.gameObject.SetActive(true);
             }
         }

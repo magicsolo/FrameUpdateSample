@@ -8,18 +8,18 @@ namespace Game
 {
     public class VideoDrive:LogicDrive
     {
-        private S2CStartGame startInfo;
+        //private S2CStartGame startInfo;
         private List<S2CFrameData> allFrames;
         private List<S2CFrameData> curFrameFrames = new List<S2CFrameData>();
         private int curServerFrameIndex;
         private int updateFrame = 1;
 
-        public void Start(S2CStartGame startInfo, List<S2CFrameData> frames)
-        {
-            this.startInfo = startInfo;
-            allFrames = frames;
-            curServerFrameIndex = -1;
-        }
+        // public void Start(S2CStartGame startInfo, List<S2CFrameData> frames)
+        // {
+        //     this.startInfo = startInfo;
+        //     allFrames = frames;
+        //     curServerFrameIndex = -1;
+        // }
         
         public void Update()
         {

@@ -1,4 +1,5 @@
-﻿using Game;
+﻿using C2SProtoInterface;
+using Game;
 using TrueSync;
 
 namespace FrameDrive
@@ -23,6 +24,13 @@ namespace FrameDrive
         {
             guid = gid;
             this.name = name;
+            this.slot = slot;
+        }
+
+        public void Init(S2CPlayerData plData, int slot)
+        {
+            guid = plData.Guid;
+            name = plData.Name;
             this.slot = slot;
         }
     }

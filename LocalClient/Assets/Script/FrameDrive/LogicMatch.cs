@@ -44,7 +44,7 @@ namespace FrameDrive
             {
                 var ipt = frameData.InputData[i];
                 
-                var player = _allPlayers[ipt.slot];
+                var player = _allPlayers[i];
                 var inputData = new FrameInputData() { input = (EInputEnum)ipt.input};
                 inputData.inputMoveAngle = ipt.inputMoveAngle;
                 player.UpdateInput(inputData);

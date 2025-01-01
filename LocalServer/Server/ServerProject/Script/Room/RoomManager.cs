@@ -19,7 +19,10 @@ namespace GameServer
 
             var newRoomPlayer = new RommPlayerInfo(agent);
             var newRoom = new GameRoomAgent(newRoomPlayer,guidIndex++);
-            gameRoomAgents.Add(newRoom.guid,newRoom);
+            lock (gameRoomAgents)
+            {
+                gameRoomAgents.Add(newRoom.guid,newRoom);
+            }
             registPlayers[newRoomPlayer.guid] = newRoom;
             newRoom.SendPlayerRoomInfo();
         }
@@ -32,7 +35,10 @@ namespace GameServer
                 registPlayers.Remove(agent.guid);
                 if (roomAgent.playerCount <= 0)
                 {
-                    gameRoomAgents.Remove(roomAgent.guid);
+                    lock (gameRoomAgents)
+                    {
+                        gameRoomAgents.Remove(roomAgent.guid);
+                    }
                 }
             }
         }
@@ -60,6 +66,34 @@ namespace GameServer
                 allRommInfo.AllRooms.Add(kv.Value.GetAllRoomInfo());
 
             agent.SendTCPData(EMessage.ReqRoomInfos, allRommInfo);
+        }
+
+        public void ReqStartMatch(PlayerAgent agent)
+        {
+            if (registPlayers.TryGetValue(agent.guid,out var roomAgent))
+            {
+                roomAgent.StartMatch();
+            }
+        }
+
+        public void ReceiveUDPData(int guid,C2SFrameUpdate data)
+        {
+            if (registPlayers.TryGetValue(guid,out var roomAgent))
+            {
+                roomAgent.ReceiveC2SFrameData(guid, data);
+            }
+        }
+
+        public void UpdateRooms()
+        {
+            lock (gameRoomAgents)
+            {
+                foreach (var room in gameRoomAgents.Values)
+                {
+                    room.Update();
+                }
+            }
+            
         }
     }    
 }
