@@ -79,7 +79,6 @@ namespace GameServer
                     {
                         ServerLogic.SendUDP(guid,frmDt);
                     }
-                    Console.WriteLine("");
                     SaveFrameBytes(frmDt);
                 }
 

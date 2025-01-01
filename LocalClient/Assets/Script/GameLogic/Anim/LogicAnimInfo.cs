@@ -43,7 +43,7 @@ namespace Game
             var vect = TSVector.zero;
             vect.x = GetCurveValue(skillAreaX, frame);
             vect.y = GetCurveValue(skillAreaY, frame);
-            vect.z = GetCurveValue(skillPosZ, frame);
+            vect.z = GetCurveValue(skillAreaZ, frame);
 
             return vect;
         }

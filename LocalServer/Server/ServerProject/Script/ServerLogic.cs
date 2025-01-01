@@ -377,7 +377,6 @@ namespace GameServer
             if (agent!=null)
             {
                 _udpSocket.SendTo(sendBytes, 0, sendBytes.Length, SocketFlags.None, agent.tcpInfo.udpEndPoint);
-                
             }
         }
 

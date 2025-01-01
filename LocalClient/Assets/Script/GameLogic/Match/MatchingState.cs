@@ -53,7 +53,7 @@ namespace Game
         public override void OnGUIUpdate()
         {
             base.OnGUIUpdate();
-            if (GUILayout.Button("重新开始",btnStyle))
+            if (GUILayout.Button("结束游戏",btnStyle))
                 ClientManager.instance.SendTCPInfo(EMessage.Restart);
             if (GUILayout.Button("保存录像以及帧输出日志",btnStyle))
                 ClientManager.instance.SendTCPInfo(EMessage.PrintFrames, new C2SPrintFrames());
