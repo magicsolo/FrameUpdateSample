@@ -38,7 +38,7 @@ public class ViewPlayerEditor : Editor
         var logicPlayer = LogicMatch.instance.GetPlayer(guid);
         if (logicPlayer!=null)
         {
-            GUILayout.Label($"State:{logicPlayer.curStateType}");
+            GUILayout.Label($"State:{logicPlayer.curStateType} angle:{playerInfo.FrameInputData.inputMoveAngle.AsFloat()} btn:{playerInfo.FrameInputData.input}");
         }
     }
 }

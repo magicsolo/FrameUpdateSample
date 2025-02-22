@@ -51,7 +51,7 @@ namespace CenterBase
         //public EConnecterState CurState=>;
         private Socket udpSocket;
 
-        byte[] receiveDatas = new byte[6000];
+        byte[] receiveDatas = new byte[600000];
         public override EConnecterState CurState => (udpSocket == null || !udpSocket.Connected) ? EConnecterState.DisConnect : EConnecterState.Connected;
 
         public override void Connect(string ip, string pot)

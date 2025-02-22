@@ -36,13 +36,6 @@ namespace Game
         public MatchingState( LogicFSM fsm) : base(ELogicType.Match, fsm)
         {
         }
-
-        protected override void BeforeEnter()
-        {
-            base.BeforeEnter();
-            //RegistTCPListener(EMessage.Restart,OnReset);
-        }
-
         protected override void OnEnter()
         {
             base.OnEnter();
@@ -53,20 +46,26 @@ namespace Game
         public override void OnGUIUpdate()
         {
             base.OnGUIUpdate();
-            if (GUILayout.Button("结束游戏",btnStyle))
-                ClientManager.instance.SendTCPInfo(EMessage.Restart);
-            if (GUILayout.Button("保存录像以及帧输出日志",btnStyle))
-                ClientManager.instance.SendTCPInfo(EMessage.PrintFrames, new C2SPrintFrames());
+            if (GUILayout.Button("结束游戏", btnStyle))
+            {
+                ClientManager.instance.SendTCPInfo(EMessage.C2SEndMatch);
+            }
+            if (GUILayout.Button("保存录像以及帧输出日志", btnStyle))
+            {
+            }
+
+            //ClientManager.instance.SendTCPInfo(EMessage.PrintFrames, new C2SPrintFrames());
             
-            GUILayout.Label($"Frame cli:{FrameManager.instance.curClientFrame} serv:{FrameManager.instance.curServerFrame} ri:{FrameManager.instance.clientRuningFrame}",btnStyle);
+            GUILayout.Label($"Frame cli:{FrameManager.instance.clientRuningFrame} ",btnStyle);
+            GUILayout.Label($"serv:{FrameManager.instance.curServerFrame}",btnStyle);
         }
 
         public override void Exit()
         {
             base.Exit();
             driver.StopDrive();
-            ClientManager.instance.UnRegistNoteListener(EMessage.Restart);
-            ClientManager.instance.UnRegistNoteListener(EMessage.PrintFrames);
+            // ClientManager.instance.UnRegistNoteListener(EMessage.Restart);
+            // ClientManager.instance.UnRegistNoteListener(EMessage.PrintFrames);
             ViewModel.instance.Unit();
         }
 

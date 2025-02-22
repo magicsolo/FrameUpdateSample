@@ -31,6 +31,7 @@ namespace Game
             AddState(new StandAloneRoom(this));
             AddState(new StandAloneMatching(this));
         }
+        
 
         public void ChangeState(ELogicType stType,object param = null)
         {

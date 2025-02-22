@@ -76,7 +76,6 @@ namespace FrameDrive
             this.slot = slot;
             //guid = ViewModel.instance.PlayerDatas[slot].guid;
         }
-
         private void Update()
         {
             if (slot >= ViewModel.instance.playerInfos.Length)

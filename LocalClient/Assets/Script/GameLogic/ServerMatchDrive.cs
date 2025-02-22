@@ -24,39 +24,39 @@ namespace Game
             }
 
             StartDrive(playerFileds);
+            ClientManager.instance.UDPConnect(8091);
+
         }
 
-        protected override void Update()
+        protected override void OnUpdate()
         {
-            ClientManager.instance.UDPConnect(8091);
-            while (true)
+            S2CFrameUpdate frmServerData = ClientManager.instance.UDPReceive();
+
+            if (frmServerData?.FrameDatas != null)
             {
-                S2CFrameUpdate frmServerData = ClientManager.instance.UDPReceive();
+                FrameManager.instance.curServerFrame = frmServerData.CurServerFrame;
 
-                if (frmServerData?.FrameDatas != null)
+                foreach (var sFrmData in frmServerData.FrameDatas)
                 {
-                    FrameManager.instance.curServerFrame = frmServerData.CurServerFrame;
-
-                    foreach (var sFrmData in frmServerData.FrameDatas)
+                    FrameData dt = FrameManager.instance.AddFrameData(sFrmData.FrameIndex);
+                    if (dt == null)
                     {
-                        FrameData dt = FrameManager.instance.AddFrameData(sFrmData.FrameIndex);
-
-                        for (int i = 0; i < sFrmData.Gids.Count; i++)
-                        {
-                            var gid = sFrmData.Gids[i];
-                            var pl = LogicMatch.instance.GetPlayer(gid);
-                            var inputData = dt.InputData[pl.slot];
-                            inputData.input = (EInputEnum)sFrmData.Inputs[i];
-                            inputData.inputMoveAngle._serializedValue = sFrmData.InputAngles[i];
-                            dt.InputData[pl.slot] = inputData;
-                        }
+                        continue;
+                    }
+                    for (int i = 0; i < sFrmData.Gids.Count; i++)
+                    {
+                        var gid = sFrmData.Gids[i];
+                        var pl = LogicMatch.instance.GetPlayer(gid);
+                        var inputData = dt.InputData[pl.slot];
+                        inputData.input = (EInputEnum)sFrmData.Inputs[i];
+                        inputData.inputMoveAngle._serializedValue = sFrmData.InputAngles[i];
+                        dt.InputData[pl.slot] = inputData;
                     }
                 }
-
-                FrameManager.instance.UpdateFrameData();
-                SendFrameData();
-                Thread.Sleep(spaceTime);
             }
+
+            FrameManager.instance.UpdateFrameData();
+            SendFrameData();
         }
 
         public void SendFrameData()

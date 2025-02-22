@@ -13,6 +13,7 @@ namespace Game
         private FileStream videoWriter;
         private Thread ud;
         private EventRegister eventRegister = new EventRegister();
+        private bool _threadUpdate = false;
         public void StartDrive(PlayerFiled[] playerFileds)
         {
             FrameManager.instance.Init(playerFileds);
@@ -26,17 +27,32 @@ namespace Game
             videoWriter = new FileStream(videoPath,FileMode.Create,FileAccess.Write);
             eventRegister.AddRegister(EventKeys.LogicMatchUpdate,SaveFrameUpdate);
             CloseThread();
+            _threadUpdate = true;
             ud = new Thread(Update);
             ud.Start();
         }
 
+        ~BaseMatchDrive()
+        {
+            _threadUpdate = false;
+        }
+
         public void StopDrive()
         {
+            _threadUpdate = false;
             eventRegister.UnregistAll();
             CloseThread();
         }
 
-        protected abstract void Update();
+        void Update()
+        {
+            while (_threadUpdate)
+            {
+                OnUpdate();
+                Thread.Sleep(spaceTime);
+            }
+        }
+        protected abstract void OnUpdate();
         
         void CloseThread()
         {

@@ -23,6 +23,10 @@ message C2SLogin{
     string name = 2;
 }
 
+message S2CLogin{
+    int32 roomId = 1;
+}
+
 message C2SStartGame{}
 
 

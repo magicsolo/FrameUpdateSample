@@ -82,7 +82,6 @@ namespace GameServer
         
         private static Socket _udpSocket;
         private bool matchStarted;
-
         public ServerLogic()
         {
             
@@ -100,9 +99,11 @@ namespace GameServer
             IPAddress ipAdress = IPAddress.Parse(ip);
             tcpIPPoint = new IPEndPoint(ipAdress, tcpPot);
             _udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            _udpSocket.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.ReuseAddress,true);
             udpIPPoint = new IPEndPoint(ipAdress, udpPot);
 
             tcpListener = new TcpListener(tcpIPPoint);
+            tcpListener.Server.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.ReuseAddress,true);
             Thread collect = new Thread(Collecting);
             Thread udpRecieveing = new Thread(UDPRecieveing);
             collect.Start();
@@ -330,7 +331,7 @@ namespace GameServer
             while (true)
             {
                 OnReceiveUDP(data);
-                Thread.Sleep(0);
+                Thread.Sleep(1);
             }
         }
 
@@ -338,14 +339,31 @@ namespace GameServer
         {
             EndPoint senderRemote = new IPEndPoint(IPAddress.Any, 0);
             int readLeng;
-            try
+            lock (_udpSocket)
             {
-                readLeng = _udpSocket.ReceiveFrom(data, data.Length, SocketFlags.None, ref senderRemote);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"UDP 收到错误信息{e.ToString()}");
-                return;
+                if (_udpSocket.Available>0)
+                {
+                    try
+                    {
+                        readLeng = _udpSocket.ReceiveFrom(data, data.Length, SocketFlags.None, ref senderRemote);
+                    }
+                    catch (Exception e)
+                    {
+                        if (e is SocketException err && err.ErrorCode == 10054)
+                        {
+                            
+                        }
+                        else
+                        {
+                            Console.WriteLine($"UDP 收到错误信息{e.ToString()}");
+                        }
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
             }
 
             fixed (void* p = data)
@@ -374,9 +392,12 @@ namespace GameServer
         {
             byte[] sendBytes =  data.ToByteArray();
             var agent = PlayerManager.instance.GetPlayerByGuid(guid);
-            if (agent!=null)
+            if (agent!=null&&agent.tcpInfo?.udpEndPoint!=null)
             {
-                _udpSocket.SendTo(sendBytes, 0, sendBytes.Length, SocketFlags.None, agent.tcpInfo.udpEndPoint);
+                lock (_udpSocket)
+                {
+                    _udpSocket.SendTo(sendBytes, 0, sendBytes.Length, SocketFlags.None, agent.tcpInfo.udpEndPoint);
+                }
             }
         }
 

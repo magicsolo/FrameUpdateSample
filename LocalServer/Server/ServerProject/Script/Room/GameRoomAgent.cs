@@ -3,58 +3,58 @@ using GameServer;
 
 namespace GameServer
 {
-    public struct RommPlayerInfo
-    {
-        public int guid;
-        public string name;
-
-        public RommPlayerInfo(PlayerAgent pl)
-        {
-            guid = pl.guid;
-            name = pl.name;
-        }
-    }
 
     public class GameRoomAgent
     {
         public int guid { get; private set; }
-        List<RommPlayerInfo> _players = new List<RommPlayerInfo>();
+        List<int> _playerGuids = new List<int>();
         
-        public int playerCount => _players.Count;
-        public RommPlayerInfo main => _players[0];
-        private bool inMatch;
+        public int playerCount => _playerGuids.Count;
+        public int main => _playerGuids[0];
         MatchAgent _matchAgent = new MatchAgent();
-        public GameRoomAgent(RommPlayerInfo pl,int guid)
+        private bool inMatch => _matchAgent.state != MatchState.Idle;
+        public GameRoomAgent(int plGuid,int guid)
         {
-            _players.Clear();
-            _players.Add(pl);
-            inMatch = false;
+            _playerGuids.Clear();
+            _playerGuids.Add(plGuid);
             this.guid = guid;
             Console.WriteLine($"Create Room {guid}");
         }
 
         public void SendPlayerRoomInfo()
         {
-            if (_players.Count<=0)
+            if (_playerGuids.Count<=0)
             {
                 return;
             }
-            var roomInfo = new S2CRoomInfo();
-            roomInfo.RoomGuid = guid;
-            
-            foreach (var pl in _players)
-            {
-                var agent = PlayerManager.instance.GetPlayerByGuid(pl.guid);
-                roomInfo.AllPlayers.Add(agent.GetS2CPlayerData());
-            }
 
-            foreach (var pl in _players)
+            var roomInfo = GetRoomInfo();
+            foreach (var plGuid in _playerGuids)
             {
-                var agent = PlayerManager.instance.GetPlayerByGuid(pl.guid);
-                agent.SendTCPData(EMessage.S2CRoomInfoRefresh,roomInfo);
+                var agent = PlayerManager.instance.GetPlayerByGuid(plGuid);
+                SendPlayerEnterRoom(roomInfo,agent);
             }
         }
 
+        S2CRoomInfo GetRoomInfo()
+        {
+            var roomInfo = new S2CRoomInfo();
+            roomInfo.RoomGuid = guid;
+            
+            foreach (var plGuid in _playerGuids)
+            {
+                var agent = PlayerManager.instance.GetPlayerByGuid(plGuid);
+                roomInfo.AllPlayers.Add(agent.GetS2CPlayerData());
+            }
+
+            return roomInfo;
+        }
+
+        void SendPlayerEnterRoom(S2CRoomInfo roomInfo,PlayerAgent pl)
+        {
+            pl.SendTCPData(EMessage.S2CRoomInfoRefresh,roomInfo);
+        }
+        
         public void OnReqLeaveRoom(PlayerAgent plAgent)
         {
             int guid = plAgent.guid;
@@ -62,36 +62,53 @@ namespace GameServer
             Console.WriteLine($"Player {plAgent.name} Leave Room {guid}");
             plAgent.SendTCPData(EMessage.S2CLeaveRoom);
         }
-
         public void OnReqJoinRoom(PlayerAgent plAgent)
         {
-            var newPlayer = new RommPlayerInfo(plAgent);
-            AddPlayer(newPlayer);
-            SendPlayerRoomInfo();
-            Console.WriteLine($"Player {plAgent.name} Join Room {guid}");
-        }
+            bool isNewPlayer = true;
+            isNewPlayer = _playerGuids.Find((guid)=>guid == plAgent.guid) == 0;
 
-        public void OnReceiveFrameData(int guid,C2SFrameUpdate frameData)
-        {
+            if (isNewPlayer)
+            {
+                AddPlayer(plAgent.guid);
+                Console.WriteLine($"Player {plAgent.name} Join Room {guid}");
+            }
             
+            if (inMatch)
+            {
+                var matchInfo = GetMatchInfo();
+                PlayerStartMatch(matchInfo,plAgent);
+            }
+            else
+            {
+                if (isNewPlayer)
+                {
+                    SendPlayerRoomInfo();
+                }
+                else
+                {
+                    var roomInfo = GetRoomInfo();
+                    SendPlayerEnterRoom(roomInfo,plAgent);
+                    Console.WriteLine($"Player {plAgent.name} ReJoin Room {guid}");    
+                }
+            }
         }
 
-        public void AddPlayer(RommPlayerInfo pl)
+        public void AddPlayer(int plGid)
         {
             if (!inMatch)
             {
-                _players.Add(pl);    
+                _playerGuids.Add(plGid);    
             }
         }
 
         public void RemovePlayer(int guid)
         {
-            for (int i = 0; i < _players.Count; i++)
+            for (int i = 0; i < _playerGuids.Count; i++)
             {
-                var pl = _players[i];
-                if (pl.guid == guid)
+                var plGid = _playerGuids[i];
+                if (plGid == guid)
                 {
-                    _players.RemoveAt(i);
+                    _playerGuids.RemoveAt(i);
                     break;
                 }
             }
@@ -107,10 +124,10 @@ namespace GameServer
         public S2CRoomInfo GetAllRoomInfo()
         {
             var roomInfo = new S2CRoomInfo();
-            foreach (var pl in _players)
+            foreach (var plGid in _playerGuids)
             {
                 roomInfo.RoomGuid = guid;
-                var agent = PlayerManager.instance.GetPlayerByGuid(pl.guid);
+                var agent = PlayerManager.instance.GetPlayerByGuid(plGid);
                 roomInfo.AllPlayers.Add(agent.GetS2CPlayerData());
             }
 
@@ -119,20 +136,28 @@ namespace GameServer
 
         public void StartMatch()
         {
-            _matchAgent.StartMatch(_players);
+            _matchAgent.StartMatch(_playerGuids);
+            var matchInfo = GetMatchInfo();
+            foreach (var plGid in _playerGuids)
+            {
+                var pl = PlayerManager.instance.GetPlayerByGuid(plGid);
+                PlayerStartMatch(matchInfo,pl);
+            }
+        }
+
+        S2CMatchInfo GetMatchInfo()
+        {
             var matchInfo = new S2CMatchInfo();
             matchInfo.RoomGuid = guid;
             matchInfo.Pot = ServerLogic.udpPot;
-            foreach (var pl in _players)
-            {
-                var agent = PlayerManager.instance.GetPlayerByGuid(pl.guid);
-                matchInfo.Players.Add(agent.GetS2CPlayerData());
-            }
-            foreach (var agent in _players)
-            {
-                var pl = PlayerManager.instance.GetPlayerByGuid(agent.guid);
-                pl.SendTCPData(EMessage.S2CStartMatch,matchInfo);
-            }
+            _matchAgent.SetMatchInfo(matchInfo);
+
+            return matchInfo;
+        }
+
+        public void PlayerStartMatch(S2CMatchInfo matchInfo,PlayerAgent pl)
+        {
+            pl.SendTCPData(EMessage.S2CStartMatch,matchInfo);
         }
 
         public void ReceiveC2SFrameData(int guid, C2SFrameUpdate data)
@@ -144,6 +169,7 @@ namespace GameServer
         {
             _matchAgent.Update();
         }
+        
     }
 }
 

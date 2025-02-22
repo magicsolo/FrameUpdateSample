@@ -25,32 +25,33 @@ namespace C2SProtoInterface {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChRQcm90b0ludGVyZmFjZS5wcm90bxIRQzJTUHJvdG9JbnRlcmZhY2UiJQoI",
-            "QzJTTG9naW4SCwoDZ0lkGAEgASgFEgwKBG5hbWUYAiABKAkiDgoMQzJTU3Rh",
-            "cnRHYW1lIkoKDkMyU0ZyYW1lVXBkYXRlEg0KBXN0YXJ0GAEgASgFEgsKA2Vu",
-            "ZBgCIAEoBRINCgVhbmdsZRgDIAEoAxINCgVpbnB1dBgEIAEoBSIQCg5DMlNQ",
-            "cmludEZyYW1lcyIfCgtDMlNKb2luUm9vbRIQCghyb29tR3VpZBgBIAEoBSIr",
-            "Cg1TMkNQbGF5ZXJEYXRhEgwKBGd1aWQYASABKAUSDAoEbmFtZRgCIAEoCSJg",
-            "CgxTMkNNYXRjaEluZm8SCwoDcG90GAEgASgFEhAKCHJvb21HdWlkGAIgASgF",
-            "EjEKB3BsYXllcnMYAyADKAsyIC5DMlNQcm90b0ludGVyZmFjZS5TMkNQbGF5",
-            "ZXJEYXRhIlUKC1MyQ1Jvb21JbmZvEhAKCHJvb21HdWlkGAEgASgFEjQKCmFs",
-            "bFBsYXllcnMYAiADKAsyIC5DMlNQcm90b0ludGVyZmFjZS5TMkNQbGF5ZXJE",
-            "YXRhIhAKDlMyQ1ByaW50RnJhbWVzIlUKDFMyQ0ZyYW1lRGF0YRISCgpmcmFt",
-            "ZUluZGV4GAEgASgFEgwKBGdpZHMYAiADKAUSDgoGaW5wdXRzGAMgAygFEhMK",
-            "C2lucHV0QW5nbGVzGAQgAygDIl0KDlMyQ0ZyYW1lVXBkYXRlEhYKDmN1clNl",
-            "cnZlckZyYW1lGAEgASgFEjMKCmZyYW1lRGF0YXMYAiADKAsyHy5DMlNQcm90",
-            "b0ludGVyZmFjZS5TMkNGcmFtZURhdGEiQgoOUzJDQWxsUm9vbUluZm8SMAoI",
-            "YWxsUm9vbXMYASADKAsyHi5DMlNQcm90b0ludGVyZmFjZS5TMkNSb29tSW5m",
-            "byqGAgoIRU1lc3NhZ2USCAoETm9uZRAAEg0KCUhlYXJ0QmVhdBABEg0KCUNv",
-            "bm5lY3RlZBACEgkKBUxvZ2luEAMSCgoGTG9nb3V0EAQSEgoOQzJTX0NyZWF0",
-            "ZVJvb20QBRIQCgxDMlNfSm9pblJvb20QBhIRCg1DMlNfTGVhdmVSb29tEAcS",
-            "FwoTUzJDX1Jvb21JbmZvUmVmcmVzaBAIEhEKDVMyQ19MZWF2ZVJvb20QCRIQ",
-            "CgxSZXFSb29tSW5mb3MQChISCg5DMlNfU3RhcnRNYXRjaBALEhIKDlMyQ19T",
-            "dGFydE1hdGNoEAwSCwoHUmVzdGFydBANEg8KC1ByaW50RnJhbWVzEA5iBnBy",
-            "b3RvMw=="));
+            "QzJTTG9naW4SCwoDZ0lkGAEgASgFEgwKBG5hbWUYAiABKAkiGgoIUzJDTG9n",
+            "aW4SDgoGcm9vbUlkGAEgASgFIg4KDEMyU1N0YXJ0R2FtZSJKCg5DMlNGcmFt",
+            "ZVVwZGF0ZRINCgVzdGFydBgBIAEoBRILCgNlbmQYAiABKAUSDQoFYW5nbGUY",
+            "AyABKAMSDQoFaW5wdXQYBCABKAUiEAoOQzJTUHJpbnRGcmFtZXMiHwoLQzJT",
+            "Sm9pblJvb20SEAoIcm9vbUd1aWQYASABKAUiKwoNUzJDUGxheWVyRGF0YRIM",
+            "CgRndWlkGAEgASgFEgwKBG5hbWUYAiABKAkiYAoMUzJDTWF0Y2hJbmZvEgsK",
+            "A3BvdBgBIAEoBRIQCghyb29tR3VpZBgCIAEoBRIxCgdwbGF5ZXJzGAMgAygL",
+            "MiAuQzJTUHJvdG9JbnRlcmZhY2UuUzJDUGxheWVyRGF0YSJVCgtTMkNSb29t",
+            "SW5mbxIQCghyb29tR3VpZBgBIAEoBRI0CgphbGxQbGF5ZXJzGAIgAygLMiAu",
+            "QzJTUHJvdG9JbnRlcmZhY2UuUzJDUGxheWVyRGF0YSIQCg5TMkNQcmludEZy",
+            "YW1lcyJVCgxTMkNGcmFtZURhdGESEgoKZnJhbWVJbmRleBgBIAEoBRIMCgRn",
+            "aWRzGAIgAygFEg4KBmlucHV0cxgDIAMoBRITCgtpbnB1dEFuZ2xlcxgEIAMo",
+            "AyJdCg5TMkNGcmFtZVVwZGF0ZRIWCg5jdXJTZXJ2ZXJGcmFtZRgBIAEoBRIz",
+            "CgpmcmFtZURhdGFzGAIgAygLMh8uQzJTUHJvdG9JbnRlcmZhY2UuUzJDRnJh",
+            "bWVEYXRhIkIKDlMyQ0FsbFJvb21JbmZvEjAKCGFsbFJvb21zGAEgAygLMh4u",
+            "QzJTUHJvdG9JbnRlcmZhY2UuUzJDUm9vbUluZm8q+gEKCEVNZXNzYWdlEggK",
+            "BE5vbmUQABINCglIZWFydEJlYXQQARINCglDb25uZWN0ZWQQAhIJCgVMb2dp",
+            "bhADEgoKBkxvZ291dBAEEhIKDkMyU19DcmVhdGVSb29tEAUSEAoMQzJTX0pv",
+            "aW5Sb29tEAYSEQoNQzJTX0xlYXZlUm9vbRAHEhcKE1MyQ19Sb29tSW5mb1Jl",
+            "ZnJlc2gQCBIRCg1TMkNfTGVhdmVSb29tEAkSEAoMUmVxUm9vbUluZm9zEAoS",
+            "EgoOQzJTX1N0YXJ0TWF0Y2gQCxISCg5TMkNfU3RhcnRNYXRjaBAMEhAKDEMy",
+            "U19FbmRNYXRjaBANYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::C2SProtoInterface.EMessage), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SLogin), global::C2SProtoInterface.C2SLogin.Parser, new[]{ "GId", "Name" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CLogin), global::C2SProtoInterface.S2CLogin.Parser, new[]{ "RoomId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SStartGame), global::C2SProtoInterface.C2SStartGame.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SFrameUpdate), global::C2SProtoInterface.C2SFrameUpdate.Parser, new[]{ "Start", "End", "Angle", "Input" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SPrintFrames), global::C2SProtoInterface.C2SPrintFrames.Parser, null, null, null, null, null),
@@ -82,8 +83,7 @@ namespace C2SProtoInterface {
     [pbr::OriginalName("ReqRoomInfos")] ReqRoomInfos = 10,
     [pbr::OriginalName("C2S_StartMatch")] C2SStartMatch = 11,
     [pbr::OriginalName("S2C_StartMatch")] S2CStartMatch = 12,
-    [pbr::OriginalName("Restart")] Restart = 13,
-    [pbr::OriginalName("PrintFrames")] PrintFrames = 14,
+    [pbr::OriginalName("C2S_EndMatch")] C2SEndMatch = 13,
   }
 
   #endregion
@@ -246,6 +246,135 @@ namespace C2SProtoInterface {
 
   }
 
+  public sealed partial class S2CLogin : pb::IMessage<S2CLogin> {
+    private static readonly pb::MessageParser<S2CLogin> _parser = new pb::MessageParser<S2CLogin>(() => new S2CLogin());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<S2CLogin> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S2CLogin() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S2CLogin(S2CLogin other) : this() {
+      roomId_ = other.roomId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public S2CLogin Clone() {
+      return new S2CLogin(this);
+    }
+
+    /// <summary>Field number for the "roomId" field.</summary>
+    public const int RoomIdFieldNumber = 1;
+    private int roomId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int RoomId {
+      get { return roomId_; }
+      set {
+        roomId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as S2CLogin);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(S2CLogin other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (RoomId != other.RoomId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (RoomId != 0) hash ^= RoomId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (RoomId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(RoomId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (RoomId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RoomId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(S2CLogin other) {
+      if (other == null) {
+        return;
+      }
+      if (other.RoomId != 0) {
+        RoomId = other.RoomId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            RoomId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   public sealed partial class C2SStartGame : pb::IMessage<C2SStartGame> {
     private static readonly pb::MessageParser<C2SStartGame> _parser = new pb::MessageParser<C2SStartGame>(() => new C2SStartGame());
     private pb::UnknownFieldSet _unknownFields;
@@ -254,7 +383,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[1]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -355,7 +484,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[2]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -568,7 +697,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[3]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -669,7 +798,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[4]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -798,7 +927,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[5]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -955,7 +1084,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[6]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1132,7 +1261,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[7]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1281,7 +1410,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[8]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1382,7 +1511,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[9]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1574,7 +1703,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[10]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1723,7 +1852,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[11]; }
+      get { return global::C2SProtoInterface.ProtoInterfaceReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

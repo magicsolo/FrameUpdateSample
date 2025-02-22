@@ -17,13 +17,12 @@ namespace GameServer
                 return;
             }
 
-            var newRoomPlayer = new RommPlayerInfo(agent);
-            var newRoom = new GameRoomAgent(newRoomPlayer,guidIndex++);
+            var newRoom = new GameRoomAgent(agent.guid,guidIndex++);
             lock (gameRoomAgents)
             {
                 gameRoomAgents.Add(newRoom.guid,newRoom);
             }
-            registPlayers[newRoomPlayer.guid] = newRoom;
+            registPlayers[agent.guid] = newRoom;
             newRoom.SendPlayerRoomInfo();
         }
 
@@ -50,13 +49,20 @@ namespace GameServer
             if (gameRoomAgents.TryGetValue(data.RoomGuid,out var roomAgent))
             {
                 roomAgent.OnReqJoinRoom(agent);
-                registPlayers.Add(agent.guid,roomAgent);
+                if (!registPlayers.ContainsKey(agent.guid))
+                {
+                    registPlayers.Add(agent.guid,roomAgent);
+                }
             }
         }
 
         public GameRoomAgent GetRoomAgentByPlayerGuid(int guid)
         {
-            return registPlayers[guid];
+            if (registPlayers.TryGetValue(guid, out var roomAgent))
+            {
+                return roomAgent;
+            }
+            return default;
         }
 
         public void ReqRoomInfo(PlayerAgent agent)

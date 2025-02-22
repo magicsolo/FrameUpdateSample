@@ -63,9 +63,9 @@ namespace GameServer
             stream.Write(data, 0, data.Length);
         }
         
-        public void OnLogin()
+        public void OnLogin(S2CLogin login)
         {
-            SendTCPData(EMessage.Login);
+            SendTCPData(EMessage.Login,login);
         }
 
         public void OnLogout()
@@ -122,7 +122,13 @@ namespace GameServer
             }
             playerTcpInfos[tcpInfo] = player;
 
-            player.OnLogin();
+            var loginInfo = new S2CLogin();
+            var roomInfo = RoomManager.instance.GetRoomAgentByPlayerGuid(player.guid);
+            if ( roomInfo!= null)
+            {
+                loginInfo.RoomId = roomInfo.guid;
+            }
+            player.OnLogin(loginInfo);
             return oldTCP;
         }
 

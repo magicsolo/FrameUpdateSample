@@ -1,5 +1,6 @@
 ﻿using C2SProtoInterface;
 using CenterBase;
+using Google.Protobuf;
 using UnityEngine;
 
 namespace Game
@@ -79,9 +80,10 @@ namespace Game
                 ClientManager.instance.Login(OnLogin);
         }
 
-        void OnLogin(TCPInfo param)
+        void OnLogin(TCPInfo tcpInfo)
         {
-            logicFsm.ChangeState(ELogicType.Lobby);
+            var loginInfo = tcpInfo.ParseMsgData(S2CLogin.Parser);
+            logicFsm.ChangeState(ELogicType.Lobby,loginInfo);
         }
     }
 }

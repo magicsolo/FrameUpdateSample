@@ -34,15 +34,15 @@ namespace GameServer
 
             // Thread receiveTcpDt = new Thread(ReceiveTCPData);
             // receiveTcpDt.Start();
-            while (true)
-            {
-                var input = Console.ReadLine();
-                if (input.Contains("-kill"))
-                {
-                    Environment.Exit(0);
-                }
-            }
-            Console.Write("ServerEnd\n");
+            // while (true)
+            // {
+            //     var input = Console.ReadLine();
+            //     if (input.Contains("-kill"))
+            //     {
+            //         Environment.Exit(0);
+            //     }
+            // }
+            Console.Write("ServerEnd\n"); 
         }
         static ServerLogic serverLogic = new ServerLogic();
 

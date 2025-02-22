@@ -13,9 +13,9 @@ namespace Game
             StartDrive(playerFileds);
         }
 
-        protected override void Update()
+        protected override void OnUpdate()
         {
-            var nxtFrame = FrameManager.instance.AddFrameData(FrameManager.instance.curClientFrame + 1);
+            var nxtFrame = FrameManager.instance.AddFrameData(FrameManager.instance.clientRuningFrame + 1);
             nxtFrame.InputData[0].input = InputManager.instance.inputData.input;
             nxtFrame.InputData[0].inputMoveAngle = InputManager.instance.inputData.inputMoveAngle;
             FrameManager.instance.UpdateFrameData();

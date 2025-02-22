@@ -9,13 +9,19 @@ namespace GameServer
         Waiting,
         Matching,
     }
+
+    public struct MatchPlayerInfo
+    {
+        public int guid;
+        public string name;
+    }
     public class MatchAgent
     {
         public static int matchIndex;
         private int matchGuid;
         HashSet<int> loadingPlayers = new HashSet<int>();
-        List<int> players = new List<int>();
-        MatchState state = MatchState.Idle;
+        public List<MatchPlayerInfo> players = new List<MatchPlayerInfo>();
+        public MatchState state { private set; get; }
         private List<PlayerFrame> _frameInputs = new List<PlayerFrame>(10000);
         private int curFrame => _frameInputs.Count -1;
         
@@ -26,16 +32,24 @@ namespace GameServer
         {
             state = MatchState.Idle;
         }
-        public void StartMatch(List<RommPlayerInfo> allPlayers)
+        public void StartMatch(List<int> allPlayers)
         {
             loadingPlayers.Clear();
             matchGuid = matchIndex++;
             state = MatchState.Waiting;
             players.Clear();
-            foreach (var pl in allPlayers)
+            foreach (var plGuid in allPlayers)
             {
-                players.Add(pl.guid);
-                loadingPlayers.Add(pl.guid);
+                var pl = PlayerManager.instance.GetPlayerByGuid(plGuid);
+                if (pl == null )
+                {
+                    continue;
+                }
+                MatchPlayerInfo info = new MatchPlayerInfo();
+                info.guid = pl.guid;
+                info.name = pl.name;
+                players.Add(info);
+                loadingPlayers.Add(info.guid);
             }
             
             string videoPath = Directory.GetCurrentDirectory() + "\\..\\SaveData";
@@ -75,9 +89,9 @@ namespace GameServer
                     var frmDt = new S2CFrameUpdate();//ServerFrameManager.GetSendFrameData(curFrame,_frameInputs[_frameInputs.Count - 1]);
                     frmDt.CurServerFrame = curFrame;
                     AddFrameData(frmDt, _frameInputs.Count - 1, _frameInputs.Count - 1);
-                    foreach (var guid in players)
+                    foreach (var plInfo in players)
                     {
-                        ServerLogic.SendUDP(guid,frmDt);
+                        ServerLogic.SendUDP(plInfo.guid,frmDt);
                     }
                     SaveFrameBytes(frmDt);
                 }
@@ -128,7 +142,7 @@ namespace GameServer
             int start = Math.Min(upData.Start, curFrame - 1);
             if (start >= 0)
             {
-                int end = Math.Max(upData.Start + 500, upData.End);
+                int end = Math.Min(upData.Start + 500, upData.End);
                 end = Math.Min(end, curFrame - 1);
                 end = Math.Max(end, start);
                 S2CFrameUpdate toC = new S2CFrameUpdate();
@@ -197,6 +211,19 @@ namespace GameServer
         public void EndMatch()
         {
             state = MatchState.Idle;
+        }
+
+        public void SetMatchInfo(S2CMatchInfo matchInfo)
+        {
+            foreach (var pl in players)
+            {
+                matchInfo.Players.Clear();
+                var s2cPl = new S2CPlayerData();
+                s2cPl.Guid = pl.guid;
+                s2cPl.Name = pl.name;
+                matchInfo.Players.Add(s2cPl);
+                
+            }
         }
     }    
 }

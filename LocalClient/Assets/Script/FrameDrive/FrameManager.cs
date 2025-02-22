@@ -58,7 +58,6 @@ namespace FrameDrive
 
         public Dictionary<int, FrameData> frameDataInputs = new Dictionary<int, FrameData>();
         public int curServerFrame { get; set; }
-        public int curClientFrame { get; private set; }
         public int clientRuningFrame { get; private set; }
         public FP curTime => Math.Max(clientRuningFrame,0)*frameTime ; 
 
@@ -70,7 +69,6 @@ namespace FrameDrive
         public void Init(PlayerFiled[] playerFileds )
         {
             clientRuningFrame = -1;
-            curClientFrame = -1;
             curServerFrame = -1;
             frameDataInputs.Clear();
             match.Init(playerFileds);
@@ -86,13 +84,12 @@ namespace FrameDrive
         {
             if (frameDataInputs.ContainsKey(frameIndex))
             {
-                Debug.LogError($"FrameDrive -> TryAddContainedFrame {frameIndex}");
+                Debug.LogWarning($"FrameDrive -> TryAddContainedFrame {frameIndex}");
                 return default;
             }
 
             var nFrm = new FrameData(frameIndex,match.allPlayers);
             frameDataInputs[frameIndex] = nFrm;
-            ++curClientFrame;
 
             return nFrm;
         }

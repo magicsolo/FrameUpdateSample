@@ -8,7 +8,6 @@ namespace CenterBase
         public T curState { get; protected set; }
         private Dictionary<int, T> states = new Dictionary<int, T>();
         
-        
         public void AddState(T st )
         {
             if (states.ContainsKey(st.stateType))
