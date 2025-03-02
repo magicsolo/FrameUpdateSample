@@ -41,6 +41,8 @@ namespace FrameDrive
         private Vector4 skillCheckArea;
         [SerializeField]
         private ViewSkillInfo skillInfoAnimObj;
+
+        public Transform hud;
         
         private void OnDrawGizmos()
         {
@@ -63,6 +65,7 @@ namespace FrameDrive
         public void BindObj()
         {
             skillInfoAnimObj = transform.GetComponentInChildren<ViewSkillInfo>();
+            hud = transform.Find("View/HUDCanvas");
         }
         
         private void Awake()
@@ -101,6 +104,13 @@ namespace FrameDrive
             }
 
             sprite.flipX = !vPlInfo.faceRight;
+
+
+            if (CameraManager.instance.mainCamera != null)
+            {
+                hud.rotation = CameraManager.instance.mainCamera.transform.rotation;
+            }
+
         }
     }
 }

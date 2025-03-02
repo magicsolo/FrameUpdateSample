@@ -122,6 +122,74 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &10535737
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 10535740}
+  - component: {fileID: 10535739}
+  - component: {fileID: 10535738}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &10535738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10535737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &10535739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10535737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &10535740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10535737}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &235898850
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,6 +278,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ce3492032b9b8445a1fffa50762583c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &384183840 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5793683487121281975, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+  m_PrefabInstance: {fileID: 865704386}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &500022650
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,6 +583,7 @@ Transform:
   - {fileID: 764849597}
   - {fileID: 1816296362}
   - {fileID: 235898851}
+  - {fileID: 1656766424}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &865704386
@@ -564,41 +638,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
-      propertyPath: pos.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
-      propertyPath: pos.y
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
-      propertyPath: area.x
-      value: 0.48
-      objectReference: {fileID: 0}
-    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
-      propertyPath: area.y
-      value: 0.45
-      objectReference: {fileID: 0}
-    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
-      propertyPath: area.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
-      propertyPath: skillInfo.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
-      propertyPath: skillInfo.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
-      propertyPath: skillInfo.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5649836034990628931, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
-      propertyPath: skillInfo.z
-      value: 1
+    - target: {fileID: 194883644670278721, guid: bff66552cde2c154698b8bd77b0258ea, type: 3}
+      propertyPath: m_Name
+      value: HUDCanvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -889,6 +931,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc2b6b480dbc73545ba8c86d8fbd16fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1656766423
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1656766424}
+  - component: {fileID: 1656766425}
+  m_Layer: 0
+  m_Name: CamerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1656766424
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656766423}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 773077881}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1656766425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656766423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3fe0abdfa9e0e445801795bc79306a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 520161663}
 --- !u!1 &1701205597
 GameObject:
   m_ObjectHideFlags: 0
@@ -984,6 +1071,7 @@ MonoBehaviour:
   slot: 0
   guid: 0
   skillInfoAnimObj: {fileID: 865704388}
+  hud: {fileID: 384183840}
 --- !u!1 &1816296361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,3 +1127,4 @@ SceneRoots:
   - {fileID: 520161664}
   - {fileID: 1765828366}
   - {fileID: 1701205598}
+  - {fileID: 10535740}
