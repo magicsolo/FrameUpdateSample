@@ -40,13 +40,13 @@ namespace C2SProtoInterface {
             "AyJdCg5TMkNGcmFtZVVwZGF0ZRIWCg5jdXJTZXJ2ZXJGcmFtZRgBIAEoBRIz",
             "CgpmcmFtZURhdGFzGAIgAygLMh8uQzJTUHJvdG9JbnRlcmZhY2UuUzJDRnJh",
             "bWVEYXRhIkIKDlMyQ0FsbFJvb21JbmZvEjAKCGFsbFJvb21zGAEgAygLMh4u",
-            "QzJTUHJvdG9JbnRlcmZhY2UuUzJDUm9vbUluZm8q+gEKCEVNZXNzYWdlEggK",
+            "QzJTUHJvdG9JbnRlcmZhY2UuUzJDUm9vbUluZm8qjAIKCEVNZXNzYWdlEggK",
             "BE5vbmUQABINCglIZWFydEJlYXQQARINCglDb25uZWN0ZWQQAhIJCgVMb2dp",
             "bhADEgoKBkxvZ291dBAEEhIKDkMyU19DcmVhdGVSb29tEAUSEAoMQzJTX0pv",
             "aW5Sb29tEAYSEQoNQzJTX0xlYXZlUm9vbRAHEhcKE1MyQ19Sb29tSW5mb1Jl",
             "ZnJlc2gQCBIRCg1TMkNfTGVhdmVSb29tEAkSEAoMUmVxUm9vbUluZm9zEAoS",
             "EgoOQzJTX1N0YXJ0TWF0Y2gQCxISCg5TMkNfU3RhcnRNYXRjaBAMEhAKDEMy",
-            "U19FbmRNYXRjaBANYgZwcm90bzM="));
+            "U19FbmRNYXRjaBANEhAKDFMyQ19FbmRNYXRjaBAOYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::C2SProtoInterface.EMessage), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -84,6 +84,7 @@ namespace C2SProtoInterface {
     [pbr::OriginalName("C2S_StartMatch")] C2SStartMatch = 11,
     [pbr::OriginalName("S2C_StartMatch")] S2CStartMatch = 12,
     [pbr::OriginalName("C2S_EndMatch")] C2SEndMatch = 13,
+    [pbr::OriginalName("S2C_EndMatch")] S2CEndMatch = 14,
   }
 
   #endregion

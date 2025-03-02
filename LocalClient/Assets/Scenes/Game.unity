@@ -665,7 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 584e091c5b9812746b1902b6bbb5cd03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ip: 192.168.50.76
+  ip: 47.115.226.238
   pot: 8090
   playerName: adam
 --- !u!1 &1265611196

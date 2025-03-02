@@ -41,6 +41,9 @@ namespace GameServer
                 case EMessage.C2SStartMatch:
                     RoomManager.instance.ReqStartMatch(this);
                     break;
+                case EMessage.C2SEndMatch:
+                    RoomManager.instance.ReqEndMatch(this);
+                    break;
             }
         }
 

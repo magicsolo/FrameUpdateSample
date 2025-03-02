@@ -17,7 +17,7 @@ namespace GameServer
                 return;
             }
 
-            var newRoom = new GameRoomAgent(agent.guid,guidIndex++);
+            var newRoom = new GameRoomAgent(agent.guid,++guidIndex);
             lock (gameRoomAgents)
             {
                 gameRoomAgents.Add(newRoom.guid,newRoom);
@@ -69,7 +69,8 @@ namespace GameServer
         {
             var allRommInfo = new S2CAllRoomInfo();
             foreach (var kv in gameRoomAgents)
-                allRommInfo.AllRooms.Add(kv.Value.GetAllRoomInfo());
+                if(!kv.Value.inMatch)
+                    allRommInfo.AllRooms.Add(kv.Value.GetAllRoomInfo());
 
             agent.SendTCPData(EMessage.ReqRoomInfos, allRommInfo);
         }
@@ -79,6 +80,14 @@ namespace GameServer
             if (registPlayers.TryGetValue(agent.guid,out var roomAgent))
             {
                 roomAgent.StartMatch();
+            }
+        }
+
+        public void ReqEndMatch(PlayerAgent agent)
+        {
+            if (registPlayers.TryGetValue(agent.guid,out var roomAgent))
+            {
+                roomAgent.EndMatch();
             }
         }
 

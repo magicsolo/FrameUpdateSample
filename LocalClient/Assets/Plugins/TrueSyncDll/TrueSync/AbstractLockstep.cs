@@ -6,22 +6,22 @@ namespace TrueSync
 {
 	public abstract class AbstractLockstep
 	{
-		private enum SimulationState // Ä£Äâ×´Ì¬
+		private enum SimulationState // Ä£ï¿½ï¿½×´Ì¬
 		{
-            NOT_STARTED, // Î´Æô¶¯
-			WAITING_PLAYERS, // µÈ´ýÍæ¼Ò
-			RUNNING, // ÔËÐÐÖÐ
-			PAUSED, // ÔÝÍ£
-			ENDED // ½áÊø
+            NOT_STARTED, // Î´ï¿½ï¿½ï¿½ï¿½
+			WAITING_PLAYERS, // ï¿½È´ï¿½ï¿½ï¿½ï¿½
+			RUNNING, // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			PAUSED, // ï¿½ï¿½Í£
+			ENDED // ï¿½ï¿½ï¿½ï¿½
 		}
         /*
-		private const int INITIAL_PLAYERS_CAPACITY = 4; // ³õÊ¼Íæ¼ÒÊýÁ¿
+		private const int INITIAL_PLAYERS_CAPACITY = 4; // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-		private const byte SYNCED_GAME_START_CODE = 196; // ¿ªÊ¼Í¬²½
+		private const byte SYNCED_GAME_START_CODE = 196; // ï¿½ï¿½Ê¼Í¬ï¿½ï¿½
 
-		private const byte SIMULATION_CODE = 197; // Ä£ÄâÖ¡
+		private const byte SIMULATION_CODE = 197; // Ä£ï¿½ï¿½Ö¡
 
-		private const byte CHECKSUM_CODE = 198; // Ð£Ñé
+		private const byte CHECKSUM_CODE = 198; // Ð£ï¿½ï¿½
 
 		private const byte SEND_CODE = 199;
 
@@ -43,14 +43,14 @@ namespace TrueSync
 
 		internal List<InputDataBase> auxPlayersInputData;
 
-        private List<int> playersIdsAux = new List<int>(); // ·Ç±¾µØÍæ¼ÒµÄ»îÔ¾Íæ¼ÒIDÁÐ±í
-		internal int[] auxActivePlayersIds; // ·Ç±¾µØÍæ¼ÒµÄ»îÔ¾Íæ¼ÒIDÊý×é
+        private List<int> playersIdsAux = new List<int>(); // ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ÒµÄ»ï¿½Ô¾ï¿½ï¿½ï¿½IDï¿½Ð±ï¿½
+		internal int[] auxActivePlayersIds; // ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ÒµÄ»ï¿½Ô¾ï¿½ï¿½ï¿½IDï¿½ï¿½ï¿½ï¿½
 
-		internal TSPlayer localPlayer; // ±¾µØÍæ¼Ò
+		internal TSPlayer localPlayer; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		protected TrueSyncUpdateCallback StepUpdate;
 
-		private TrueSyncInputCallback GetLocalData; // »ñÈ¡±¾µØÊý¾Ý
+		private TrueSyncInputCallback GetLocalData; // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		internal TrueSyncInputDataProvider InputDataProvider;
 
@@ -76,7 +76,7 @@ namespace TrueSync
 
 		private AbstractLockstep.SimulationState simulationState;
 
-		internal int rollbackWindow; // »Ø¹ö´°¿ÚÊý
+		internal int rollbackWindow; // ï¿½Ø¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		internal ICommunicator communicator;
 
@@ -98,9 +98,9 @@ namespace TrueSync
 
 		protected Dictionary<int, List<byte>> playersDisconnect;
 
-		private ReplayMode replayMode; // ÖØ·ÅÄ£Ê½
+		private ReplayMode replayMode; // ï¿½Ø·ï¿½Ä£Ê½
 
-		private ReplayRecord replayRecord; // ÖØ·Å¼ÇÂ¼
+		private ReplayRecord replayRecord; // ï¿½Ø·Å¼ï¿½Â¼
 
 		internal static AbstractLockstep instance;
 
@@ -108,7 +108,7 @@ namespace TrueSync
 
 		private SyncedData[] _syncedDataCacheUpdateData = new SyncedData[1];
 
-        #region ÊôÐÔ
+        #region ï¿½ï¿½ï¿½ï¿½
         public List<TSPlayer> ActivePlayers
 		{
 			get
@@ -185,7 +185,7 @@ namespace TrueSync
 				}
 			}
 		}
-        #endregion ÊôÐÔ
+        #endregion ï¿½ï¿½ï¿½ï¿½
 
         public static AbstractLockstep NewInstance(float deltaTime, ICommunicator communicator, IPhysicsManagerBase physicsManager, int syncWindow, int panicWindow, int rollbackWindow, TrueSyncEventCallback OnGameStarted, TrueSyncEventCallback OnGamePaused, TrueSyncEventCallback OnGameUnPaused, TrueSyncEventCallback OnGameEnded, TrueSyncPlayerDisconnectionCallback OnPlayerDisconnection, TrueSyncUpdateCallback OnStepUpdate, TrueSyncInputCallback GetLocalData, TrueSyncInputDataProvider InputDataProvider)
 		{
@@ -294,13 +294,13 @@ namespace TrueSync
 			}
 		}
 
-        #region ÉúÃüÖÜÆÚ·½·¨
-        #region Update Ïà¹Ø
-        // ¸üÐÂ
+        #region ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½
+        #region Update ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ï¿½ï¿½
 		public void Update()
 		{
 			bool flag = this.simulationState == AbstractLockstep.SimulationState.WAITING_PLAYERS;
-			if (flag) // µÈ´ýÍæ¼Ò
+			if (flag) // ï¿½È´ï¿½ï¿½ï¿½ï¿½
 			{
 				this.CheckGameStart();
 			}
@@ -401,15 +401,15 @@ namespace TrueSync
 			}
 		}
 
-        // ¼ì²éÓÎÏ·ÊÇ·ñ¿ÉÒÔ¿ªÊ¼
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½Ç·ï¿½ï¿½ï¿½Ô¿ï¿½Ê¼
         private void CheckGameStart()
         {
             bool flag = this.replayMode == ReplayMode.LOAD_REPLAY;
-            if (flag) // ¼ÓÔØ»Ø·ÅÄ£Ê½
+            if (flag) // ï¿½ï¿½ï¿½Ø»Ø·ï¿½Ä£Ê½
             {
                 this.RunSimulation(false);
             }
-            else // ·Ç¼ÓÔØ»Ø·ÅÄ£Ê½
+            else // ï¿½Ç¼ï¿½ï¿½Ø»Ø·ï¿½Ä£Ê½
             {
                 bool flag2 = true;
                 int i = 0;
@@ -434,8 +434,8 @@ namespace TrueSync
                 }
             }
         }
-        #endregion Update Ïà¹Ø
-        #endregion ÉúÃüÖÜÆÚ·½·¨
+        #endregion Update ï¿½ï¿½ï¿½
+        #endregion ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½
 
         private bool CheckGameIsReady()
 		{
@@ -485,8 +485,8 @@ namespace TrueSync
 			}
 		}
 
-        #region ÄÚ²¿·½·¨
-        // ¸üÐÂ ·Ç±¾µØÍæ¼ÒµÄ»îÔ¾Íæ¼ÒID Êý¾Ý
+        #region ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ÒµÄ»ï¿½Ô¾ï¿½ï¿½ï¿½ID ï¿½ï¿½ï¿½ï¿½
         internal void UpdateActivePlayers()
 		{
 			this.playersIdsAux.Clear();
@@ -495,7 +495,7 @@ namespace TrueSync
 			while (i < count)
 			{
 				bool flag = this.localPlayer == null || this.localPlayer.ID != this.activePlayers[i].ID;
-				if (flag) // °Ñ±»±¾µØÍæ¼Ò¼ÓÈëÁÐ±íÖÐ
+				if (flag) // ï¿½Ñ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½
 				{   
 					this.playersIdsAux.Add((int)this.activePlayers[i].ID);
 				}
@@ -503,7 +503,7 @@ namespace TrueSync
 			}
 			this.auxActivePlayersIds = this.playersIdsAux.ToArray();
 		}
-        #endregion ÄÚ²¿·½·¨
+        #endregion ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½
 
         
 
@@ -525,12 +525,12 @@ namespace TrueSync
 			this.RaiseEvent(197, new byte[1], true, this.auxActivePlayersIds);
 		}
 
-        // Ö´ÐÐÄ£Äâ
+        // Ö´ï¿½ï¿½Ä£ï¿½ï¿½
 		public void RunSimulation(bool firstRun)
 		{
 			this.Run();
 			bool flag = !firstRun;
-			if (flag) // ²»ÊÇµÚÒ»´ÎÔËÐÐ
+			if (flag) // ï¿½ï¿½ï¿½Çµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
 				this.RaiseEvent(197, new byte[]
 				{
@@ -624,22 +624,22 @@ namespace TrueSync
 		{
 			bool flag = this.replayMode == ReplayMode.LOAD_REPLAY;
 			SyncedData result;
-			if (flag) // ¼ÓÔØ»Ø·ÅÄ£Ê½
+			if (flag) // ï¿½ï¿½ï¿½Ø»Ø·ï¿½Ä£Ê½
 			{
 				result = null;
 			}
-            else // ·Ç¼ÓÔØ»Ø·ÅÄ£Ê½
+            else // ï¿½Ç¼ï¿½ï¿½Ø»Ø·ï¿½Ä£Ê½
 			{
-				SyncedData @new = SyncedData.pool.GetNew(); // ´Ó³ØÖÐ»ñÈ¡
+				SyncedData @new = SyncedData.pool.GetNew(); // ï¿½Ó³ï¿½ï¿½Ð»ï¿½È¡
 				@new.Init(this.localPlayer.ID, this.ticks);
-                this.GetLocalData(@new.inputData); // °ÑÍæ¼Ò²Ù×÷Êý¾Ý·ÅÈëSyncedDataÊµÀýÖÐ
-                this.localPlayer.AddData(@new); // °ÑSyncedDataÊµÀý·ÅÈë±¾µØÍæ¼ÒµÄ²Ù×÷Êý¾Ý×ÖµäÖÐ
+                this.GetLocalData(@new.inputData); // ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½SyncedDataÊµï¿½ï¿½ï¿½ï¿½
+                this.localPlayer.AddData(@new); // ï¿½ï¿½SyncedDataÊµï¿½ï¿½ï¿½ï¿½ï¿½ë±¾ï¿½ï¿½ï¿½ï¿½ÒµÄ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½
 
 				bool flag2 = this.communicator != null;
-				if (flag2) // ÓÐÍ¨ÐÅÆ÷
+				if (flag2) // ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½
 				{
-                    this.localPlayer.GetSendData(this.ticks, this._syncedDataCacheUpdateData); // °Ñ×îÐÂµÄ²Ù×÷Êý¾Ý·ÅÈë_syncedDataCacheUpdateDataÖÐ
-					this.communicator.OpRaiseEvent(199, SyncedData.Encode(this._syncedDataCacheUpdateData), true, this.auxActivePlayersIds); // ·¢ËÍ²Ù×÷Êý¾Ý
+                    this.localPlayer.GetSendData(this.ticks, this._syncedDataCacheUpdateData); // ï¿½ï¿½ï¿½ï¿½ï¿½ÂµÄ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½_syncedDataCacheUpdateDataï¿½ï¿½
+					this.communicator.OpRaiseEvent(199, SyncedData.Encode(this._syncedDataCacheUpdateData), true, this.auxActivePlayersIds); // ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				}
 				result = @new;
 			}
@@ -682,25 +682,25 @@ namespace TrueSync
 		private void OnEventDataReceived(byte eventCode, object content)
 		{
 			bool flag = eventCode == 199;
-			if (flag) // ½ÓÊÕ²Ù×÷Êý¾Ý
+			if (flag) // ï¿½ï¿½ï¿½Õ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
 				byte[] data = content as byte[];
-				List<SyncedData> list = SyncedData.Decode(data); // ½âÂë
+				List<SyncedData> list = SyncedData.Decode(data); // ï¿½ï¿½ï¿½ï¿½
 				bool flag2 = list.Count > 0;
-				if (flag2) // ÓÐÊý¾Ý
+				if (flag2) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				{
-					TSPlayer tSPlayer = this.players[list[0].inputData.ownerID]; // ÕÒµ½¶ÔÓ¦µÄÍæ¼Ò
+					TSPlayer tSPlayer = this.players[list[0].inputData.ownerID]; // ï¿½Òµï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½
 					bool flag3 = !tSPlayer.dropped;
-					if (flag3) // ¸ÃÍæ¼ÒÃ»ÓÐµôÏß
+					if (flag3) // ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ðµï¿½ï¿½ï¿½
 					{
-						this.OnSyncedDataReceived(tSPlayer, list); // ´¦ÀíÍ¬²½Êý¾Ý
+						this.OnSyncedDataReceived(tSPlayer, list); // ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						bool flag4 = list[0].dropPlayer && tSPlayer.ID != this.localPlayer.ID && !this.players[list[0].dropFromPlayerId].dropped;
 						if (flag4)
 						{
-							tSPlayer.dropCount++; // Í³¼ÆµôÏßÍæ¼ÒÊýÁ¿
+							tSPlayer.dropCount++; // Í³ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						}
 					}
-					else // ¸ÃÍæ¼ÒµôÏßÁË,»ØÊÕÊý¾Ý¶ÔÏó
+					else // ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¶ï¿½ï¿½ï¿½
 					{
 						int i = 0;
 						int count = list.Count;
@@ -800,13 +800,13 @@ namespace TrueSync
 			return this.auxPlayersSyncedData;
 		}
 
-        // Ìí¼ÓÍæ¼Ò
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		public void AddPlayer(byte playerId, string playerName, bool isLocal)
 		{
 			TSPlayer tSPlayer = new TSPlayer(playerId, playerName);
 			this.players.Add(tSPlayer.ID, tSPlayer);
 			this.activePlayers.Add(tSPlayer);
-			if (isLocal) // ±¾µØÍæ¼Ò
+			if (isLocal) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
 				this.localPlayer = tSPlayer;
 				this.localPlayer.sentSyncedStart = true;
@@ -849,33 +849,33 @@ namespace TrueSync
 			return result;
         }
 
-        #region Ë½ÓÐ·½·¨
-        // ÔËÐÐ
+        #region Ë½ï¿½Ð·ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ï¿½ï¿½
         private void Run()
         {
             bool flag = this.simulationState == AbstractLockstep.SimulationState.NOT_STARTED;
-            if (flag) // Î´¿ªÊ¼
+            if (flag) // Î´ï¿½ï¿½Ê¼
             {
                 this.simulationState = AbstractLockstep.SimulationState.WAITING_PLAYERS;
             }
-            else // ·ÇNOT_STARTED×´Ì¬
+            else // ï¿½ï¿½NOT_STARTED×´Ì¬
             {
                 bool flag2 = this.simulationState == AbstractLockstep.SimulationState.WAITING_PLAYERS || this.simulationState == AbstractLockstep.SimulationState.PAUSED;
-                if (flag2) // ÕýÔÚµÈ´ýÍæ¼Ò »ò ÔÝÍ£×´Ì¬
+                if (flag2) // ï¿½ï¿½ï¿½ÚµÈ´ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Í£×´Ì¬
                 {
                     bool flag3 = this.simulationState == AbstractLockstep.SimulationState.WAITING_PLAYERS;
-                    if (flag3) // ÕýÔÚµÈ´ýÍæ¼Ò
+                    if (flag3) // ï¿½ï¿½ï¿½ÚµÈ´ï¿½ï¿½ï¿½ï¿½
                     {
                         this.OnGameStarted();
                     }
-                    else // ÔÝÍ£×´Ì¬
+                    else // ï¿½ï¿½Í£×´Ì¬
                     {
                         this.OnGameUnPaused();
                     }
-                    this.simulationState = AbstractLockstep.SimulationState.RUNNING; // ¸ÄÎªÔËÐÐ×´Ì¬
+                    this.simulationState = AbstractLockstep.SimulationState.RUNNING; // ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½×´Ì¬
                 }
             }
         }
-        #endregion Ë½ÓÐ·½·¨
+        #endregion Ë½ï¿½Ð·ï¿½ï¿½ï¿½
     }
 }

@@ -12,7 +12,7 @@ namespace  Game
 
         public void EventFunc(string param)
         {
-            Debug.Log(param);
+            //Debug.Log(param);
         }
     }
 

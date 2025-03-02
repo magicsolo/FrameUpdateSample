@@ -36,6 +36,13 @@ namespace Game
         public MatchingState( LogicFSM fsm) : base(ELogicType.Match, fsm)
         {
         }
+
+        protected override void BeforeEnter()
+        {
+            base.BeforeEnter();
+            RegistTCPListener(EMessage.S2CEndMatch,OnMatchEnd);
+        }
+
         protected override void OnEnter()
         {
             base.OnEnter();
@@ -48,7 +55,7 @@ namespace Game
             base.OnGUIUpdate();
             if (GUILayout.Button("结束游戏", btnStyle))
             {
-                ClientManager.instance.SendTCPInfo(EMessage.C2SEndMatch);
+                ClientManager.instance.SendTCPInfo(EMessage.C2SEndMatch); 
             }
             if (GUILayout.Button("保存录像以及帧输出日志", btnStyle))
             {
@@ -59,6 +66,7 @@ namespace Game
             GUILayout.Label($"Frame cli:{FrameManager.instance.clientRuningFrame} ",btnStyle);
             GUILayout.Label($"serv:{FrameManager.instance.curServerFrame}",btnStyle);
         }
+
 
         public override void Exit()
         {
@@ -80,6 +88,12 @@ namespace Game
             driver.Start(matchInfo);
             ViewModel.instance.Init();
             //ViewModel.instance.ResetPlayers(FrameManager.instance.players);
+        }
+        
+        
+        private void OnMatchEnd(TCPInfo tcpInfo)
+        {
+            logicFsm.ChangeState(ELogicType.Room,tcpInfo);
         }
     }
 }

@@ -35,6 +35,7 @@ namespace GameServer
         public void StartMatch(List<int> allPlayers)
         {
             loadingPlayers.Clear();
+            _frameInputs.Clear();
             matchGuid = matchIndex++;
             state = MatchState.Waiting;
             players.Clear();
@@ -74,6 +75,15 @@ namespace GameServer
             File.Delete(logPath);
             File.Create(logPath).Dispose();
             logWriter = new StreamWriter(logPath);
+        }
+        
+        public void EndMatch()
+        {
+            state = MatchState.Idle;
+            logWriter.Flush();
+            logWriter.Close();
+            videoWriter.Flush();
+            videoWriter.Close();
         }
 
         public void Update()
@@ -182,6 +192,10 @@ namespace GameServer
 
                 curInput.Refresh(upData);
                 inputs[idx] = curInput;
+                if (idx == 0 )
+                {
+                    Console.WriteLine($"{upData.Angle} frame{_frameInputs.Count - 1}");
+                }
             }
         }
             
@@ -208,16 +222,13 @@ namespace GameServer
             }
         }
 
-        public void EndMatch()
-        {
-            state = MatchState.Idle;
-        }
+        
 
         public void SetMatchInfo(S2CMatchInfo matchInfo)
         {
+            matchInfo.Players.Clear();
             foreach (var pl in players)
             {
-                matchInfo.Players.Clear();
                 var s2cPl = new S2CPlayerData();
                 s2cPl.Guid = pl.guid;
                 s2cPl.Name = pl.name;

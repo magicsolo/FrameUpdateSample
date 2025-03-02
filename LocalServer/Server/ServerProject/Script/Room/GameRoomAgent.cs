@@ -12,7 +12,7 @@ namespace GameServer
         public int playerCount => _playerGuids.Count;
         public int main => _playerGuids[0];
         MatchAgent _matchAgent = new MatchAgent();
-        private bool inMatch => _matchAgent.state != MatchState.Idle;
+        public bool inMatch => _matchAgent.state != MatchState.Idle;
         public GameRoomAgent(int plGuid,int guid)
         {
             _playerGuids.Clear();
@@ -69,6 +69,10 @@ namespace GameServer
 
             if (isNewPlayer)
             {
+                if (inMatch)
+                {
+                    return;
+                }
                 AddPlayer(plAgent.guid);
                 Console.WriteLine($"Player {plAgent.name} Join Room {guid}");
             }
@@ -145,6 +149,19 @@ namespace GameServer
             }
         }
 
+        public void EndMatch()
+        {
+            if (inMatch)
+            {
+                _matchAgent.EndMatch();
+                foreach (var plGid in _playerGuids)
+                {
+                    var pl = PlayerManager.instance.GetPlayerByGuid(plGid);
+                    PlayerEndMatch(GetRoomInfo(),pl);
+                }
+            }
+        }
+
         S2CMatchInfo GetMatchInfo()
         {
             var matchInfo = new S2CMatchInfo();
@@ -158,6 +175,11 @@ namespace GameServer
         public void PlayerStartMatch(S2CMatchInfo matchInfo,PlayerAgent pl)
         {
             pl.SendTCPData(EMessage.S2CStartMatch,matchInfo);
+        }
+
+        public void PlayerEndMatch(S2CRoomInfo roominfo,PlayerAgent pl)
+        {
+             pl.SendTCPData(EMessage.S2CEndMatch,roominfo);
         }
 
         public void ReceiveC2SFrameData(int guid, C2SFrameUpdate data)
