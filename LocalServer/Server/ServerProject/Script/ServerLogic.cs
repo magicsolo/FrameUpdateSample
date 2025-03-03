@@ -339,13 +339,16 @@ namespace GameServer
         {
             EndPoint senderRemote = new IPEndPoint(IPAddress.Any, 0);
             int readLeng;
-            lock (_udpSocket)
+            //lock (_udpSocket)
             {
-                if (_udpSocket.Available>0)
+                int canReadLen = _udpSocket.Available;
+
+                while (canReadLen > 0)
                 {
                     try
                     {
                         readLeng = _udpSocket.ReceiveFrom(data, data.Length, SocketFlags.None, ref senderRemote);
+                        canReadLen -= readLeng;
                     }
                     catch (Exception e)
                     {
@@ -359,32 +362,28 @@ namespace GameServer
                         }
                         return;
                     }
-                }
-                else
-                {
-                    return;
-                }
-            }
+                    
+                    fixed (void* p = data)
+                    {
+                        int _msgOffset = 0;
+                        int guid = *(int*)p;
+                        _msgOffset += sizeof(int);
 
-            fixed (void* p = data)
-            {
-                int _msgOffset = 0;
-                int guid = *(int*)p;
-                _msgOffset += sizeof(int);
+                        var pl = PlayerManager.instance.GetPlayerByGuid(guid);
+                        if (pl == null)
+                        {
+                            return;
+                        }
 
-                var pl = PlayerManager.instance.GetPlayerByGuid(guid);
-                if (pl == null)
-                {
-                    return;
+                        if (pl.tcpInfo.udpEndPoint == null || !pl.tcpInfo.udpEndPoint.Equals(senderRemote))
+                        {
+                            pl.tcpInfo.udpEndPoint = senderRemote;
+                        }
+
+                        var upData = C2SFrameUpdate.Parser.ParseFrom(data, _msgOffset, readLeng - _msgOffset);
+                        RoomManager.instance.ReceiveUDPData(guid, upData);
+                    }
                 }
-
-                if (pl.tcpInfo.udpEndPoint == null || !pl.tcpInfo.udpEndPoint.Equals(senderRemote))
-                {
-                    pl.tcpInfo.udpEndPoint = senderRemote;
-                }
-
-                var upData = C2SFrameUpdate.Parser.ParseFrom(data, _msgOffset, readLeng - _msgOffset);
-                RoomManager.instance.ReceiveUDPData(guid,upData);
             }
         }
 
@@ -394,7 +393,7 @@ namespace GameServer
             var agent = PlayerManager.instance.GetPlayerByGuid(guid);
             if (agent!=null&&agent.tcpInfo?.udpEndPoint!=null)
             {
-                lock (_udpSocket)
+                //lock (_udpSocket)
                 {
                     _udpSocket.SendTo(sendBytes, 0, sendBytes.Length, SocketFlags.None, agent.tcpInfo.udpEndPoint);
                 }

@@ -63,8 +63,6 @@ namespace GameServer
                 serverLogic.Update();
                 Thread.Sleep(ServerLogic.frameTime);
             }
-
-            
         }
 
         public void TestFunc()

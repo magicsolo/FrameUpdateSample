@@ -192,10 +192,6 @@ namespace GameServer
 
                 curInput.Refresh(upData);
                 inputs[idx] = curInput;
-                if (idx == 0 )
-                {
-                    Console.WriteLine($"{upData.Angle} frame{_frameInputs.Count - 1}");
-                }
             }
         }
             
@@ -221,8 +217,6 @@ namespace GameServer
                 toC.FrameDatas.Add(frmDt);
             }
         }
-
-        
 
         public void SetMatchInfo(S2CMatchInfo matchInfo)
         {

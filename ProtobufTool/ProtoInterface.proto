@@ -36,6 +36,7 @@ message C2SFrameUpdate{
     int32 end = 2;
     int64 angle = 3;
     int32 input = 4;
+    int32 index = 5;
 }
 
 message C2SPrintFrames{

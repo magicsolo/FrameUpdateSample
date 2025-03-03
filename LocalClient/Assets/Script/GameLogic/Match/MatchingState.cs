@@ -37,6 +37,11 @@ namespace Game
         {
         }
 
+        ~MatchingState()
+        {
+            driver = null;
+        }
+
         protected override void BeforeEnter()
         {
             base.BeforeEnter();
@@ -65,6 +70,7 @@ namespace Game
             
             GUILayout.Label($"Frame cli:{FrameManager.instance.clientRuningFrame} ",btnStyle);
             GUILayout.Label($"serv:{FrameManager.instance.curServerFrame}",btnStyle);
+            GUILayout.Label($"sendIdx:{ServerMatchDrive.sendIndex}",btnStyle);
         }
 
 

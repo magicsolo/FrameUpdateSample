@@ -9,9 +9,10 @@ namespace Game
     public class ServerMatchDrive : BaseMatchDrive
     {
         private MatchInfo matchInfo;
-
+        static public int sendIndex = 0;
         public void Start(MatchInfo matchInfo)
         {
+            sendIndex = 0;
             this.matchInfo = matchInfo;
             PlayerFiled[] playerFileds = new PlayerFiled[this.matchInfo.players.Count];
 
@@ -87,6 +88,7 @@ namespace Game
 
             frmUpdate.Input = (int)InputManager.instance.inputData.input;
             frmUpdate.Angle = InputManager.instance.inputData.inputMoveAngle._serializedValue;
+            frmUpdate.Index = ++sendIndex;
             ClientManager.instance.UDPSend(frmUpdate);
         }
     }
