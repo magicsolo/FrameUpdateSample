@@ -79,6 +79,7 @@ namespace Game
         protected TSVector _curSkillArea => _animLogicInfo.GetSkillArea(passedFrame);
         protected TSVector _curAnimPos => _animLogicInfo.GetPos(passedFrame);
         protected TSVector _enterPos;
+        protected TSQuaternion _enterRot;
 
         public int enterFrame { get; private set; }
         public int passedFrame => FrameManager.instance.clientRuningFrame - enterFrame;
@@ -91,6 +92,7 @@ namespace Game
         public override void Enter(FSMState<PS_Base> lstState, object param = null)
         {
             _enterPos = owner.filed.data.pos;
+            _enterRot = owner.filed.data.rot;
             _animLogicInfo = default;
             _nxtStateType = 0;
             _finished = false;
@@ -115,8 +117,8 @@ namespace Game
             if (useAnimDrive)
             {
                 var animPos = _curAnimPos;
-                animPos.x *= owner.filed.data.faceRight ? 1 : -1;
-                owner.filed.data.pos = _enterPos + animPos;
+                var dt = _enterRot * animPos;
+                owner.filed.data.pos = _enterPos + dt;
             }
             
             LogicUpdate();

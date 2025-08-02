@@ -40,6 +40,11 @@ namespace Game
 
         }
 
+        private void OnDestroy()
+        {
+            fsm.Exit();
+        }
+
         private void OnGUI()
         {
             fsm.curState.OnGUIUpdate();

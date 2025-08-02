@@ -18,7 +18,7 @@ namespace Game
             for (int i = 0; i < roomInfo.AllPlayers.Count; i++)
             {
                 var pl = roomInfo.AllPlayers[i];
-                players.Add(new PlayerInfo(){ name = pl.Name, guid = pl.Guid,slot = i});
+                players.Add(new PlayerInfo(){ playerName = pl.Name, guid = pl.Guid,slot = i});
             }
         }
     }
@@ -61,7 +61,7 @@ namespace Game
             
             foreach (var pl in players)
             {
-                GUILayout.Label($"{pl.name} " );
+                GUILayout.Label($"{pl.playerName} " );
             }
             GUILayout.EndHorizontal();
         }

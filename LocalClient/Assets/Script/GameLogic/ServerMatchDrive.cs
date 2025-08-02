@@ -19,7 +19,7 @@ namespace Game
             for (int i = 0; i < playerFileds.Length; i++)
             {
                 var plData = this.matchInfo.players[i];
-                var plFiled = new PlayerFiled(new PlayerInfo(plData.guid, plData.name, i));
+                var plFiled = new PlayerFiled(new PlayerInfo(plData.guid, plData.playerName, i));
                 plFiled.data = new PlayerLogicData();
                 playerFileds[i] = plFiled;
             }

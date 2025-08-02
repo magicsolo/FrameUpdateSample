@@ -72,7 +72,7 @@ namespace Game
             if (leng == 0)
                 return lst.Value;
 
-            FP t = new FP(frame) / leng;
+            FP t = new FP(frame - lst.frame) / leng;
             FP t2 = TSMath.Pow(t, 2);
             FP t3 = TSMath.Pow(t, 3);
             FP p0 = lst.Value;

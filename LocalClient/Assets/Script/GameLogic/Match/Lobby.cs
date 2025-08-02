@@ -56,7 +56,7 @@ namespace Game
             foreach (RoomInfo room in allRooms)
             {
                 GUILayout.BeginHorizontal();
-                GUILayout.Label($"{room.guid} {room.players[0].name}");
+                GUILayout.Label($"{room.guid} {room.players[0].playerName}");
                 if (GUILayout.Button("进入"))
                 {
                     EnterRoom(room.guid);

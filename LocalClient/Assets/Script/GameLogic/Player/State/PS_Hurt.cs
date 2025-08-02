@@ -1,4 +1,6 @@
 ﻿using CenterBase;
+using FrameDrive;
+using TrueSync;
 
 namespace Game
 {
@@ -12,10 +14,11 @@ namespace Game
 
         public override void Enter(FSMState<PS_Base> lstState, object param = null)
         {
+            var attacker = (LogicPlayer)param;
+            owner.filed.data.rot = TSQuaternion.FromToRotation(TSVector.forward,attacker.filed.data.pos - owner.filed.data.pos);
             base.Enter(lstState, param);
-            var data = (HurtInfo)param;
-            owner.filed.data.faceRight = data.dir.x < 0;
-            PlayState("Player_hurt");
+            
+            PlayState("Player_Hurt");
         }
     }
 }

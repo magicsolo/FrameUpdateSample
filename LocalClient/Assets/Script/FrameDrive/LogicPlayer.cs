@@ -17,20 +17,20 @@ namespace FrameDrive
     public struct PlayerInfo
     {
         public int guid;
-        public string name;
+        public string playerName;
         public int slot;
 
-        public PlayerInfo(int gid, string name, int slot)
+        public PlayerInfo(int gid, string playerName, int slot)
         {
             guid = gid;
-            this.name = name;
+            this.playerName = playerName;
             this.slot = slot;
         }
 
         public void Init(S2CPlayerData plData, int slot)
         {
             guid = plData.Guid;
-            name = plData.Name;
+            playerName = plData.Name;
             this.slot = slot;
         }
     }
@@ -41,7 +41,6 @@ namespace FrameDrive
         public TSQuaternion rot;
         public FrameInputData inputData;
         public PlayAnimInfo aniInfo;
-        public bool faceRight;
 
         public void DeepCoppy(PlayerLogicData targetLogicData)
         {
@@ -49,7 +48,6 @@ namespace FrameDrive
             targetLogicData.rot = rot;
             targetLogicData.inputData = inputData;
             targetLogicData.aniInfo = aniInfo;
-            targetLogicData.faceRight = faceRight;
         }
     }
 

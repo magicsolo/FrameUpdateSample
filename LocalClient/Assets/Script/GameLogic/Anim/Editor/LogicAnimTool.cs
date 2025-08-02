@@ -97,7 +97,7 @@ namespace EditorGame
                         case "m_LocalPosition.y":
                             newInfo.posY = GetCurveFrameFloatValue(clip, binding);
                             break;
-                        case "m_LocalPosition.Z":
+                        case "m_LocalPosition.z":
                             newInfo.posZ = GetCurveFrameFloatValue(clip, binding);
                             break;
                     }

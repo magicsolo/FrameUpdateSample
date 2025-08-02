@@ -47,6 +47,7 @@ namespace Script
             this.match = FrameManager.instance.match;
             gameObject.SetActive(true);
             playerInfos = new ViewPlayerInfo[match.playerCount];
+            RefreshViewInfo();
             foreach (var pl in players)
             {
                 pl.gameObject.SetActive(false);
@@ -64,21 +65,24 @@ namespace Script
                 {
                     vpl = GameObject.Instantiate(sampPlayeer);
                     vpl.transform.SetParent(_playersNode);
-                    vpl.Init(slot);
                     players.Add(vpl);
                 }
+                vpl.Init(slot);
 
-                vpl.name = LogicMatch.instance.allPlayers[slot].filed.info.name;
                 vpl.gameObject.SetActive(true);
             }
         }
 
         public void Unit()
         {
-            gameObject.SetActive(false);
         }
 
         private void Update()
+        {
+            RefreshViewInfo();
+        }
+
+        void RefreshViewInfo()
         {
             lock (match.viewPlayerInfo)
             {

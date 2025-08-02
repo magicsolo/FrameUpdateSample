@@ -8,7 +8,7 @@ namespace  Game
     public class ViewSkillInfo : MonoBehaviour
     {
         public Vector4 area;
-        public Vector2 pos;
+        public Vector3 pos;
 
         public void EventFunc(string param)
         {

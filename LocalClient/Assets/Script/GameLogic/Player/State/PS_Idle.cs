@@ -30,7 +30,7 @@ namespace Game
         public override void Enter(FSMState<PS_Base> lstState, object param = null)
         {
             base.Enter(lstState, param);
-            PlayState("Player_idle");
+            PlayState("Player_Idle");
         }
 
         protected override void LogicUpdate()

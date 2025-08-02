@@ -38,6 +38,11 @@ namespace CenterBase
             states.TryGetValue(stType, out var st);
             return st;
         }
+
+        public void Exit()
+        {
+            curState.Exit();
+        }
     }
 
     public abstract class FSMState<T> where T:FSMState<T>

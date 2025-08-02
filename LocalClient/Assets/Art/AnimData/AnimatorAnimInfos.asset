@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: AnimatorAnimInfos
   m_EditorClassIdentifier: 
   allInfos:
-  - key: Player_move
+  - key: Player_Idle
     controllerName: Player
-    length: 8
-    stateName: move
+    length: 52
+    stateName: Idle
     fireFrame: 0
     skillAreaX: []
     skillAreaY: []
@@ -27,59 +27,108 @@ MonoBehaviour:
     posX: []
     posY: []
     posZ: []
-  - key: Player_attack
+  - key: Player_Attack
     controllerName: Player
-    length: 23
-    stateName: attack
-    fireFrame: 10
+    length: 30
+    stateName: Attack
+    fireFrame: 15
     skillAreaX:
     - inTan:
         _serializedValue: 0
       outTan:
         _serializedValue: 0
-      frame: 10
+      frame: 0
       Value:
-        _serializedValue: 1717986944
+        _serializedValue: 3393024256
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 30
+      Value:
+        _serializedValue: 3393024256
     skillAreaY:
     - inTan:
         _serializedValue: 0
       outTan:
         _serializedValue: 0
-      frame: 10
+      frame: 0
       Value:
-        _serializedValue: 1717986944
+        _serializedValue: 3307124736
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 30
+      Value:
+        _serializedValue: 3307124736
     skillAreaZ:
     - inTan:
         _serializedValue: 0
       outTan:
         _serializedValue: 0
-      frame: 10
+      frame: 0
       Value:
-        _serializedValue: 2362232064
+        _serializedValue: 6442450944
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 30
+      Value:
+        _serializedValue: 6442450944
     skillPosX:
     - inTan:
         _serializedValue: 0
       outTan:
         _serializedValue: 0
-      frame: 10
+      frame: 0
       Value:
-        _serializedValue: 2147483648
+        _serializedValue: 0
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 30
+      Value:
+        _serializedValue: 0
     skillPosY:
     - inTan:
         _serializedValue: 0
       outTan:
         _serializedValue: 0
-      frame: 10
+      frame: 0
       Value:
-        _serializedValue: 687194752
-    skillPosZ: []
+        _serializedValue: 4896262656
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 30
+      Value:
+        _serializedValue: 4896262656
+    skillPosZ:
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 0
+      Value:
+        _serializedValue: 1202590848
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 30
+      Value:
+        _serializedValue: 1202590848
     posX: []
     posY: []
     posZ: []
-  - key: Player_idle
+  - key: Player_Move
     controllerName: Player
-    length: 13
-    stateName: idle
+    length: 20
+    stateName: Move
     fireFrame: 0
     skillAreaX: []
     skillAreaY: []
@@ -90,10 +139,10 @@ MonoBehaviour:
     posX: []
     posY: []
     posZ: []
-  - key: Player_hurt
+  - key: Player_Hurt
     controllerName: Player
-    length: 16
-    stateName: hurt
+    length: 20
+    stateName: Hurt
     fireFrame: 0
     skillAreaX: []
     skillAreaY: []
@@ -106,56 +155,7 @@ MonoBehaviour:
         _serializedValue: 0
       outTan:
         _serializedValue: 0
-      frame: 0
-      Value:
-        _serializedValue: 0
-    - inTan:
-        _serializedValue: -8053063168
-      outTan:
-        _serializedValue: -8053063168
-      frame: 3
-      Value:
-        _serializedValue: -2936012544
-    - inTan:
-        _serializedValue: 0
-      outTan:
-        _serializedValue: 0
-      frame: 16
-      Value:
-        _serializedValue: -4294967296
-    posY: []
-    posZ: []
-  - key: Player_death
-    controllerName: Player
-    length: 23
-    stateName: death
-    fireFrame: 0
-    skillAreaX: []
-    skillAreaY: []
-    skillAreaZ: []
-    skillPosX: []
-    skillPosY: []
-    skillPosZ: []
-    posX: []
-    posY: []
-    posZ: []
-  - key: Player_maskAnim
-    controllerName: Player
-    length: 0
-    stateName: maskAnim
-    fireFrame: 0
-    skillAreaX: []
-    skillAreaY: []
-    skillAreaZ: []
-    skillPosX: []
-    skillPosY: []
-    skillPosZ: []
-    posX:
-    - inTan:
-        _serializedValue: 0
-      outTan:
-        _serializedValue: 0
-      frame: 0
+      frame: 20
       Value:
         _serializedValue: 0
     posY:
@@ -163,7 +163,28 @@ MonoBehaviour:
         _serializedValue: 0
       outTan:
         _serializedValue: 0
+      frame: 20
+      Value:
+        _serializedValue: 0
+    posZ:
+    - inTan:
+        _serializedValue: 57215016
+      outTan:
+        _serializedValue: 57215016
       frame: 0
       Value:
-        _serializedValue: 601295424
-    posZ: []
+        _serializedValue: 0
+    - inTan:
+        _serializedValue: -9868334080
+      outTan:
+        _serializedValue: -9868334080
+      frame: 17
+      Value:
+        _serializedValue: -4080218880
+    - inTan:
+        _serializedValue: 0
+      outTan:
+        _serializedValue: 0
+      frame: 20
+      Value:
+        _serializedValue: -4294967296

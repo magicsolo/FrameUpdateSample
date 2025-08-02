@@ -36,6 +36,8 @@ namespace FrameDrive
                 _allPlayers[slot] = lgPl;
                 dicPlayers[lgPl.filed.info.guid] = lgPl;
             }
+            
+            RefreshViewInfo();
         }
         public void Update(FrameData frameData)
         {
@@ -52,11 +54,16 @@ namespace FrameDrive
 
             lock (viewPlayerInfo)
             {
-                for (int i = 0; i < _allPlayers.Length; i++)
-                {
-                    var pl = _allPlayers[i];
-                    viewPlayerInfo[i] = new ViewPlayerInfo(pl.filed.info,pl.filed.data);
-                }
+                RefreshViewInfo();
+            }
+        }
+
+        void RefreshViewInfo()
+        {
+            for (int i = 0; i < _allPlayers.Length; i++)
+            {
+                var pl = _allPlayers[i];
+                viewPlayerInfo[i] = new ViewPlayerInfo(pl.filed.info,pl.filed.data);
             }
         }
         
