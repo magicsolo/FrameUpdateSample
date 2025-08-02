@@ -16,17 +16,23 @@ namespace Game
     public struct OBB
     {
         public TSVector center;
-        public TSVector axX;
-        public TSVector axY;
-        public TSVector axZ;
+        public TSVector axX => rotation * TSVector.right;
+        public TSVector axY => rotation * TSVector.up;
+        public TSVector axZ => rotation * TSVector.forward;
 
+        public TSQuaternion rotation { get;private set; }
         public TSVector halfLengths;
 
-        public void SetAxis(TSQuaternion rot)
+        public OBB(TSVector center,TSQuaternion rotation, TSVector halfLengths)
         {
-            axY = rot * TSVector.up;
-            axZ = rot * TSVector.forward;
-            axX = rot * TSVector.right;
+            this.center = center;
+            this.rotation = rotation;
+            this.halfLengths = halfLengths;
+        }
+        
+        public void SetRotate(TSQuaternion rot)
+        {
+            this.rotation = rot;
         }
 
         public TSVector GetAxis(int idx)
@@ -45,7 +51,7 @@ namespace Game
             {
                 case 0: return halfLengths.x;
                 case 1: return halfLengths.y;
-                case 2:default: return halfLengths.z;
+                default: return halfLengths.z;
             }
         }
     }
@@ -67,7 +73,7 @@ namespace Game
             pos += dt;
 
             var selfOBB = GetOBBB(pos, _curSkillArea);
-            selfOBB.SetAxis(owner.filed.data.rot);
+            selfOBB.SetRotate(owner.filed.data.rot);
 
             foreach (var target in owner.match.allPlayers)
             {
@@ -86,7 +92,7 @@ namespace Game
                     tarMax.y += height / 2;
                     
                     var targetOBB = GetOBBB(target.filed.data.pos+TSVector.up, new TSVector(width, height,width));
-                    targetOBB.SetAxis(target.filed.data.rot);
+                    targetOBB.SetRotate(target.filed.data.rot);
                     if (CheckCollision(selfOBB,targetOBB))
                     {
                         target.fsm.SetNextState(EPlayerState.Hurt,owner);

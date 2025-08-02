@@ -1,3 +1,4 @@
+using Game;
 using TrueSync;
 
 namespace FPPhysic
@@ -11,6 +12,19 @@ namespace FPPhysic
             var p2p = point - plane.center;
             
             return point - (plane.normal * p2p) / (plane.normal * plane.normal) * plane.normal;
+        }
+
+        public static TSVector GetClosestPointToOBB(OBB obb, TSVector point)
+        {
+            TSVector d = point - obb.center;
+            TSVector tarP = obb.center;
+            var disX = obb.axX * d;
+            tarP += obb.axX * (TSMath.Sign(disX)*TSMath.Min(obb.halfLengths.x,TSMath.Abs(disX)));
+            var disY = obb.axY * d;
+            tarP += obb.axY * (TSMath.Sign(disY) * TSMath.Min(obb.halfLengths.y, TSMath.Abs(disY)));
+            var disZ = obb.axZ * d;
+            tarP += obb.axZ * (TSMath.Sign(disZ) * TSMath.Min(obb.halfLengths.z, TSMath.Abs(disZ)));
+            return tarP;
         }
 
         //获取两直线的最近点

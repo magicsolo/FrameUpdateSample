@@ -6,11 +6,12 @@ using TrueSync;
 
 namespace FPPhysic
 {
-    //平面
+    //平面 TODO 重新做
     public struct FPPlane
     {
         public TSVector normal;
         public TSVector center;
+        public int distance;
     }
     
     //
