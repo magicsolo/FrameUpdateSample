@@ -12,6 +12,7 @@ namespace Game
         Lobby,
         Room,
         Match,
+        MatchResult,
         Video,
         StandAloneRoom,
         StandAloneMatching,
@@ -27,6 +28,7 @@ namespace Game
             AddState(new Lobby(this));
             AddState(new Room(this));
             AddState(new MatchingState(this));
+            AddState(new MatchResultState(this));
             AddState(new VideoState(this));
             AddState(new StandAloneRoom(this));
             AddState(new StandAloneMatching(this));

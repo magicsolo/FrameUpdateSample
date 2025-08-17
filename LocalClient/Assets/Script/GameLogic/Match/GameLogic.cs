@@ -28,7 +28,7 @@ namespace Game
         public PlayerServData playerData = new PlayerServData() { index = -1 };
         public bool isStandAlone;
 
-        private LogicFSM fsm;
+        public LogicFSM fsm { get; private set; }
         
         private void Start()
         {
