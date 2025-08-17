@@ -2,7 +2,6 @@
 using Game;
 using Script;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace FrameDrive
@@ -10,7 +9,8 @@ namespace FrameDrive
     public struct ViewPlayerInfo
     {
         public PlayerInfo info;
-        
+
+        public Fraction<int> life;
         public Vector3 pos;
         public Quaternion rot;
         public FrameInputData FrameInputData;
@@ -24,8 +24,10 @@ namespace FrameDrive
             rot = data.rot.ToQuaternion();
             FrameInputData = data.inputData;
             aniInfo = data.aniInfo;
+            life = data.life;
         }
     }
+    
     public class ViewPlayer:MonoBehaviour
     {
         private Animator animator;
@@ -43,9 +45,13 @@ namespace FrameDrive
         private Vector4 skillCheckArea;
         [SerializeField]
         private ViewSkillInfo skillInfoAnimObj;
-
+        [SerializeField]
         public Transform hud;
+        [SerializeField]
         public Text nameTxt;
+        [SerializeField]
+        public Slider lifeSlider;
+        
         
         private void OnDrawGizmos()
         {
@@ -71,6 +77,7 @@ namespace FrameDrive
             skillInfoAnimObj = transform.GetComponentInChildren<ViewSkillInfo>();
             hud = transform.Find("View/HUDCanvas");
             nameTxt = hud.Find("_name_txt").GetComponent<Text>();
+            lifeSlider = hud.Find("_lifeBar_slider").GetComponent<Slider>();
         }
         
         private void Awake()
@@ -98,8 +105,14 @@ namespace FrameDrive
                 gameObject.SetActive(false);
                 return;
             }
+            
+                //lifeSlider.value
             //
             ViewPlayerInfo vPlInfo = ViewModel.instance.GetPlayerInfo(slot);
+            var life = (float)vPlInfo.life.Numerator;
+            var maxLife = (float)vPlInfo.life.Denominator;
+            lifeSlider.value = life / maxLife;
+
             var oldPosition = transform.position;
             transform.position = Vector3.Lerp(transform.position, vPlInfo.pos,0.5f);
             var dtMove = transform.position - oldPosition;

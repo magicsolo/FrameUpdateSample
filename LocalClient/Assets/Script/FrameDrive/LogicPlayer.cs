@@ -12,6 +12,7 @@ namespace FrameDrive
         public PlayerFiled(PlayerInfo plInfo)
         {
             info = plInfo;
+            data.life = new Fraction<int>(10, 10);
         }
     }
     public struct PlayerInfo
@@ -41,6 +42,7 @@ namespace FrameDrive
         public TSQuaternion rot;
         public FrameInputData inputData;
         public PlayAnimInfo aniInfo;
+        public Fraction<int> life;
 
         public void DeepCoppy(PlayerLogicData targetLogicData)
         {
@@ -48,6 +50,7 @@ namespace FrameDrive
             targetLogicData.rot = rot;
             targetLogicData.inputData = inputData;
             targetLogicData.aniInfo = aniInfo;
+            life = targetLogicData.life;
         }
     }
 
