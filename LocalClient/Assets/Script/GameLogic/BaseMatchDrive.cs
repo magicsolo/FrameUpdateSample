@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using C2SProtoInterface;
@@ -7,6 +8,53 @@ using Google.Protobuf;
 
 namespace Game
 {
+    public abstract class BaseLogic
+    {
+        public virtual bool OnUpdate()
+        {
+            return true;
+        }
+    }
+
+    public class RuningLogic : BaseLogic
+    {
+        public override bool OnUpdate()
+        {
+            foreach (var player in LogicMatch.instance.allPlayers)
+            {
+                if (player.curStateType == EPlayerState.Death)
+                {
+                    LogicMatch.instance.isInput = false;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public class DeathingLogic : BaseLogic
+    {
+    }
+    public class MatchLogicControler
+    {
+        Queue<BaseLogic> queue = new Queue<BaseLogic>();
+
+        public MatchLogicControler()
+        {
+            queue.Enqueue(new RuningLogic());
+            queue.Enqueue(new DeathingLogic());
+        }
+        public void Update()
+        {
+            if (queue.Count > 0)
+            {
+                if (queue.Peek().OnUpdate())
+                {
+                    queue.Dequeue();
+                }
+            }
+        }
+    }
     public abstract class BaseMatchDrive : LogicDrive
     {
         private StreamWriter logWriter;
@@ -14,9 +62,12 @@ namespace Game
         private Thread ud;
         private EventRegister eventRegister = new EventRegister();
         private bool _threadUpdate = false;
+
+        public MatchLogicControler controler;
         public void StartDrive(PlayerFiled[] playerFileds)
         {
-            FrameManager.instance.Init(playerFileds);
+            controler = new MatchLogicControler();
+            FrameManager.instance.Init(playerFileds,controler);
             var logPath = Directory.GetCurrentDirectory() + "\\log.txt";
             ClearStreamWriter(logPath,logWriter);
             logWriter = new StreamWriter(logPath);

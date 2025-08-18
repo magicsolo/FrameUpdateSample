@@ -188,3 +188,17 @@ MonoBehaviour:
       frame: 20
       Value:
         _serializedValue: -4294967296
+  - key: Player_Death
+    controllerName: Player
+    length: 50
+    stateName: Death
+    fireFrame: 0
+    skillAreaX: []
+    skillAreaY: []
+    skillAreaZ: []
+    skillPosX: []
+    skillPosY: []
+    skillPosZ: []
+    posX: []
+    posY: []
+    posZ: []

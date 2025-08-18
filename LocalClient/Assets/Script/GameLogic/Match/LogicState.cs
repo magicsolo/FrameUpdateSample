@@ -40,7 +40,8 @@ namespace Game
             ChgST((int)stType,param);
         }
     }
-    
+
+
     public abstract class LogicState : FSMState<LogicState>
     {
         EventRegister eventRegister = new EventRegister();

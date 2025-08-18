@@ -95,7 +95,7 @@ namespace Game
                     targetOBB.SetRotate(target.filed.data.rot);
                     if (CheckCollision(selfOBB,targetOBB))
                     {
-                        target.fsm.SetNextState(EPlayerState.Hurt,new AttackData(){ attacker = target, datamage = 1});
+                        AttackManager.AttackEffect(owner, target, new AttackData() { attacker = owner, datamage = 1 });
                     }
                 }
             }

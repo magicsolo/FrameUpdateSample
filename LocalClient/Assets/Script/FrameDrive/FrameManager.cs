@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using C2SProtoInterface;
 using CenterBase;
+using Game;
 using TrueSync;
 using UnityEngine;
 
@@ -28,7 +29,6 @@ namespace FrameDrive
 
         public void Clear()
         {
-            inputMoveAngle = 0;
             input = EInputEnum.none;
             inputMoveAngle = -1;
         }
@@ -65,13 +65,14 @@ namespace FrameDrive
         public int playerCount => match.playerCount;
         public LogicMatch match => LogicMatch.instance;
         
+        
 
-        public void Init(PlayerFiled[] playerFileds )
+        public void Init(PlayerFiled[] playerFileds,MatchLogicControler controler = null )
         {
             clientRuningFrame = -1;
             curServerFrame = -1;
             frameDataInputs.Clear();
-            match.Init(playerFileds);
+            match.Init(playerFileds,controler);
         }
 
         public void Unit()

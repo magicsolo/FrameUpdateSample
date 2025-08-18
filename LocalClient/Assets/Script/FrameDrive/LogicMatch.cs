@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CenterBase;
+using Game;
 
 namespace FrameDrive
 {
@@ -11,10 +12,14 @@ namespace FrameDrive
         
         private Dictionary<int, LogicPlayer> dicPlayers = new Dictionary<int, LogicPlayer>();
         public int playerCount => allPlayers.Length;
+        MatchLogicControler _controler;
+        public bool isInput = true;
         
-        public void Init(PlayerFiled[] playerInfos)
+        public void Init(PlayerFiled[] playerInfos,MatchLogicControler controler = null)
         {
-            ResetCharacters(playerInfos);   
+            ResetCharacters(playerInfos);
+            _controler = controler;
+            isInput = true;
         }
 
         public void Unit()
@@ -42,13 +47,22 @@ namespace FrameDrive
         public void Update(FrameData frameData)
         {
 
+            if (_controler != null)
+            {
+                _controler.Update();
+            }
             for (int i = 0; i < frameData.InputData.Length; i++)
             {
                 var ipt = frameData.InputData[i];
                 
                 var player = _allPlayers[i];
-                var inputData = new FrameInputData() { input = (EInputEnum)ipt.input};
-                inputData.inputMoveAngle = ipt.inputMoveAngle;
+                var inputData = new FrameInputData();
+                inputData.Clear();
+                if (isInput)
+                {
+                    inputData.input = (EInputEnum)ipt.input;
+                    inputData.inputMoveAngle = ipt.inputMoveAngle;    
+                }
                 player.UpdateInput(inputData);
             }
 

@@ -1,9 +1,15 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
+using UnityEngine.PlayerLoop;
 
 namespace CenterBase
 {
-    public abstract class FSM <T> where T:FSMState<T>
+
+    public interface IUpdate
+    {
+        void Update();
+    }
+    public abstract class FSM <T>:IUpdate where T:FSMState<T>
     {
         public T curState { get; protected set; }
         private Dictionary<int, T> states = new Dictionary<int, T>();
@@ -13,6 +19,11 @@ namespace CenterBase
             if (states.ContainsKey(st.stateType))
                 return;
             states.Add(st.stateType,st);
+        }
+
+        public virtual void Update()
+        {
+            curState.Update();
         }
 
         protected bool ChgST(int stType,object param = null)

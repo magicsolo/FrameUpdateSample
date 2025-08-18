@@ -12,7 +12,7 @@ namespace FrameDrive
         public PlayerFiled(PlayerInfo plInfo)
         {
             info = plInfo;
-            data.life = new Fraction<int>(10, 10);
+            data.life = new Fraction<int>(3, 3);
         }
     }
     public struct PlayerInfo

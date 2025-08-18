@@ -12,6 +12,7 @@ namespace Game
         Move,
         Attack,
         Hurt,
+        Death,
         Total,
         
     }
@@ -29,6 +30,7 @@ namespace Game
             AddState(new PS_Move(this));
             AddState(new PS_Attack(this));
             AddState(new PS_Hurt(this));
+            AddState(new PS_Death(this));
             ChangeState(EPlayerState.Idle);
         }
 
@@ -80,6 +82,7 @@ namespace Game
         protected TSVector _curAnimPos => _animLogicInfo.GetPos(passedFrame);
         protected TSVector _enterPos;
         protected TSQuaternion _enterRot;
+        protected bool isLoop = false;
 
         public int enterFrame { get; private set; }
         public int passedFrame => FrameManager.instance.clientRuningFrame - enterFrame;
@@ -127,7 +130,7 @@ namespace Game
             if (passedFrame == _fireFrame )
                 OnFire();
             
-            if (passedFrame >= totalFrame)
+            if (!isLoop && passedFrame >= totalFrame)
                 _finished = true;
             if (_finished)
             {
