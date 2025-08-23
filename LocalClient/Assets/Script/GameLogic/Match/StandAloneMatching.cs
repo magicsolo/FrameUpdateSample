@@ -27,6 +27,28 @@ namespace Game
             {
                 logicFsm.ChangeState(ELogicType.StandAloneRoom);
             }
+            
+            FramePlayerInfo playerWiner = default;
+            FramePlayerInfo playerLoseer = default;
+            bool gameEnd = false;
+            foreach (var vPlayer in ViewModel.instance.playerInfos)
+            {
+                if (vPlayer.state == EPlayerState.Death && vPlayer.aniInfo.passedFrame > vPlayer.aniInfo.totalFrame)
+                {
+                    gameEnd = true;
+                    playerLoseer = vPlayer;
+
+                }
+                else
+                {
+                    playerWiner = vPlayer;
+                }
+            }
+
+            if (gameEnd)
+            {
+                GUILayout.Label($"比赛结束 胜者:{playerWiner.info.playerName} 败者:{playerLoseer.info.playerName}", txtStyle);
+            }
         }
 
         public override void Exit()

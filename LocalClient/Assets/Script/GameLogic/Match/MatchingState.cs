@@ -65,12 +65,35 @@ namespace Game
             if (GUILayout.Button("保存录像以及帧输出日志", btnStyle))
             {
             }
-
+            
+            
             //ClientManager.instance.SendTCPInfo(EMessage.PrintFrames, new C2SPrintFrames());
             
             GUILayout.Label($"Frame cli:{FrameManager.instance.clientRuningFrame} ",btnStyle);
             GUILayout.Label($"serv:{FrameManager.instance.curServerFrame}",btnStyle);
             GUILayout.Label($"sendIdx:{ServerMatchDrive.sendIndex}",btnStyle);
+
+            FramePlayerInfo playerWiner = default;
+            FramePlayerInfo playerLoseer = default;
+            bool gameEnd = false;
+            foreach (var vPlayer in ViewModel.instance.playerInfos)
+            {
+                if (vPlayer.state == EPlayerState.Death && vPlayer.aniInfo.passedFrame > vPlayer.aniInfo.totalFrame)
+                {
+                    gameEnd = true;
+                    playerLoseer = vPlayer;
+
+                }
+                else
+                {
+                    playerWiner = vPlayer;
+                }
+            }
+
+            if (gameEnd)
+            {
+                GUILayout.Label($"比赛结束 胜者:{playerWiner.info.playerName} 败者:{playerLoseer.info.playerName}",btnStyle);
+            }
         }
 
 

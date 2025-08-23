@@ -126,7 +126,7 @@ namespace Game
             
             LogicUpdate();
             InputCheck();
-            owner.filed.data.aniInfo.curFrame = passedFrame;
+            owner.filed.data.aniInfo.passedFrame = passedFrame;
             if (passedFrame == _fireFrame )
                 OnFire();
             

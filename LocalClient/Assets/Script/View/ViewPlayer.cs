@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace FrameDrive
 {
-    public struct ViewPlayerInfo
+    public struct FramePlayerInfo
     {
         public PlayerInfo info;
 
@@ -15,16 +15,18 @@ namespace FrameDrive
         public Quaternion rot;
         public FrameInputData FrameInputData;
         public PlayAnimInfo aniInfo;
+        public EPlayerState state;
 
-        public ViewPlayerInfo(PlayerInfo info,PlayerLogicData data)
+        public FramePlayerInfo(LogicPlayer pl)// PlayerInfo info,PlayerLogicInfo data)
         {
-            this.info = info;
+            this.info = pl.filed.info;//info;
             
-            pos = data.pos.ToVector();
-            rot = data.rot.ToQuaternion();
-            FrameInputData = data.inputData;
-            aniInfo = data.aniInfo;
-            life = data.life;
+            pos = pl.filed.data.pos.ToVector();
+            rot = pl.filed.data.rot.ToQuaternion();
+            FrameInputData = pl.filed.data.inputData;
+            aniInfo = pl.filed.data.aniInfo;
+            life = pl.filed.data.life;
+            state = pl.fsm.curState.curState;
         }
     }
     
@@ -34,7 +36,7 @@ namespace FrameDrive
         public string curAnimState;
         public int slot;
 
-        ViewPlayerInfo viewInfo =>
+        FramePlayerInfo viewInfo =>
             slot < ViewModel.instance.playerInfos.Length ? ViewModel.instance.playerInfos[slot] : default; 
 
         public int guid;
@@ -108,7 +110,7 @@ namespace FrameDrive
             
                 //lifeSlider.value
             //
-            ViewPlayerInfo vPlInfo = ViewModel.instance.GetPlayerInfo(slot);
+            FramePlayerInfo vPlInfo = ViewModel.instance.GetPlayerInfo(slot);
             var life = (float)vPlInfo.life.Numerator;
             var maxLife = (float)vPlInfo.life.Denominator;
             lifeSlider.value = life / maxLife;
@@ -125,7 +127,7 @@ namespace FrameDrive
             {
                 playAnimTime = aniInfo.startFrame;
                 curAnimState = aniInfo.stateName;
-                animator.Play(curAnimState, 0, aniInfo.curFrame / (float)aniInfo.totalFrame);
+                animator.Play(curAnimState, 0, aniInfo.passedFrame / (float)aniInfo.totalFrame);
             }
             //
             if (CameraManager.instance.mainCamera != null)

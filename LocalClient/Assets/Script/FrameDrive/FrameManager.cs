@@ -59,13 +59,16 @@ namespace FrameDrive
         public Dictionary<int, FrameData> frameDataInputs = new Dictionary<int, FrameData>();
         public int curServerFrame { get; set; }
         public int clientRuningFrame { get; private set; }
-        public FP curTime => Math.Max(clientRuningFrame,0)*frameTime ; 
+        public FP curTime => GetTimeByFrame(clientRuningFrame); 
 
         private int tracingFrameIndex;
         public int playerCount => match.playerCount;
         public LogicMatch match => LogicMatch.instance;
-        
-        
+
+        public static FP GetTimeByFrame(int frameIndex)
+        {
+            return Math.Max(frameIndex,0)*frameTime ; 
+        }
 
         public void Init(PlayerFiled[] playerFileds,MatchLogicControler controler = null )
         {

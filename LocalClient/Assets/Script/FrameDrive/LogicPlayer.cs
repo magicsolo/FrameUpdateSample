@@ -7,7 +7,7 @@ namespace FrameDrive
     public class PlayerFiled
     {
         public PlayerInfo info;
-        public PlayerLogicData data = new PlayerLogicData();
+        public PlayerLogicInfo data = new PlayerLogicInfo();
 
         public PlayerFiled(PlayerInfo plInfo)
         {
@@ -36,29 +36,20 @@ namespace FrameDrive
         }
     }
 
-    public class PlayerLogicData
+    public class PlayerLogicInfo
     {
         public TSVector pos;
         public TSQuaternion rot;
         public FrameInputData inputData;
         public PlayAnimInfo aniInfo;
         public Fraction<int> life;
-
-        public void DeepCoppy(PlayerLogicData targetLogicData)
-        {
-            targetLogicData.pos = pos;
-            targetLogicData.rot = rot;
-            targetLogicData.inputData = inputData;
-            targetLogicData.aniInfo = aniInfo;
-            life = targetLogicData.life;
-        }
     }
 
     public struct PlayAnimInfo
     {
         public string stateName;
         public int totalFrame;
-        public int curFrame;
+        public int passedFrame;
         public int startFrame;
     }
     
@@ -70,7 +61,6 @@ namespace FrameDrive
         public FP speed = 10f;
 
         public LogicMatch match;
-
         public PlayerFiled filed;
 
         public LogicPlayer(int slot,LogicMatch match,PlayerFiled playerFiled)

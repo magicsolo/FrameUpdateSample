@@ -7,7 +7,7 @@ namespace FrameDrive
     public class LogicMatch:Single<LogicMatch>
     {
         private LogicPlayer[] _allPlayers;
-        public ViewPlayerInfo[] viewPlayerInfo;
+        public FramePlayerInfo[] framePlayerInfos;
         public LogicPlayer[] allPlayers => _allPlayers;
         
         private Dictionary<int, LogicPlayer> dicPlayers = new Dictionary<int, LogicPlayer>();
@@ -25,14 +25,14 @@ namespace FrameDrive
         public void Unit()
         {
             _allPlayers = null;
-            viewPlayerInfo = null;
+            framePlayerInfos = null;
             dicPlayers.Clear();
         }
 
         void ResetCharacters(PlayerFiled[] playerInfos)
         {
             _allPlayers = new LogicPlayer[playerInfos.Length];
-            viewPlayerInfo = new ViewPlayerInfo[playerInfos.Length];
+            framePlayerInfos = new FramePlayerInfo[playerInfos.Length];
             dicPlayers.Clear();
             for (int slot = 0; slot < _allPlayers.Length; slot++)
             {
@@ -66,7 +66,7 @@ namespace FrameDrive
                 player.UpdateInput(inputData);
             }
 
-            lock (viewPlayerInfo)
+            lock (framePlayerInfos)
             {
                 RefreshViewInfo();
             }
@@ -77,7 +77,7 @@ namespace FrameDrive
             for (int i = 0; i < _allPlayers.Length; i++)
             {
                 var pl = _allPlayers[i];
-                viewPlayerInfo[i] = new ViewPlayerInfo(pl.filed.info,pl.filed.data);
+                framePlayerInfos[i] = new FramePlayerInfo(pl);
             }
         }
         

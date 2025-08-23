@@ -17,7 +17,7 @@ namespace Script
 
         private LogicMatch match;
         private List<ViewPlayer> players = new List<ViewPlayer>();
-        public ViewPlayerInfo[] playerInfos;
+        public FramePlayerInfo[] playerInfos;
 
         Transform _playersNode;
 
@@ -46,7 +46,7 @@ namespace Script
         {
             this.match = FrameManager.instance.match;
             gameObject.SetActive(true);
-            playerInfos = new ViewPlayerInfo[match.playerCount];
+            playerInfos = new FramePlayerInfo[match.playerCount];
             RefreshViewInfo();
             foreach (var pl in players)
             {
@@ -84,18 +84,18 @@ namespace Script
 
         void RefreshViewInfo()
         {
-            lock (match.viewPlayerInfo)
+            lock (match.framePlayerInfos)
             {
-                for (int slot = 0; slot < match.viewPlayerInfo.Length; slot++)
+                for (int slot = 0; slot < match.framePlayerInfos.Length; slot++)
                 {
-                    var viewInfo = match.viewPlayerInfo[slot];
+                    var viewInfo = match.framePlayerInfos[slot];
                     playerInfos[slot] = viewInfo;
                 }
             }
         }
 
 
-        public ViewPlayerInfo GetPlayerInfo(int slot)
+        public FramePlayerInfo GetPlayerInfo(int slot)
         {
             return (playerInfos != null && slot < playerInfos.Length) ? playerInfos[slot] : default;
         }
