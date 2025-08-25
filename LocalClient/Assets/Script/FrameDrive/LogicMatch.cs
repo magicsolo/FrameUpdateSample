@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using CenterBase;
 using Game;
+using TrueSync;
+using UnityEngine;
 
 namespace FrameDrive
 {
@@ -15,9 +17,11 @@ namespace FrameDrive
         MatchLogicControler _controler;
         public bool isInput = true;
         
-        public void Init(PlayerFiled[] playerInfos,MatchLogicControler controler = null)
+        public void Init(MatchInfo matchInfo,MatchLogicControler controler = null)
         {
-            ResetCharacters(playerInfos);
+            TSRandom.Init();
+            TSRandom.instance.Initialize(matchInfo.randomSeed); 
+            ResetCharacters(matchInfo.players);
             _controler = controler;
             isInput = true;
         }
@@ -29,17 +33,45 @@ namespace FrameDrive
             dicPlayers.Clear();
         }
 
-        void ResetCharacters(PlayerFiled[] playerInfos)
+        void ResetCharacters(PlayerInfo[] playerInfos)
         {
             _allPlayers = new LogicPlayer[playerInfos.Length];
             framePlayerInfos = new FramePlayerInfo[playerInfos.Length];
             dicPlayers.Clear();
             for (int slot = 0; slot < _allPlayers.Length; slot++)
             {
-                var plFiled = playerInfos[slot];
-                var lgPl = new LogicPlayer(slot,this,plFiled);
+                var plInfo = playerInfos[slot];
+                var lgPl = new LogicPlayer(slot,this,plInfo);
                 _allPlayers[slot] = lgPl;
                 dicPlayers[lgPl.filed.info.guid] = lgPl;
+                var randomX = TSRandom.instance.Next(0, GameManager.halfArea.x/4);
+                var randomY = TSRandom.instance.Next(0, GameManager.halfArea.y/4);
+                var offset = new TSVector2(randomX, randomY);
+                TSVector2 pos = default;
+                switch (slot % 4)
+                {
+                    case 0:
+                        pos = GameManager.halfArea / 2;
+                        break;
+                    case 1:
+                        pos = -GameManager.halfArea / 2;
+                        offset *= -1;
+                        break;
+                    case 2:
+                        pos = GameManager.halfArea / 2;
+                        pos.x *= -1;
+                        offset.x *= -1;
+                        break;
+                    case 3:
+                    default:
+                        pos = GameManager.halfArea / 2;
+                        pos.y *= -1;
+                        offset.y *= -1;
+                        break;
+                }
+
+                pos += offset;
+                lgPl.filed.data.pos = new TSVector(pos.x, 0, pos.y);
             }
             
             RefreshViewInfo();

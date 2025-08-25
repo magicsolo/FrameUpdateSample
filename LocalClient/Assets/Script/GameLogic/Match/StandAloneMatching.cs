@@ -9,14 +9,14 @@ namespace Game
     public class StandAloneMatching:LogicState
     {
         private StandAloneMatchDrive driver = new StandAloneMatchDrive();
-        public StandAloneMatching( LogicFSM fsm) : base(ELogicType.StandAloneMatching, fsm)
+        public StandAloneMatching(LogicFSM fsm) : base(ELogicType.StandAloneMatching, fsm)
         {
         }
 
         protected override void OnEnter()
         {
             base.OnEnter();
-            driver.Start((PlayerFiled[]) param);
+            driver.Start((MatchInfo) param);
             ViewModel.instance.Init();
         }
 

@@ -7,10 +7,10 @@ namespace Game
         private int _spaceTime;
         protected override int spaceTime => _spaceTime;
         
-        public void Start(PlayerFiled[] playerFileds)
+        public void Start(MatchInfo matchInfo)
         {
             _spaceTime = (FrameManager.frameTime*1000).AsInt();
-            StartDrive(playerFileds);
+            StartDrive(matchInfo);
         }
 
         protected override void OnUpdate()

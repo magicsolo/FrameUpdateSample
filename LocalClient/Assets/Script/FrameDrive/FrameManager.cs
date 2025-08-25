@@ -16,6 +16,29 @@ namespace FrameDrive
         fire,
     }
 
+    public struct MatchInfo
+    {
+        public PlayerInfo[] players;
+        public int randomSeed;
+
+        public MatchInfo(S2CMatchInfo matchInfo)
+        {
+            players = new PlayerInfo [matchInfo.Players.Count];
+            for (int i = 0; i < matchInfo.Players.Count; i++)
+            {
+                var plInfo = matchInfo.Players[i];
+                players[i] = new PlayerInfo(plInfo,i);
+            }
+            randomSeed = matchInfo.RandomSeed;
+        }
+
+        public MatchInfo(PlayerInfo[] players, int randomSeed = 0)
+        {
+            this.players = players;
+            this.randomSeed = randomSeed;
+        }
+    }
+
     public struct originalData
     {
         public TSVector orPos;
@@ -70,12 +93,12 @@ namespace FrameDrive
             return Math.Max(frameIndex,0)*frameTime ; 
         }
 
-        public void Init(PlayerFiled[] playerFileds,MatchLogicControler controler = null )
+        public void Init(MatchInfo matchInfo,MatchLogicControler controler = null)
         {
             clientRuningFrame = -1;
             curServerFrame = -1;
             frameDataInputs.Clear();
-            match.Init(playerFileds,controler);
+            match.Init(matchInfo,controler);
         }
 
         public void Unit()

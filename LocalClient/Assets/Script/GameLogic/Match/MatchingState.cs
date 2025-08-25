@@ -7,27 +7,6 @@ using UnityEngine;
 
 namespace Game
 {
-    public struct MatchInfo
-    {
-        public int pot;
-        public int roomGuid;
-        public List<PlayerInfo> players;
-
-        public void Init(S2CMatchInfo gameInfo)
-        {
-            roomGuid = gameInfo.RoomGuid;
-            pot = gameInfo.Pot;
-            var playersInfo = gameInfo.Players;
-            players = new List<PlayerInfo>();
-            for (int i = 0; i < playersInfo.Count; i++)
-            {
-                var plinfo = playersInfo[i];
-                var player = new PlayerInfo();
-                player.Init(plinfo,i);
-                players.Add(player);
-            }
-        }
-    }
     public class MatchingState:LogicState
     {
         private MatchInfo matchInfo => (MatchInfo)param;

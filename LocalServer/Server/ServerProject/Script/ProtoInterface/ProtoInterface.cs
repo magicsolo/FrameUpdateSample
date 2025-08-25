@@ -30,24 +30,24 @@ namespace C2SProtoInterface {
             "ZVVwZGF0ZRINCgVzdGFydBgBIAEoBRILCgNlbmQYAiABKAUSDQoFYW5nbGUY",
             "AyABKAMSDQoFaW5wdXQYBCABKAUSDQoFaW5kZXgYBSABKAUiEAoOQzJTUHJp",
             "bnRGcmFtZXMiHwoLQzJTSm9pblJvb20SEAoIcm9vbUd1aWQYASABKAUiKwoN",
-            "UzJDUGxheWVyRGF0YRIMCgRndWlkGAEgASgFEgwKBG5hbWUYAiABKAkiYAoM",
-            "UzJDTWF0Y2hJbmZvEgsKA3BvdBgBIAEoBRIQCghyb29tR3VpZBgCIAEoBRIx",
-            "CgdwbGF5ZXJzGAMgAygLMiAuQzJTUHJvdG9JbnRlcmZhY2UuUzJDUGxheWVy",
-            "RGF0YSJVCgtTMkNSb29tSW5mbxIQCghyb29tR3VpZBgBIAEoBRI0CgphbGxQ",
-            "bGF5ZXJzGAIgAygLMiAuQzJTUHJvdG9JbnRlcmZhY2UuUzJDUGxheWVyRGF0",
-            "YSIQCg5TMkNQcmludEZyYW1lcyJVCgxTMkNGcmFtZURhdGESEgoKZnJhbWVJ",
-            "bmRleBgBIAEoBRIMCgRnaWRzGAIgAygFEg4KBmlucHV0cxgDIAMoBRITCgtp",
-            "bnB1dEFuZ2xlcxgEIAMoAyJdCg5TMkNGcmFtZVVwZGF0ZRIWCg5jdXJTZXJ2",
-            "ZXJGcmFtZRgBIAEoBRIzCgpmcmFtZURhdGFzGAIgAygLMh8uQzJTUHJvdG9J",
-            "bnRlcmZhY2UuUzJDRnJhbWVEYXRhIkIKDlMyQ0FsbFJvb21JbmZvEjAKCGFs",
-            "bFJvb21zGAEgAygLMh4uQzJTUHJvdG9JbnRlcmZhY2UuUzJDUm9vbUluZm8q",
-            "jAIKCEVNZXNzYWdlEggKBE5vbmUQABINCglIZWFydEJlYXQQARINCglDb25u",
-            "ZWN0ZWQQAhIJCgVMb2dpbhADEgoKBkxvZ291dBAEEhIKDkMyU19DcmVhdGVS",
-            "b29tEAUSEAoMQzJTX0pvaW5Sb29tEAYSEQoNQzJTX0xlYXZlUm9vbRAHEhcK",
-            "E1MyQ19Sb29tSW5mb1JlZnJlc2gQCBIRCg1TMkNfTGVhdmVSb29tEAkSEAoM",
-            "UmVxUm9vbUluZm9zEAoSEgoOQzJTX1N0YXJ0TWF0Y2gQCxISCg5TMkNfU3Rh",
-            "cnRNYXRjaBAMEhAKDEMyU19FbmRNYXRjaBANEhAKDFMyQ19FbmRNYXRjaBAO",
-            "YgZwcm90bzM="));
+            "UzJDUGxheWVyRGF0YRIMCgRndWlkGAEgASgFEgwKBG5hbWUYAiABKAkidAoM",
+            "UzJDTWF0Y2hJbmZvEgsKA3BvdBgBIAEoBRIQCghyb29tR3VpZBgCIAEoBRIS",
+            "CgpyYW5kb21TZWVkGAMgASgFEjEKB3BsYXllcnMYBCADKAsyIC5DMlNQcm90",
+            "b0ludGVyZmFjZS5TMkNQbGF5ZXJEYXRhIlUKC1MyQ1Jvb21JbmZvEhAKCHJv",
+            "b21HdWlkGAEgASgFEjQKCmFsbFBsYXllcnMYAiADKAsyIC5DMlNQcm90b0lu",
+            "dGVyZmFjZS5TMkNQbGF5ZXJEYXRhIhAKDlMyQ1ByaW50RnJhbWVzIlUKDFMy",
+            "Q0ZyYW1lRGF0YRISCgpmcmFtZUluZGV4GAEgASgFEgwKBGdpZHMYAiADKAUS",
+            "DgoGaW5wdXRzGAMgAygFEhMKC2lucHV0QW5nbGVzGAQgAygDIl0KDlMyQ0Zy",
+            "YW1lVXBkYXRlEhYKDmN1clNlcnZlckZyYW1lGAEgASgFEjMKCmZyYW1lRGF0",
+            "YXMYAiADKAsyHy5DMlNQcm90b0ludGVyZmFjZS5TMkNGcmFtZURhdGEiQgoO",
+            "UzJDQWxsUm9vbUluZm8SMAoIYWxsUm9vbXMYASADKAsyHi5DMlNQcm90b0lu",
+            "dGVyZmFjZS5TMkNSb29tSW5mbyqMAgoIRU1lc3NhZ2USCAoETm9uZRAAEg0K",
+            "CUhlYXJ0QmVhdBABEg0KCUNvbm5lY3RlZBACEgkKBUxvZ2luEAMSCgoGTG9n",
+            "b3V0EAQSEgoOQzJTX0NyZWF0ZVJvb20QBRIQCgxDMlNfSm9pblJvb20QBhIR",
+            "Cg1DMlNfTGVhdmVSb29tEAcSFwoTUzJDX1Jvb21JbmZvUmVmcmVzaBAIEhEK",
+            "DVMyQ19MZWF2ZVJvb20QCRIQCgxSZXFSb29tSW5mb3MQChISCg5DMlNfU3Rh",
+            "cnRNYXRjaBALEhIKDlMyQ19TdGFydE1hdGNoEAwSEAoMQzJTX0VuZE1hdGNo",
+            "EA0SEAoMUzJDX0VuZE1hdGNoEA5iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::C2SProtoInterface.EMessage), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -58,7 +58,7 @@ namespace C2SProtoInterface {
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SPrintFrames), global::C2SProtoInterface.C2SPrintFrames.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SJoinRoom), global::C2SProtoInterface.C2SJoinRoom.Parser, new[]{ "RoomGuid" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CPlayerData), global::C2SProtoInterface.S2CPlayerData.Parser, new[]{ "Guid", "Name" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CMatchInfo), global::C2SProtoInterface.S2CMatchInfo.Parser, new[]{ "Pot", "RoomGuid", "Players" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CMatchInfo), global::C2SProtoInterface.S2CMatchInfo.Parser, new[]{ "Pot", "RoomGuid", "RandomSeed", "Players" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CRoomInfo), global::C2SProtoInterface.S2CRoomInfo.Parser, new[]{ "RoomGuid", "AllPlayers" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CPrintFrames), global::C2SProtoInterface.S2CPrintFrames.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CFrameData), global::C2SProtoInterface.S2CFrameData.Parser, new[]{ "FrameIndex", "Gids", "Inputs", "InputAngles" }, null, null, null, null),
@@ -1133,6 +1133,7 @@ namespace C2SProtoInterface {
     public S2CMatchInfo(S2CMatchInfo other) : this() {
       pot_ = other.pot_;
       roomGuid_ = other.roomGuid_;
+      randomSeed_ = other.randomSeed_;
       players_ = other.players_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -1164,10 +1165,21 @@ namespace C2SProtoInterface {
       }
     }
 
+    /// <summary>Field number for the "randomSeed" field.</summary>
+    public const int RandomSeedFieldNumber = 3;
+    private int randomSeed_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int RandomSeed {
+      get { return randomSeed_; }
+      set {
+        randomSeed_ = value;
+      }
+    }
+
     /// <summary>Field number for the "players" field.</summary>
-    public const int PlayersFieldNumber = 3;
+    public const int PlayersFieldNumber = 4;
     private static readonly pb::FieldCodec<global::C2SProtoInterface.S2CPlayerData> _repeated_players_codec
-        = pb::FieldCodec.ForMessage(26, global::C2SProtoInterface.S2CPlayerData.Parser);
+        = pb::FieldCodec.ForMessage(34, global::C2SProtoInterface.S2CPlayerData.Parser);
     private readonly pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData> players_ = new pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData> Players {
@@ -1189,6 +1201,7 @@ namespace C2SProtoInterface {
       }
       if (Pot != other.Pot) return false;
       if (RoomGuid != other.RoomGuid) return false;
+      if (RandomSeed != other.RandomSeed) return false;
       if(!players_.Equals(other.players_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1198,6 +1211,7 @@ namespace C2SProtoInterface {
       int hash = 1;
       if (Pot != 0) hash ^= Pot.GetHashCode();
       if (RoomGuid != 0) hash ^= RoomGuid.GetHashCode();
+      if (RandomSeed != 0) hash ^= RandomSeed.GetHashCode();
       hash ^= players_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1220,6 +1234,10 @@ namespace C2SProtoInterface {
         output.WriteRawTag(16);
         output.WriteInt32(RoomGuid);
       }
+      if (RandomSeed != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(RandomSeed);
+      }
       players_.WriteTo(output, _repeated_players_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1234,6 +1252,9 @@ namespace C2SProtoInterface {
       }
       if (RoomGuid != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(RoomGuid);
+      }
+      if (RandomSeed != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RandomSeed);
       }
       size += players_.CalculateSize(_repeated_players_codec);
       if (_unknownFields != null) {
@@ -1252,6 +1273,9 @@ namespace C2SProtoInterface {
       }
       if (other.RoomGuid != 0) {
         RoomGuid = other.RoomGuid;
+      }
+      if (other.RandomSeed != 0) {
+        RandomSeed = other.RandomSeed;
       }
       players_.Add(other.players_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -1273,7 +1297,11 @@ namespace C2SProtoInterface {
             RoomGuid = input.ReadInt32();
             break;
           }
-          case 26: {
+          case 24: {
+            RandomSeed = input.ReadInt32();
+            break;
+          }
+          case 34: {
             players_.AddEntriesFrom(input, _repeated_players_codec);
             break;
           }

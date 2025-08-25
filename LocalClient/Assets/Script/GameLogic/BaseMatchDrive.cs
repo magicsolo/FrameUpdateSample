@@ -64,10 +64,10 @@ namespace Game
         private bool _threadUpdate = false;
 
         public MatchLogicControler controler;
-        public void StartDrive(PlayerFiled[] playerFileds)
+        public void StartDrive(MatchInfo matchInfo)
         {
             controler = new MatchLogicControler();
-            FrameManager.instance.Init(playerFileds,controler);
+            FrameManager.instance.Init(matchInfo,controler);
             var logPath = Directory.GetCurrentDirectory() + "\\log.txt";
             ClearStreamWriter(logPath,logWriter);
             logWriter = new StreamWriter(logPath);

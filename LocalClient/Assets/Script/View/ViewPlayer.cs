@@ -98,7 +98,7 @@ namespace FrameDrive
             var plInfo = viewInfo;
             nameTxt.text = plInfo.info.playerName;
             nameTxt.color = plInfo.info.guid == ClientManager.instance.guid? Color.green : Color.red;
-            //guid = ViewModel.instance.PlayerDatas[slot].guid;
+            guid = plInfo.info.guid;
         }
         private void Update()
         {

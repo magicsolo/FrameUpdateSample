@@ -14,17 +14,7 @@ namespace Game
         {
             sendIndex = 0;
             this.matchInfo = matchInfo;
-            PlayerFiled[] playerFileds = new PlayerFiled[this.matchInfo.players.Count];
-
-            for (int i = 0; i < playerFileds.Length; i++)
-            {
-                var plData = this.matchInfo.players[i];
-                var plFiled = new PlayerFiled(new PlayerInfo(plData.guid, plData.playerName, i));
-                plFiled.data = new PlayerLogicInfo();
-                playerFileds[i] = plFiled;
-            }
-
-            StartDrive(playerFileds);
+            StartDrive(matchInfo);
             ClientManager.instance.UDPConnect(8091);
 
         }

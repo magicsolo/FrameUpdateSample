@@ -80,8 +80,7 @@ namespace Game
         
         private void OnEnterGame(TCPInfo obj)
         {
-            var MatchInfo = new MatchInfo();
-            MatchInfo.Init(obj.ParseMsgData(S2CMatchInfo.Parser));
+            var MatchInfo = new MatchInfo(obj.ParseMsgData(S2CMatchInfo.Parser));
             logicFsm.ChangeState(ELogicType.Match,MatchInfo);
         }
     }

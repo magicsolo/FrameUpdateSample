@@ -27,4 +27,8 @@
       <Folder Include="Script\Match\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.32.0" />
+    </ItemGroup>
+
 </Project>

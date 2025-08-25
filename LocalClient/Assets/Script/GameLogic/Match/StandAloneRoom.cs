@@ -31,15 +31,16 @@ namespace Game
             GUILayout.EndHorizontal();
             if (GUILayout.Button("开始测试",btnStyle))
             {
-                PlayerFiled[] startInfo = new PlayerFiled[1 + aiCount];
-                var pl = new PlayerFiled(new PlayerInfo(){guid = ClientManager.instance.guid,playerName = ClientManager.instance.playerName });
-                startInfo[0] = pl;
+                MatchInfo startInfo;// new PlayerFiled[1 + aiCount];
+                PlayerInfo[] plInfos = new PlayerInfo[1 + aiCount];
+                var pl = new PlayerInfo(){guid = ClientManager.instance.guid,playerName = ClientManager.instance.playerName };
+                plInfos[0] = pl;
                 for (int i = 1; i <= aiCount; i++)
                 {
-                    var aiInfo = new PlayerFiled(new PlayerInfo(){guid = i,playerName = $"AI_{i}" });
-                    startInfo[i] = aiInfo;
+                    var aiInfo = new PlayerInfo(){guid = i,playerName = $"AI_{i}" };
+                    plInfos[i] = aiInfo;
                 }
-
+                startInfo = new MatchInfo(plInfos,Random.Range(int.MinValue,int.MaxValue));
                 logicFsm.ChangeState(ELogicType.StandAloneMatching, startInfo);
             }
         }

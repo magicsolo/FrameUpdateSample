@@ -28,7 +28,7 @@ namespace FrameDrive
             this.slot = slot;
         }
 
-        public void Init(S2CPlayerData plData, int slot)
+        public PlayerInfo(S2CPlayerData plData, int slot)
         {
             guid = plData.Guid;
             playerName = plData.Name;
@@ -63,11 +63,11 @@ namespace FrameDrive
         public LogicMatch match;
         public PlayerFiled filed;
 
-        public LogicPlayer(int slot,LogicMatch match,PlayerFiled playerFiled)
+        public LogicPlayer(int slot,LogicMatch match,PlayerInfo playerFiled)
         {
             this.slot = slot;
             this.match = match;
-            filed = playerFiled;
+            filed = new PlayerFiled(playerFiled);
             fsm = new PlayerFSM(this);
         }
         public void UpdateInput(FrameInputData frameInputData)

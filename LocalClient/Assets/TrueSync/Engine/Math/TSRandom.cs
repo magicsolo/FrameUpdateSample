@@ -103,6 +103,17 @@ namespace TrueSync {
                 minValueInt)) / 1000;
         }
 
+        public FP Next(FP minValue, FP maxValue)
+        {
+            if (minValue > maxValue) {
+                var tmp = maxValue;
+                maxValue = minValue;
+                minValue = tmp;
+            }
+
+            return (FP.Floor((maxValue - minValue + 1) * NextFP() + minValue));
+        }
+
         /**
          *  @brief Returns a integer between a min value [inclusive] and a max value [exclusive].
          **/

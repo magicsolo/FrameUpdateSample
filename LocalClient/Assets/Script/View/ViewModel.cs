@@ -14,6 +14,8 @@ namespace Script
         
         [SerializeField]
         private ViewPlayer sampPlayeer;
+        [SerializeField]
+        private ViewCamera camera;
 
         private LogicMatch match;
         private List<ViewPlayer> players = new List<ViewPlayer>();
@@ -68,8 +70,13 @@ namespace Script
                     players.Add(vpl);
                 }
                 vpl.Init(slot);
-
+                
                 vpl.gameObject.SetActive(true);
+
+                if (vpl.guid == ClientManager.instance.guid)
+                {
+                    camera.target = vpl.transform;
+                }
             }
         }
 

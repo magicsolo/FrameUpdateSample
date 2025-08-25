@@ -55,7 +55,8 @@ message S2CPlayerData{
 message S2CMatchInfo{
     int32 pot = 1;
     int32 roomGuid = 2;
-    repeated S2CPlayerData players = 3;
+    int32 randomSeed = 3;
+    repeated S2CPlayerData players = 4;
 }
 
 message S2CRoomInfo{

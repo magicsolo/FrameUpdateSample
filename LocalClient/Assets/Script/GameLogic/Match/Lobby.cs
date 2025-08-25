@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using C2SProtoInterface;
+using FrameDrive;
 using UnityEngine;
 
 namespace Game
@@ -85,8 +86,7 @@ namespace Game
 
         private void OnEnterGame(TCPInfo tcpInfo)
         {
-            var MatchInfo = new MatchInfo();
-            MatchInfo.Init(tcpInfo.ParseMsgData(S2CMatchInfo.Parser));
+            var MatchInfo = new MatchInfo(tcpInfo.ParseMsgData(S2CMatchInfo.Parser));
             logicFsm.ChangeState(ELogicType.Match,MatchInfo);
         }
         

@@ -1,6 +1,8 @@
-﻿using CenterBase;
+﻿using System;
+using CenterBase;
 using FrameDrive;
 using TrueSync;
+using UnityEngine;
 using InputData = TrueSync.InputData;
 
 namespace Game
@@ -121,7 +123,10 @@ namespace Game
             {
                 var animPos = _curAnimPos;
                 var dt = _enterRot * animPos;
-                owner.filed.data.pos = _enterPos + dt;
+                var pos = _enterPos + dt;
+                pos.x = TSMath.Clamp(pos.x, -5, 5);
+                pos.z = TSMath.Clamp(pos.z, -5, 5);
+                owner.filed.data.pos = pos;
             }
             
             LogicUpdate();

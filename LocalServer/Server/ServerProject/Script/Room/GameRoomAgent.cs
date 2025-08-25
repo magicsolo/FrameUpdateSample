@@ -167,6 +167,8 @@ namespace GameServer
             var matchInfo = new S2CMatchInfo();
             matchInfo.RoomGuid = guid;
             matchInfo.Pot = ServerLogic.udpPot;
+            var random = new Random();
+            matchInfo.RandomSeed = random.Next(int.MinValue,int.MaxValue);
             _matchAgent.SetMatchInfo(matchInfo);
 
             return matchInfo;

@@ -25,7 +25,10 @@ namespace Game
                 var dir = TSQuaternion.Euler(0, inputData.inputMoveAngle, 0) * TSVector.forward;
                 var dt = dir * speed *
                          FrameManager.frameTime;
-                owner.filed.data.pos += dt;
+                var pos = owner.filed.data.pos + dt; 
+                pos.x = TSMath.Clamp(pos.x, -5, 5);
+                pos.z = TSMath.Clamp(pos.z, -5, 5);
+                owner.filed.data.pos = pos;
                 owner.filed.data.rot = TSQuaternion.Euler(0, inputData.inputMoveAngle, 0);
             }
             else
