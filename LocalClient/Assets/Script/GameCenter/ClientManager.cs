@@ -88,13 +88,24 @@ namespace Game
         {
             playerName = PlayerPrefs.GetString("name");
             guid = PlayerPrefs.GetInt("guid");
-            ip = PlayerPrefs.GetString("ip");
-            pot = PlayerPrefs.GetString("pot");
+            
 
             tcp = new TCPConnecter(onConnectionEnd:OnConnectionEnd);
             udp = new UDPConnecter();
         }
 
+        public void LoadIPInfo()
+        {
+            ip = PlayerPrefs.GetString("ip");
+            pot = PlayerPrefs.GetString("pot");
+        }
+
+        public void SetDefaultIP()
+        { 
+            ip = "192.168.50.76";
+            pot = "8090";
+        }
+        
         public void Connect()
         {
             tcp.Connect(ip, pot);

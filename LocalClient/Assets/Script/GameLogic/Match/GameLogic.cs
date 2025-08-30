@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using C2SProtoInterface;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game
 {
@@ -22,22 +23,33 @@ namespace Game
         public int index;
     }
 
+    public enum GameModelType
+    {
+        StandAlone,
+        Local,
+        Server,
+    }
+
     public class GameLogic : MonoBehaviour
     {
         
         public PlayerServData playerData = new PlayerServData() { index = -1 };
-        public bool isStandAlone;
+        public GameModelType gameModelType;
 
         public LogicFSM fsm { get; private set; }
         
         private void Start()
         {
             fsm = new LogicFSM();
-            if (isStandAlone)
-                fsm.ChangeState(ELogicType.StandAloneRoom);
-            else
-                fsm.ChangeState(ELogicType.Disconnection);
-
+            switch (gameModelType)
+            {
+                case GameModelType.StandAlone:
+                    fsm.ChangeState(ELogicType.StandAloneRoom);
+                    break;
+                default:
+                    fsm.ChangeState(ELogicType.Disconnection,gameModelType);
+                    break;
+            }
         }
 
         private void OnDestroy()

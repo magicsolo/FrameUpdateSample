@@ -41,6 +41,21 @@ namespace Game
         {
         }
 
+        protected override void OnEnter()
+        {
+            base.OnEnter();
+            var p = (GameModelType)param;
+            switch (p)
+            {
+                // case GameModelType.Server:
+                //     ClientManager.instance.LoadIPInfo();
+                //     break;
+                case GameModelType.Local:
+                    ClientManager.instance.SetDefaultIP();
+                    break;
+            }
+        }
+
         void ShowDisConnected()
         {
             GUILayout.BeginHorizontal();

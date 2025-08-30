@@ -1,9 +1,24 @@
 
+using System.Net.Sockets;
 using C2SProtoInterface;
 using Google.Protobuf;
 
 namespace GameServer
 {
+    public abstract class BaseAgent
+    {
+        public bool SendPlayerTCP(int guid, EMessage messageType, IMessage obj = null)
+        {
+            var player = PlayerManager.instance.GetPlayerByGuid(guid);
+            if (player == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+    
     public class PlayerAgent
     {
         public TCPInfo tcpInfo { get; private set; }
@@ -50,7 +65,6 @@ namespace GameServer
         public unsafe void SendTCPData( EMessage messageType, IMessage obj = null)
         {
             Stream stream = tcpInfo.stream;
-            
             byte[] data = new byte[sizeof(EMessage) + sizeof(int) + (obj?.CalculateSize() ?? 0)];
             var infoBytes = obj?.ToByteArray()??new byte[0];
             int offset = 0;
@@ -63,7 +77,15 @@ namespace GameServer
             }
 
             Buffer.BlockCopy(infoBytes, 0, data, offset, infoBytes.Length);
-            stream.Write(data, 0, data.Length);
+            try
+            {
+                if (tcpInfo.stream != null)
+                    stream.Write(data, 0, data.Length);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
         
         public void OnLogin(S2CLogin login)
@@ -146,6 +168,7 @@ namespace GameServer
                 {
                     guidplayersContainer.Remove(player.guid);
                 }
+                RoomManager.instance.ReqLeaveRoom(player);
                 player.OnLogout();
             }
         }

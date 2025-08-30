@@ -4,8 +4,6 @@ D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Debug\n
 D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Debug\net7.0\ServerProject.dll
 D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Debug\net7.0\ServerProject.pdb
 D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Debug\net7.0\Google.Protobuf.dll
-D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Debug\net7.0\Google.Protobuf.pdb
-D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Debug\net7.0\Google.Protobuf.xml
 D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\obj\Debug\net7.0\ServerProject.csproj.AssemblyReference.cache
 D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\obj\Debug\net7.0\ServerProject.GeneratedMSBuildEditorConfig.editorconfig
 D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\obj\Debug\net7.0\ServerProject.AssemblyInfoInputs.cache

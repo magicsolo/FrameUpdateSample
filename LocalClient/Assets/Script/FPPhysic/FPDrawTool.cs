@@ -53,22 +53,22 @@ namespace Game
             pointTransParent.SetParent(transform);
         }
 
-        public void SetPoint(TSVector point, string name)
-        {
-            var target = pointTransParent.Find(name);
-            if (target==null)
-            {
-                target = new GameObject(name).transform;
-                target.SetParent(pointTransParent,false);
-                GUIContent iconContent = EditorGUIUtility.IconContent("sv_icon_dot1_pix16_gizmo");
-                Texture2D defaultIcon = iconContent.image as Texture2D;
-                EditorGUIUtility.SetIconForObject(target.gameObject,defaultIcon);
-            }
-
-            target.position = point.ToVector();
-            target.gameObject.name = name;
-            
-        }
+        // public void SetPoint(TSVector point, string name)
+        // {
+        //     var target = pointTransParent.Find(name);
+        //     if (target==null)
+        //     {
+        //         target = new GameObject(name).transform;
+        //         target.SetParent(pointTransParent,false);
+        //         GUIContent iconContent = EditorGUIUtility.IconContent("sv_icon_dot1_pix16_gizmo");
+        //         Texture2D defaultIcon = iconContent.image as Texture2D;
+        //         EditorGUIUtility.SetIconForObject(target.gameObject,defaultIcon);
+        //     }
+        //
+        //     target.position = point.ToVector();
+        //     target.gameObject.name = name;
+        //     
+        // }
 
         public void RemovePoint(string name)
         {

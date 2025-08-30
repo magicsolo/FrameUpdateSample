@@ -1,4 +1,4 @@
-﻿//#define CheckOutLine
+﻿#define CheckOutLine
 
 using System.Diagnostics;
 using System.Net;
@@ -167,9 +167,9 @@ namespace GameServer
                 foreach (var kv in clientCollection)
                 {
                     var plInfo = kv.Value;
+                    CheckPlayerOffline(plInfo);
                     if (plInfo.enabled)
                         OnRecieveTCPInfo(kv.Value);
-                    CheckPlayerOffline(plInfo);
                 }
 
                 if (tmpRemovedClient.Count > 0)
@@ -404,6 +404,22 @@ namespace GameServer
         [Conditional("CheckOutLine")]
         void CheckPlayerOffline(TCPInfo player)
         {
+            if (!player.enabled)
+            {
+                return;
+            }
+            if (!player.client.Connected)
+            {
+                OnPlayerLogout(player);
+                return;
+            }
+            if (player.client.Client.Poll(1, SelectMode.SelectWrite) && 
+                 player.client.Client.Poll(1, SelectMode.SelectError))
+            {
+                OnPlayerLogout(player);
+                return;
+            }
+            
             if (DateTime.Now.Ticks - player.lastHeartTime >outlineTimeSeconds * 10000000)
             {
                 OnPlayerLogout(player);

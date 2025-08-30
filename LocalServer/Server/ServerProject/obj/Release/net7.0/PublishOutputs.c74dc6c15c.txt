@@ -4,5 +4,3 @@ D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Release
 D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Release\net7.0\publish\ServerProject.runtimeconfig.json
 D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Release\net7.0\publish\ServerProject.pdb
 D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Release\net7.0\publish\Google.Protobuf.dll
-D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Release\net7.0\publish\Google.Protobuf.pdb
-D:\Project\Unity\FrameUpdateProject\LocalServer\Server\ServerProject\bin\Release\net7.0\publish\Google.Protobuf.xml

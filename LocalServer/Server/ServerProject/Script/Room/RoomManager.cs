@@ -56,6 +56,15 @@ namespace GameServer
             }
         }
 
+        public GameRoomAgent GetRoomAgent(int roomGuid)
+        {
+            if (gameRoomAgents.TryGetValue(roomGuid,out var room))
+            {
+                return room;
+            }
+
+            return null;
+        }
         public GameRoomAgent GetRoomAgentByPlayerGuid(int guid)
         {
             if (registPlayers.TryGetValue(guid, out var roomAgent))
