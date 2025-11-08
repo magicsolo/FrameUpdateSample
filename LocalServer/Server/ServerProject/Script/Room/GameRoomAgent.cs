@@ -4,19 +4,16 @@ using GameServer;
 namespace GameServer
 {
 
-    public class GameRoomAgent
+    public class GameRoomAgent:BaseAgent
     {
         public int guid { get; private set; }
         List<int> _playerGuids = new List<int>();
         
         public int playerCount => _playerGuids.Count;
         public int main => _playerGuids[0];
-        MatchAgent _matchAgent = new MatchAgent();
-        public bool inMatch => _matchAgent.state != MatchState.Idle;
-        public GameRoomAgent(int plGuid,int guid)
+        public GameRoomAgent(int guid)
         {
             _playerGuids.Clear();
-            _playerGuids.Add(plGuid);
             this.guid = guid;
             Console.WriteLine($"Create Room {guid}");
         }
@@ -36,7 +33,7 @@ namespace GameServer
             }
         }
 
-        S2CRoomInfo GetRoomInfo()
+        public S2CRoomInfo GetRoomInfo()
         {
             var roomInfo = new S2CRoomInfo();
             roomInfo.RoomGuid = guid;
@@ -69,40 +66,23 @@ namespace GameServer
 
             if (isNewPlayer)
             {
-                if (inMatch)
-                {
-                    return;
-                }
+                
                 AddPlayer(plAgent.guid);
                 Console.WriteLine($"Player {plAgent.name} Join Room {guid}");
-            }
-            
-            if (inMatch)
-            {
-                var matchInfo = GetMatchInfo();
-                PlayerStartMatch(matchInfo,plAgent);
+                SendPlayerRoomInfo();
+
             }
             else
             {
-                if (isNewPlayer)
-                {
-                    SendPlayerRoomInfo();
-                }
-                else
-                {
-                    var roomInfo = GetRoomInfo();
-                    SendPlayerEnterRoom(roomInfo,plAgent);
-                    Console.WriteLine($"Player {plAgent.name} ReJoin Room {guid}");    
-                }
+                var roomInfo = GetRoomInfo();
+                SendPlayerEnterRoom(roomInfo,plAgent);
+                Console.WriteLine($"Player {plAgent.name} ReJoin Room {guid}");   
             }
         }
 
         public void AddPlayer(int plGid)
         {
-            if (!inMatch)
-            {
-                _playerGuids.Add(plGid);    
-            }
+            _playerGuids.Add(plGid);    
         }
 
         public void RemovePlayer(int guid)
@@ -117,7 +97,14 @@ namespace GameServer
                 }
             }
 
-            SendPlayerRoomInfo();
+            if (_playerGuids.Count > 0)
+            {
+                SendPlayerRoomInfo();
+            }
+            else
+            {
+                RoomManager.instance.RemoveRoom(guid);
+            }
         }
 
         public void URPGameInput()
@@ -140,59 +127,70 @@ namespace GameServer
 
         public void StartMatch()
         {
-            _matchAgent.StartMatch(_playerGuids);
-            var matchInfo = GetMatchInfo();
-            foreach (var plGid in _playerGuids)
+            var matchInfo = new MatchInfo();
+            matchInfo.players = new MatchPlayerInfo[_playerGuids.Count];
+            for (int i = 0; i < _playerGuids.Count; i++)
             {
+                var plGid = _playerGuids[i];
                 var pl = PlayerManager.instance.GetPlayerByGuid(plGid);
-                PlayerStartMatch(matchInfo,pl);
+                matchInfo.players[i] = new MatchPlayerInfo(){guid = pl.guid, name = pl.name};
             }
+            MatchManager.instance.StartMatch(matchInfo);
+            RoomManager.instance.RemoveRoom(guid);
+            
+            // var matchInfo = GetMatchInfo();
+            // foreach (var plGid in _playerGuids)
+            // {
+            //     var pl = PlayerManager.instance.GetPlayerByGuid(plGid);
+            //     PlayerStartMatch(matchInfo,pl);
+            // }
         }
 
-        public void EndMatch()
+        public void EnterFromMatch()
         {
-            if (inMatch)
+            for (int i = 0; i < _playerGuids.Count(); i++)
             {
-                _matchAgent.EndMatch();
+                var plGid = _playerGuids[i];
+                
+                var pl = PlayerManager.instance.GetPlayerByGuid(plGid);
+                if (pl == null)
+                    _playerGuids.RemoveAt(i);
+            }
+
+            if (_playerGuids.Count<=0)
+            {
+                RoomManager.instance.RemoveRoom(guid);
+            }
+            else
+            {
+                var roomInfo = GetAllRoomInfo();
                 foreach (var plGid in _playerGuids)
                 {
-                    var pl = PlayerManager.instance.GetPlayerByGuid(plGid);
-                    PlayerEndMatch(GetRoomInfo(),pl);
+                    SendPlayerTCP(plGid,EMessage.S2CEndMatch, roomInfo);
                 }
             }
         }
 
-        S2CMatchInfo GetMatchInfo()
-        {
-            var matchInfo = new S2CMatchInfo();
-            matchInfo.RoomGuid = guid;
-            matchInfo.Pot = ServerLogic.udpPot;
-            var random = new Random();
-            matchInfo.RandomSeed = random.Next(int.MinValue,int.MaxValue);
-            _matchAgent.SetMatchInfo(matchInfo);
+        // S2CMatchInfo GetMatchInfo()
+        // {
+        
+        // }
 
-            return matchInfo;
-        }
-
-        public void PlayerStartMatch(S2CMatchInfo matchInfo,PlayerAgent pl)
-        {
-            pl.SendTCPData(EMessage.S2CStartMatch,matchInfo);
-        }
+        
 
         public void PlayerEndMatch(S2CRoomInfo roominfo,PlayerAgent pl)
         {
-             pl.SendTCPData(EMessage.S2CEndMatch,roominfo);
         }
 
-        public void ReceiveC2SFrameData(int guid, C2SFrameUpdate data)
-        {
-            _matchAgent.ReceiveC2SFrameData(guid, data);
-        }
-
-        public void Update()
-        {
-            _matchAgent.Update();
-        }
+        // public void ReceiveC2SFrameData(int guid, C2SFrameUpdate data)
+        // {
+        //     _matchAgent.ReceiveC2SFrameData(guid, data);
+        // }
+        //
+        // public void Update()
+        // {
+        //     _matchAgent.Update();
+        // }
         
     }
 }

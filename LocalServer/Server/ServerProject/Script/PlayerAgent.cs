@@ -14,9 +14,16 @@ namespace GameServer
             {
                 return false;
             }
-
+            player.SendTCPData(messageType,obj);
             return true;
         }
+    }
+
+    enum EPlayerState
+    {
+        None = 0,
+        Room = 1,
+        Match = 1 << 1,
     }
     
     public class PlayerAgent
@@ -50,14 +57,23 @@ namespace GameServer
                 case EMessage.C2SJoinRoom:
                     RoomManager.instance.ReqJoinRoom(this,streamBuffer,readLen);
                     break;
-                case EMessage.ReqRoomInfos:
-                    RoomManager.instance.ReqRoomInfo(this);
+                case EMessage.C2SReqAllRoomInfos:
+                    RoomManager.instance.ReqAllRoomInfo(this);
+                    break;
+                case EMessage.C2SReqRoomInfo:
+                    var roomAgent = RoomManager.instance.GetRoomAgentByPlayerGuid(guid);
+                    var roomInfo = roomAgent.GetRoomInfo();
+                    SendTCPData(EMessage.C2SReqRoomInfo,roomInfo);
+                    break;
+                case EMessage.C2SReqMatchInfo:
+                    var matchAgetn = MatchManager.instance.GetMatchAgentByPlayerId(guid);
+                    SendTCPData(EMessage.C2SReqMatchInfo,matchAgetn.GetMatchInfo());
                     break;
                 case EMessage.C2SStartMatch:
                     RoomManager.instance.ReqStartMatch(this);
                     break;
                 case EMessage.C2SEndMatch:
-                    RoomManager.instance.ReqEndMatch(this);
+                    MatchManager.instance.ReqEndMatch(this);
                     break;
             }
         }
@@ -88,9 +104,14 @@ namespace GameServer
             }
         }
         
-        public void OnLogin(S2CLogin login)
+        public void OnLogin()
         {
-            SendTCPData(EMessage.Login,login);
+            var loginInfo = new S2CLogin();
+
+            loginInfo.RoomId = RoomManager.instance.GetRoomAgentByPlayerGuid(guid)?.guid??0;
+            loginInfo.MatchId = MatchManager.instance.GetMatchAgentByPlayerId(guid)?.matchGuid??0; 
+            
+            SendTCPData(EMessage.Login,loginInfo);
         }
 
         public void OnLogout()
@@ -122,7 +143,7 @@ namespace GameServer
         /// <param name="tcpInfo"></param>
         /// <param name="login"></param>
         /// <returns></returns>
-        public TCPInfo PrlayerLogin(TCPInfo tcpInfo,C2SLogin login)
+        public TCPInfo PlayerLogin(TCPInfo tcpInfo,C2SLogin login)
         {
             PlayerAgent player;
             TCPInfo oldTCP = null;
@@ -142,22 +163,12 @@ namespace GameServer
                     Console.WriteLine($"Player Login:{login.Name} guid:{login.GId}");
                 }
 
-            
                 guidplayersContainer.Add(player.guid,player);
             }
             playerTcpInfos[tcpInfo] = player;
-
-            var loginInfo = new S2CLogin();
-            var roomInfo = RoomManager.instance.GetRoomAgentByPlayerGuid(player.guid);
-            if ( roomInfo!= null)
-            {
-                loginInfo.RoomId = roomInfo.guid;
-            }
-            player.OnLogin(loginInfo);
+            player.OnLogin();
             return oldTCP;
         }
-
-        
 
         public void RemovePlayerByTCPInfo(TCPInfo tcpInfo)
         {

@@ -15,33 +15,38 @@ namespace GameServer
         public int guid;
         public string name;
     }
-    public class MatchAgent
+
+    public struct MatchInfo
+    {
+        public MatchPlayerInfo[] players;
+    }
+    public class MatchAgent:BaseAgent
     {
         public static int matchIndex;
-        private int matchGuid;
+        public int matchGuid { get;private set; }
         HashSet<int> loadingPlayers = new HashSet<int>();
-        public List<MatchPlayerInfo> players = new List<MatchPlayerInfo>();
         public MatchState state { private set; get; }
         private List<PlayerFrame> _frameInputs = new List<PlayerFrame>(10000);
         private int curFrame => _frameInputs.Count -1;
         
         public StreamWriter videoWriter;
         public StreamWriter logWriter;
+        public MatchInfo matchInfo;
         
-        public MatchAgent()
+        public MatchAgent(MatchInfo matchInfo)
         {
+            this.matchInfo = matchInfo;
             state = MatchState.Idle;
         }
-        public void StartMatch(List<int> allPlayers)
+        public void StartMatch(int matchId)
         {
             loadingPlayers.Clear();
             _frameInputs.Clear();
-            matchGuid = matchIndex++;
+            matchGuid = ++matchIndex;
             state = MatchState.Waiting;
-            players.Clear();
-            foreach (var plGuid in allPlayers)
+            foreach (var plInfo in this.matchInfo.players)
             {
-                var pl = PlayerManager.instance.GetPlayerByGuid(plGuid);
+                var pl = PlayerManager.instance.GetPlayerByGuid(plInfo.guid);
                 if (pl == null )
                 {
                     continue;
@@ -49,7 +54,6 @@ namespace GameServer
                 MatchPlayerInfo info = new MatchPlayerInfo();
                 info.guid = pl.guid;
                 info.name = pl.name;
-                players.Add(info);
                 loadingPlayers.Add(info.guid);
             }
             
@@ -75,6 +79,29 @@ namespace GameServer
             File.Delete(logPath);
             File.Create(logPath).Dispose();
             logWriter = new StreamWriter(logPath);
+
+            var s2cMatchInfo = GetMatchInfo();
+
+            foreach (var plInfo in matchInfo.players)
+            {
+                SendPlayerTCP(plInfo.guid, EMessage.S2CStartMatch, s2cMatchInfo);
+            }
+            Console.Write($"Start Match{matchId}\n");
+        }
+
+        public S2CMatchInfo GetMatchInfo()
+        {
+            var s2cMatchInfo = new S2CMatchInfo();
+            s2cMatchInfo.RoomGuid = s2cMatchInfo.RoomGuid;
+            for (int i = 0; i < matchInfo.players.Length; i++)
+            {
+                var plInfo = matchInfo.players[i];
+                s2cMatchInfo.Players.Add(new S2CPlayerData(){Guid = plInfo.guid, Name = plInfo.name});
+            }
+            s2cMatchInfo.Pot = ServerLogic.udpPot;
+            var random = new Random();
+            s2cMatchInfo.RandomSeed = random.Next(int.MinValue,int.MaxValue);
+            return s2cMatchInfo;
         }
         
         public void EndMatch()
@@ -84,6 +111,8 @@ namespace GameServer
             logWriter.Close();
             videoWriter.Flush();
             videoWriter.Close();
+            
+            RoomManager.instance.FromMatchBackToRoom(matchInfo);
         }
 
         public void Update()
@@ -99,7 +128,7 @@ namespace GameServer
                     var frmDt = new S2CFrameUpdate();//ServerFrameManager.GetSendFrameData(curFrame,_frameInputs[_frameInputs.Count - 1]);
                     frmDt.CurServerFrame = curFrame;
                     AddFrameData(frmDt, _frameInputs.Count - 1, _frameInputs.Count - 1);
-                    foreach (var plInfo in players)
+                    foreach (var plInfo in matchInfo.players)
                     {
                         ServerLogic.SendUDP(plInfo.guid,frmDt);
                     }
@@ -221,7 +250,7 @@ namespace GameServer
         public void SetMatchInfo(S2CMatchInfo matchInfo)
         {
             matchInfo.Players.Clear();
-            foreach (var pl in players)
+            foreach (var pl in this.matchInfo.players)
             {
                 var s2cPl = new S2CPlayerData();
                 s2cPl.Guid = pl.guid;
@@ -229,6 +258,12 @@ namespace GameServer
                 matchInfo.Players.Add(s2cPl);
                 
             }
+        }
+
+
+        public void ReEnterMatch(PlayerAgent player)
+        {
+            SendPlayerTCP(player.guid, EMessage.S2CStartMatch, GetMatchInfo());
         }
     }    
 }

@@ -12,11 +12,13 @@ enum EMessage {
     C2S_LeaveRoom = 7;
     S2C_RoomInfoRefresh = 8;
     S2C_LeaveRoom = 9;
-    ReqRoomInfos = 10;
+    C2S_ReqAllRoomInfos = 10;
     C2S_StartMatch = 11;
     S2C_StartMatch = 12;
     C2S_EndMatch = 13;
     S2C_EndMatch = 14;
+    C2S_ReqRoomInfo = 15;
+    C2S_ReqMatchInfo = 16;
 }
 
 message C2SLogin{
@@ -25,7 +27,8 @@ message C2SLogin{
 }
 
 message S2CLogin{
-    int32 roomId = 1;
+    int32 matchId = 1;
+    int32 roomId = 2;
 }
 
 message C2SStartGame{}

@@ -140,7 +140,7 @@ namespace GameServer
         public void Update()
         {
             
-            RoomManager.instance.UpdateRooms();
+            MatchManager.instance.Update();
         }
 
         public void Collecting()
@@ -221,6 +221,7 @@ namespace GameServer
                 case EMessage.Login:
                     OnPlayerLogin(plInfo, streamBuffer, sizeof(EMessage), readLen);
                     break;
+                
                 case EMessage.Logout:
                     OnPlayerLogout(plInfo);
                     break;
@@ -244,13 +245,14 @@ namespace GameServer
         {
             var c2SLog = C2SLogin.Parser.ParseFrom(streamBuffer, offset, len - offset);
             Console.WriteLine($"TCP Connected:{tcpInfo.client.Client.RemoteEndPoint}");
-            var oldTCP = PlayerManager.instance.PrlayerLogin(tcpInfo, c2SLog); 
+            var oldTCP = PlayerManager.instance.PlayerLogin(tcpInfo, c2SLog); 
             RemoveClient(oldTCP);
         }
 
         void OnPlayerLogout(TCPInfo plInfo)
         {
             PlayerManager.instance.RemovePlayerByTCPInfo(plInfo);
+            RemoveClient(plInfo);
         }
         void RemoveClient(TCPInfo rmPlInfo)
         {
@@ -381,7 +383,7 @@ namespace GameServer
                         }
 
                         var upData = C2SFrameUpdate.Parser.ParseFrom(data, _msgOffset, readLeng - _msgOffset);
-                        RoomManager.instance.ReceiveUDPData(guid, upData);
+                        MatchManager.instance.ReceiveUDPData(guid, upData);
                     }
                 }
             }
@@ -420,10 +422,10 @@ namespace GameServer
                 return;
             }
             
-            if (DateTime.Now.Ticks - player.lastHeartTime >outlineTimeSeconds * 10000000)
-            {
-                OnPlayerLogout(player);
-            }
+            // if (DateTime.Now.Ticks - player.lastHeartTime >outlineTimeSeconds * 10000000)
+            // {
+            //     OnPlayerLogout(player);
+            // }
         }
     }
 }

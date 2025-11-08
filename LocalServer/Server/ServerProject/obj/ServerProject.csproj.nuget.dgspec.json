@@ -38,12 +38,6 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "dependencies": {
-            "Google.Protobuf": {
-              "target": "Package",
-              "version": "[3.32.0, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",

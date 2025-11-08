@@ -25,34 +25,36 @@ namespace C2SProtoInterface {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChRQcm90b0ludGVyZmFjZS5wcm90bxIRQzJTUHJvdG9JbnRlcmZhY2UiJQoI",
-            "QzJTTG9naW4SCwoDZ0lkGAEgASgFEgwKBG5hbWUYAiABKAkiGgoIUzJDTG9n",
-            "aW4SDgoGcm9vbUlkGAEgASgFIg4KDEMyU1N0YXJ0R2FtZSJZCg5DMlNGcmFt",
-            "ZVVwZGF0ZRINCgVzdGFydBgBIAEoBRILCgNlbmQYAiABKAUSDQoFYW5nbGUY",
-            "AyABKAMSDQoFaW5wdXQYBCABKAUSDQoFaW5kZXgYBSABKAUiEAoOQzJTUHJp",
-            "bnRGcmFtZXMiHwoLQzJTSm9pblJvb20SEAoIcm9vbUd1aWQYASABKAUiKwoN",
-            "UzJDUGxheWVyRGF0YRIMCgRndWlkGAEgASgFEgwKBG5hbWUYAiABKAkidAoM",
-            "UzJDTWF0Y2hJbmZvEgsKA3BvdBgBIAEoBRIQCghyb29tR3VpZBgCIAEoBRIS",
-            "CgpyYW5kb21TZWVkGAMgASgFEjEKB3BsYXllcnMYBCADKAsyIC5DMlNQcm90",
-            "b0ludGVyZmFjZS5TMkNQbGF5ZXJEYXRhIlUKC1MyQ1Jvb21JbmZvEhAKCHJv",
-            "b21HdWlkGAEgASgFEjQKCmFsbFBsYXllcnMYAiADKAsyIC5DMlNQcm90b0lu",
-            "dGVyZmFjZS5TMkNQbGF5ZXJEYXRhIhAKDlMyQ1ByaW50RnJhbWVzIlUKDFMy",
-            "Q0ZyYW1lRGF0YRISCgpmcmFtZUluZGV4GAEgASgFEgwKBGdpZHMYAiADKAUS",
-            "DgoGaW5wdXRzGAMgAygFEhMKC2lucHV0QW5nbGVzGAQgAygDIl0KDlMyQ0Zy",
-            "YW1lVXBkYXRlEhYKDmN1clNlcnZlckZyYW1lGAEgASgFEjMKCmZyYW1lRGF0",
-            "YXMYAiADKAsyHy5DMlNQcm90b0ludGVyZmFjZS5TMkNGcmFtZURhdGEiQgoO",
-            "UzJDQWxsUm9vbUluZm8SMAoIYWxsUm9vbXMYASADKAsyHi5DMlNQcm90b0lu",
-            "dGVyZmFjZS5TMkNSb29tSW5mbyqMAgoIRU1lc3NhZ2USCAoETm9uZRAAEg0K",
-            "CUhlYXJ0QmVhdBABEg0KCUNvbm5lY3RlZBACEgkKBUxvZ2luEAMSCgoGTG9n",
-            "b3V0EAQSEgoOQzJTX0NyZWF0ZVJvb20QBRIQCgxDMlNfSm9pblJvb20QBhIR",
-            "Cg1DMlNfTGVhdmVSb29tEAcSFwoTUzJDX1Jvb21JbmZvUmVmcmVzaBAIEhEK",
-            "DVMyQ19MZWF2ZVJvb20QCRIQCgxSZXFSb29tSW5mb3MQChISCg5DMlNfU3Rh",
-            "cnRNYXRjaBALEhIKDlMyQ19TdGFydE1hdGNoEAwSEAoMQzJTX0VuZE1hdGNo",
-            "EA0SEAoMUzJDX0VuZE1hdGNoEA5iBnByb3RvMw=="));
+            "QzJTTG9naW4SCwoDZ0lkGAEgASgFEgwKBG5hbWUYAiABKAkiKwoIUzJDTG9n",
+            "aW4SDwoHbWF0Y2hJZBgBIAEoBRIOCgZyb29tSWQYAiABKAUiDgoMQzJTU3Rh",
+            "cnRHYW1lIlkKDkMyU0ZyYW1lVXBkYXRlEg0KBXN0YXJ0GAEgASgFEgsKA2Vu",
+            "ZBgCIAEoBRINCgVhbmdsZRgDIAEoAxINCgVpbnB1dBgEIAEoBRINCgVpbmRl",
+            "eBgFIAEoBSIQCg5DMlNQcmludEZyYW1lcyIfCgtDMlNKb2luUm9vbRIQCghy",
+            "b29tR3VpZBgBIAEoBSIrCg1TMkNQbGF5ZXJEYXRhEgwKBGd1aWQYASABKAUS",
+            "DAoEbmFtZRgCIAEoCSJ0CgxTMkNNYXRjaEluZm8SCwoDcG90GAEgASgFEhAK",
+            "CHJvb21HdWlkGAIgASgFEhIKCnJhbmRvbVNlZWQYAyABKAUSMQoHcGxheWVy",
+            "cxgEIAMoCzIgLkMyU1Byb3RvSW50ZXJmYWNlLlMyQ1BsYXllckRhdGEiVQoL",
+            "UzJDUm9vbUluZm8SEAoIcm9vbUd1aWQYASABKAUSNAoKYWxsUGxheWVycxgC",
+            "IAMoCzIgLkMyU1Byb3RvSW50ZXJmYWNlLlMyQ1BsYXllckRhdGEiEAoOUzJD",
+            "UHJpbnRGcmFtZXMiVQoMUzJDRnJhbWVEYXRhEhIKCmZyYW1lSW5kZXgYASAB",
+            "KAUSDAoEZ2lkcxgCIAMoBRIOCgZpbnB1dHMYAyADKAUSEwoLaW5wdXRBbmds",
+            "ZXMYBCADKAMiXQoOUzJDRnJhbWVVcGRhdGUSFgoOY3VyU2VydmVyRnJhbWUY",
+            "ASABKAUSMwoKZnJhbWVEYXRhcxgCIAMoCzIfLkMyU1Byb3RvSW50ZXJmYWNl",
+            "LlMyQ0ZyYW1lRGF0YSJCCg5TMkNBbGxSb29tSW5mbxIwCghhbGxSb29tcxgB",
+            "IAMoCzIeLkMyU1Byb3RvSW50ZXJmYWNlLlMyQ1Jvb21JbmZvKr4CCghFTWVz",
+            "c2FnZRIICgROb25lEAASDQoJSGVhcnRCZWF0EAESDQoJQ29ubmVjdGVkEAIS",
+            "CQoFTG9naW4QAxIKCgZMb2dvdXQQBBISCg5DMlNfQ3JlYXRlUm9vbRAFEhAK",
+            "DEMyU19Kb2luUm9vbRAGEhEKDUMyU19MZWF2ZVJvb20QBxIXChNTMkNfUm9v",
+            "bUluZm9SZWZyZXNoEAgSEQoNUzJDX0xlYXZlUm9vbRAJEhcKE0MyU19SZXFB",
+            "bGxSb29tSW5mb3MQChISCg5DMlNfU3RhcnRNYXRjaBALEhIKDlMyQ19TdGFy",
+            "dE1hdGNoEAwSEAoMQzJTX0VuZE1hdGNoEA0SEAoMUzJDX0VuZE1hdGNoEA4S",
+            "EwoPQzJTX1JlcVJvb21JbmZvEA8SFAoQQzJTX1JlcU1hdGNoSW5mbxAQYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::C2SProtoInterface.EMessage), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SLogin), global::C2SProtoInterface.C2SLogin.Parser, new[]{ "GId", "Name" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CLogin), global::C2SProtoInterface.S2CLogin.Parser, new[]{ "RoomId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CLogin), global::C2SProtoInterface.S2CLogin.Parser, new[]{ "MatchId", "RoomId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SStartGame), global::C2SProtoInterface.C2SStartGame.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SFrameUpdate), global::C2SProtoInterface.C2SFrameUpdate.Parser, new[]{ "Start", "End", "Angle", "Input", "Index" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SPrintFrames), global::C2SProtoInterface.C2SPrintFrames.Parser, null, null, null, null, null),
@@ -81,11 +83,13 @@ namespace C2SProtoInterface {
     [pbr::OriginalName("C2S_LeaveRoom")] C2SLeaveRoom = 7,
     [pbr::OriginalName("S2C_RoomInfoRefresh")] S2CRoomInfoRefresh = 8,
     [pbr::OriginalName("S2C_LeaveRoom")] S2CLeaveRoom = 9,
-    [pbr::OriginalName("ReqRoomInfos")] ReqRoomInfos = 10,
+    [pbr::OriginalName("C2S_ReqAllRoomInfos")] C2SReqAllRoomInfos = 10,
     [pbr::OriginalName("C2S_StartMatch")] C2SStartMatch = 11,
     [pbr::OriginalName("S2C_StartMatch")] S2CStartMatch = 12,
     [pbr::OriginalName("C2S_EndMatch")] C2SEndMatch = 13,
     [pbr::OriginalName("S2C_EndMatch")] S2CEndMatch = 14,
+    [pbr::OriginalName("C2S_ReqRoomInfo")] C2SReqRoomInfo = 15,
+    [pbr::OriginalName("C2S_ReqMatchInfo")] C2SReqMatchInfo = 16,
   }
 
   #endregion
@@ -273,6 +277,7 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public S2CLogin(S2CLogin other) : this() {
+      matchId_ = other.matchId_;
       roomId_ = other.roomId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -282,8 +287,19 @@ namespace C2SProtoInterface {
       return new S2CLogin(this);
     }
 
+    /// <summary>Field number for the "matchId" field.</summary>
+    public const int MatchIdFieldNumber = 1;
+    private int matchId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MatchId {
+      get { return matchId_; }
+      set {
+        matchId_ = value;
+      }
+    }
+
     /// <summary>Field number for the "roomId" field.</summary>
-    public const int RoomIdFieldNumber = 1;
+    public const int RoomIdFieldNumber = 2;
     private int roomId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int RoomId {
@@ -306,6 +322,7 @@ namespace C2SProtoInterface {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (MatchId != other.MatchId) return false;
       if (RoomId != other.RoomId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -313,6 +330,7 @@ namespace C2SProtoInterface {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (MatchId != 0) hash ^= MatchId.GetHashCode();
       if (RoomId != 0) hash ^= RoomId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -327,8 +345,12 @@ namespace C2SProtoInterface {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (RoomId != 0) {
+      if (MatchId != 0) {
         output.WriteRawTag(8);
+        output.WriteInt32(MatchId);
+      }
+      if (RoomId != 0) {
+        output.WriteRawTag(16);
         output.WriteInt32(RoomId);
       }
       if (_unknownFields != null) {
@@ -339,6 +361,9 @@ namespace C2SProtoInterface {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (MatchId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MatchId);
+      }
       if (RoomId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(RoomId);
       }
@@ -352,6 +377,9 @@ namespace C2SProtoInterface {
     public void MergeFrom(S2CLogin other) {
       if (other == null) {
         return;
+      }
+      if (other.MatchId != 0) {
+        MatchId = other.MatchId;
       }
       if (other.RoomId != 0) {
         RoomId = other.RoomId;
@@ -368,6 +396,10 @@ namespace C2SProtoInterface {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
+            MatchId = input.ReadInt32();
+            break;
+          }
+          case 16: {
             RoomId = input.ReadInt32();
             break;
           }

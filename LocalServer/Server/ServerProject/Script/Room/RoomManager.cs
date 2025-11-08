@@ -17,13 +17,21 @@ namespace GameServer
                 return;
             }
 
-            var newRoom = new GameRoomAgent(agent.guid,++guidIndex);
+            var newRoom = GenerateNewRoom();
+            newRoom.AddPlayer(agent.guid);
+            registPlayers[agent.guid] = newRoom;
+            newRoom.SendPlayerRoomInfo();
+        }
+        
+        
+        GameRoomAgent GenerateNewRoom()
+        {
+            var newRoom = new GameRoomAgent(++guidIndex);
             lock (gameRoomAgents)
             {
                 gameRoomAgents.Add(newRoom.guid,newRoom);
             }
-            registPlayers[agent.guid] = newRoom;
-            newRoom.SendPlayerRoomInfo();
+            return newRoom;
         }
 
         public void ReqLeaveRoom(PlayerAgent agent)
@@ -42,6 +50,14 @@ namespace GameServer
             }
         }
 
+        public void RemoveRoom(int roomId)
+        {
+            lock (gameRoomAgents)
+            {
+                gameRoomAgents.Remove(roomId);
+            }
+        }
+
         public void ReqJoinRoom(PlayerAgent agent,byte[] streamBuffer,int len)
         {
             int offset = sizeof(EMessage);
@@ -55,6 +71,7 @@ namespace GameServer
                 }
             }
         }
+
 
         public GameRoomAgent GetRoomAgent(int roomGuid)
         {
@@ -74,14 +91,13 @@ namespace GameServer
             return default;
         }
 
-        public void ReqRoomInfo(PlayerAgent agent)
+        public void ReqAllRoomInfo(PlayerAgent agent)
         {
             var allRommInfo = new S2CAllRoomInfo();
             foreach (var kv in gameRoomAgents)
-                if(!kv.Value.inMatch)
-                    allRommInfo.AllRooms.Add(kv.Value.GetAllRoomInfo());
+                allRommInfo.AllRooms.Add(kv.Value.GetAllRoomInfo());
 
-            agent.SendTCPData(EMessage.ReqRoomInfos, allRommInfo);
+            agent.SendTCPData(EMessage.C2SReqAllRoomInfos, allRommInfo);
         }
 
         public void ReqStartMatch(PlayerAgent agent)
@@ -92,32 +108,24 @@ namespace GameServer
             }
         }
 
-        public void ReqEndMatch(PlayerAgent agent)
+        public void FromMatchBackToRoom(MatchInfo matchInfo)
         {
-            if (registPlayers.TryGetValue(agent.guid,out var roomAgent))
+            var newRoom = GenerateNewRoom();
+            foreach (var matchPlayer in matchInfo.players)
             {
-                roomAgent.EndMatch();
+                newRoom.AddPlayer(matchPlayer.guid);
             }
         }
-
-        public void ReceiveUDPData(int guid,C2SFrameUpdate data)
-        {
-            if (registPlayers.TryGetValue(guid,out var roomAgent))
-            {
-                roomAgent.ReceiveC2SFrameData(guid, data);
-            }
-        }
-
-        public void UpdateRooms()
-        {
-            lock (gameRoomAgents)
-            {
-                foreach (var room in gameRoomAgents.Values)
-                {
-                    room.Update();
-                }
-            }
-            
-        }
+        
+        // public void UpdateRooms()
+        // {
+        //     lock (gameRoomAgents)
+        //     {
+        //         foreach (var room in gameRoomAgents.Values)
+        //         {
+        //             room.Update();
+        //         }
+        //     }
+        // }
     }    
 }
