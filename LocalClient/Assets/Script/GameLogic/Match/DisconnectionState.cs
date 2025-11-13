@@ -1,5 +1,6 @@
 ﻿using C2SProtoInterface;
 using CenterBase;
+using FrameDrive;
 using Google.Protobuf;
 using UnityEngine;
 
@@ -97,8 +98,36 @@ namespace Game
 
         void OnLogin(TCPInfo tcpInfo)
         {
-            var loginInfo = tcpInfo.ParseMsgData(S2CLogin.Parser);
-            logicFsm.ChangeState(ELogicType.Lobby,loginInfo);
+            var loginParam =tcpInfo.ParseMsgData(S2CLogin.Parser);
+            if (loginParam.MatchId>0)
+            {
+                ClientManager.instance.SendTCPInfo(EMessage.C2SReqMatchInfo,callBack:OnEnterGame);
+
+            }else if (loginParam.RoomId > 0)
+            {
+                ClientManager.instance.SendTCPInfo(EMessage.C2SReqRoomInfo,callBack:OnEnterRoom);
+            }
+            else
+            {
+                ClientManager.instance.SendTCPInfo(EMessage.C2SReqAllRoomInfos,callBack:OnEnterLobby);
+            }
+        }
+
+        private void OnEnterLobby(TCPInfo tcpInfo)
+        {
+            var allRoomInfos = tcpInfo.ParseMsgData(S2CAllRoomInfo.Parser);
+            logicFsm.ChangeState(ELogicType.Lobby,allRoomInfos);
+        }
+        
+        private void OnEnterRoom(TCPInfo tcpInfo)
+        {
+            logicFsm.ChangeState(ELogicType.Room,tcpInfo);
+        }
+
+        private void OnEnterGame(TCPInfo tcpInfo)
+        {
+            var MatchInfo = new MatchInfo(tcpInfo.ParseMsgData(S2CMatchInfo.Parser));
+            logicFsm.ChangeState(ELogicType.Match,MatchInfo);
         }
     }
 }

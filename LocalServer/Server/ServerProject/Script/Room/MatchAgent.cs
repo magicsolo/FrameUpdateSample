@@ -111,8 +111,6 @@ namespace GameServer
             logWriter.Close();
             videoWriter.Flush();
             videoWriter.Close();
-            
-            RoomManager.instance.FromMatchBackToRoom(matchInfo);
         }
 
         public void Update()

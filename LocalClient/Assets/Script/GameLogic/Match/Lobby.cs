@@ -24,15 +24,7 @@ namespace Game
         protected override void AfterEnter()
         {
             base.AfterEnter();
-            var loginParam =(S2CLogin)param;
-            if (loginParam.MatchId>0)
-            {
-                ClientManager.instance.SendTCPInfo(EMessage.C2SReqMatchInfo,callBack:OnEnterGame);
-
-            }else if (loginParam.RoomId > 0)
-            {
-                ClientManager.instance.SendTCPInfo(EMessage.C2SReqRoomInfo,callBack:OnEnterRoom);
-            }
+            SetViewRoomInfos((S2CAllRoomInfo)param);
         }
         
         public override void OnGUIUpdate()
@@ -47,7 +39,7 @@ namespace Game
 
             if (GUILayout.Button("刷新当前房间列表"))
             {
-                ClientManager.instance.SendTCPInfo(EMessage.C2SReqRoomInfo,callBack:OnEnterRoom);
+                ClientManager.instance.SendTCPInfo(EMessage.C2SReqAllRoomInfos,callBack:OnGetRoomInfos);
             }
 
             if (GUILayout.Button("创建房间"))
@@ -82,7 +74,7 @@ namespace Game
 
         private void OnEnterRoom(TCPInfo tcpInfo)
         {
-            logicFsm.ChangeState(ELogicType.Room,tcpInfo);
+            logicFsm.ChangeState(ELogicType.Room,tcpInfo.ParseMsgData(S2CRoomInfo.Parser));
         }
 
         private void OnEnterGame(TCPInfo tcpInfo)
@@ -95,6 +87,11 @@ namespace Game
         {
             allRooms.Clear();
             var roomInfo = tcpInfo.ParseMsgData(S2CAllRoomInfo.Parser);
+            SetViewRoomInfos(roomInfo);
+        }
+
+        void SetViewRoomInfos(S2CAllRoomInfo roomInfo)
+        {
             foreach (var room in roomInfo.AllRooms)
             {
                 var newRoom = new RoomInfo();
@@ -102,8 +99,6 @@ namespace Game
                 allRooms.Add(newRoom);
             }
         }
-        
-        
 
     }
 }

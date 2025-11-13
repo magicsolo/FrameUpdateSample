@@ -101,7 +101,7 @@ namespace Game
         
         private void OnMatchEnd(TCPInfo tcpInfo)
         {
-            logicFsm.ChangeState(ELogicType.Room,tcpInfo);
+            logicFsm.ChangeState(ELogicType.Room,tcpInfo.ParseMsgData(S2CRoomInfo.Parser));
         }
     }
 }

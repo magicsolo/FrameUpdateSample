@@ -108,12 +108,13 @@ namespace GameServer
             }
         }
 
-        public void FromMatchBackToRoom(MatchInfo matchInfo)
+        public void FromMatchBackToRoom(PlayerAgent player)
         {
-            var newRoom = GenerateNewRoom();
-            foreach (var matchPlayer in matchInfo.players)
+            var room = GetRoomAgentByPlayerGuid(player.guid);
+            var roomInfo = room.GetRoomInfo();
+            foreach (var playerInfo in roomInfo.AllPlayers)
             {
-                newRoom.AddPlayer(matchPlayer.guid);
+                room.SendPlayerTCP(playerInfo.Guid, EMessage.S2CEndMatch, roomInfo);
             }
         }
         

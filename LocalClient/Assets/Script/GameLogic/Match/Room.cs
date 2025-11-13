@@ -35,9 +35,8 @@ namespace Game
         protected override void BeforeEnter()
         {
             base.BeforeEnter();
-            var tcpInfo = (TCPInfo)param;
-            SetRoomInfo(tcpInfo);
-            RegistTCPListener(EMessage.S2CRoomInfoRefresh,SetRoomInfo);
+            SetRoomInfo((S2CRoomInfo)param);
+            RegistTCPListener(EMessage.S2CRoomInfoRefresh,OnGetRoomInfo);
             RegistTCPListener(EMessage.S2CLeaveRoom,OnLeaveRoom);
             RegistTCPListener(EMessage.S2CStartMatch,OnEnterGame);
         }
@@ -66,15 +65,21 @@ namespace Game
             GUILayout.EndHorizontal();
         }
 
-        void SetRoomInfo(TCPInfo tcpInfo)
+        void OnGetRoomInfo(TCPInfo tcpInfo)
+        {
+            
+            SetRoomInfo(tcpInfo.ParseMsgData(S2CRoomInfo.Parser));
+        }
+
+        void SetRoomInfo(S2CRoomInfo s2cRoomInfo)
         {
             roomInfo = new RoomInfo();
-            roomInfo.Init(tcpInfo.ParseMsgData(S2CRoomInfo.Parser));
+            roomInfo.Init(s2cRoomInfo);
         }
         
         private void OnLeaveRoom(TCPInfo obj)
         {
-            logicFsm.ChangeState(ELogicType.Lobby);
+            logicFsm.ChangeState(ELogicType.Lobby,obj.ParseMsgData(S2CAllRoomInfo.Parser));
         }
         
         

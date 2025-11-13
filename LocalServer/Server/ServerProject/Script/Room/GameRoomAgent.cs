@@ -57,7 +57,8 @@ namespace GameServer
             int guid = plAgent.guid;
             RemovePlayer(guid);
             Console.WriteLine($"Player {plAgent.name} Leave Room {guid}");
-            plAgent.SendTCPData(EMessage.S2CLeaveRoom);
+            var allRoomInfos = GetAllRoomInfo();
+            plAgent.SendTCPData(EMessage.S2CLeaveRoom, allRoomInfos);
         }
         public void OnReqJoinRoom(PlayerAgent plAgent)
         {

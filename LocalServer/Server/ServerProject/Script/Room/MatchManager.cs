@@ -41,6 +41,8 @@ public class MatchManager:Single<MatchManager>
         if (playerMatchAgents.TryGetValue(player.guid, out MatchAgent agent))
         {
             agent.EndMatch();
+            RoomManager.instance.FromMatchBackToRoom(player);
+
             matchAgents.Remove(agent.matchGuid);
             foreach (var plInfo in agent.matchInfo.players)
             {

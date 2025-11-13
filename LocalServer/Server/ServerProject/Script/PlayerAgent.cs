@@ -62,8 +62,11 @@ namespace GameServer
                     break;
                 case EMessage.C2SReqRoomInfo:
                     var roomAgent = RoomManager.instance.GetRoomAgentByPlayerGuid(guid);
-                    var roomInfo = roomAgent.GetRoomInfo();
-                    SendTCPData(EMessage.C2SReqRoomInfo,roomInfo);
+                    if (roomAgent!=null)
+                    {
+                        var roomInfo = roomAgent.GetRoomInfo();
+                        SendTCPData(EMessage.C2SReqRoomInfo,roomInfo);    
+                    }
                     break;
                 case EMessage.C2SReqMatchInfo:
                     var matchAgetn = MatchManager.instance.GetMatchAgentByPlayerId(guid);
