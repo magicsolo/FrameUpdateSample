@@ -34,3 +34,4 @@ LocalServer/Server/Server.sln
 LocalServer/Server/ServerProject/bin/Debug/SaveData/log.txt
 LocalServer/Server/ServerProject/bin/Debug/SaveData/video.bytes
 LocalServer/Server/ServerProject/bin/
+LocalClient/SaveData/

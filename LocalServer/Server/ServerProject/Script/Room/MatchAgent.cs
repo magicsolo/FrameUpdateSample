@@ -59,6 +59,7 @@ namespace GameServer
             
             string videoPath = Directory.GetCurrentDirectory() + "\\..\\SaveData";
             Directory.CreateDirectory(videoPath);
+            
             videoPath += $"\\{matchGuid}_video.bytes";
             if (videoWriter!=null)
                 videoWriter.Close();
@@ -101,6 +102,7 @@ namespace GameServer
             s2cMatchInfo.Pot = ServerLogic.udpPot;
             var random = new Random();
             s2cMatchInfo.RandomSeed = random.Next(int.MinValue,int.MaxValue);
+            s2cMatchInfo.MatchGuid = matchGuid;
             return s2cMatchInfo;
         }
         
@@ -148,12 +150,21 @@ namespace GameServer
 
             var frmUpdate = frmDt.FrameDatas[0];
             logWriter.WriteLine($"frm:{frmUpdate.FrameIndex}");
-            for (int i = 0; i < frmUpdate.Gids.Count; i++)
+
+            for (int i = 0; i < matchInfo.players.Length; i++)
             {
-                var gid = frmUpdate.Gids[i];
-                var input = frmUpdate.Inputs[i];
-                var angle = frmUpdate.InputAngles[i];
-                logWriter.WriteLine($"{gid}:: input:{input} angle:{angle}");
+                var emGid = matchInfo.players[i].guid;
+                int input = 0;
+                long angle = 0;
+                for (int pi = 0; pi < frmUpdate.Gids.Count; pi++)
+                {
+                    if (emGid == frmUpdate.Gids[pi])
+                    {
+                        input = frmUpdate.Inputs[pi];
+                        angle = frmUpdate.InputAngles[pi];
+                    }
+                }
+                logWriter.WriteLine($"{i}:: input:{input} angle:{angle}");
             }
             logWriter.Flush();
         }

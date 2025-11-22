@@ -68,15 +68,23 @@ namespace Game
         {
             controler = new MatchLogicControler();
             FrameManager.instance.Init(matchInfo,controler);
-            var logPath = Directory.GetCurrentDirectory() + "\\log.txt";
+            var savePath = Directory.GetCurrentDirectory() + "\\SaveData";
+            Directory.CreateDirectory(savePath);
+            var logPath = savePath + $"\\log_{matchInfo.guid}_{DateTime.Now.Hour}_{DateTime.Now.Minute}_{DateTime.Now.Second}.txt";
+            File.Delete(logPath);
+            File.Create(logPath).Dispose();
             ClearStreamWriter(logPath,logWriter);
             logWriter = new StreamWriter(logPath);
 
-            var videoPath = Directory.GetCurrentDirectory() + "\\video.bytes";
+            var videoPath = savePath + $"\\video_{matchInfo.guid}.bytes";
             if (videoWriter!=null)
                 videoWriter.Close();
+            File.Delete(videoPath);
+            File.Create(videoPath).Dispose();
             videoWriter = new FileStream(videoPath,FileMode.Create,FileAccess.Write);
             eventRegister.AddRegister(EventKeys.LogicMatchUpdate,SaveFrameUpdate);
+            
+            eventRegister.RegistAll();
             CloseThread();
             _threadUpdate = true;
             ud = new Thread(Update);
@@ -124,21 +132,19 @@ namespace Game
         
         void SaveFrameUpdate(object obj)
         {
-            S2CFrameData frmUpdate = (S2CFrameData)obj;
-            var sendBytes = frmUpdate.ToByteArray();
-            Int32 length = sendBytes.Length;
-            var lengthBytes = BitConverter.GetBytes(length);
-            videoWriter.Write(lengthBytes,0,lengthBytes.Length);
-            videoWriter.Write(sendBytes,0,sendBytes.Length);
-            videoWriter.Flush();
+            FrameData frmUpdate = (FrameData)obj;
+            //var lengthBytes = //BitConverter.GetBytes(length);
+            //videoWriter.Write(lengthBytes,0,lengthBytes.Length);
+            //videoWriter.Write(sendBytes,0,sendBytes.Length);
+            //videoWriter.Flush();
 
-            logWriter.WriteLine($"frm:{frmUpdate.FrameIndex}");
-            for (int i = 0; i < frmUpdate.Gids.Count; i++)
+            logWriter.WriteLine($"frm:{frmUpdate.frameIndex}");
+            for (int i = 0; i < frmUpdate.InputData.Length; i++)
             {
-                var gid = frmUpdate.Gids[i];
-                var input = frmUpdate.Inputs[i];
-                var angle = frmUpdate.InputAngles[i];
-                logWriter.WriteLine($"{gid}:: input:{input} angle:{angle}");
+                var data = frmUpdate.InputData[i];
+                var input = data.input;
+                var angle = data.inputMoveAngle;
+                logWriter.WriteLine($"{i}:: input:{input} angle:{angle}");
             }
             logWriter.Flush();
         }

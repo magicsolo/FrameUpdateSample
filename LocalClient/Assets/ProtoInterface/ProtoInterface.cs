@@ -31,25 +31,25 @@ namespace C2SProtoInterface {
             "ZBgCIAEoBRINCgVhbmdsZRgDIAEoAxINCgVpbnB1dBgEIAEoBRINCgVpbmRl",
             "eBgFIAEoBSIQCg5DMlNQcmludEZyYW1lcyIfCgtDMlNKb2luUm9vbRIQCghy",
             "b29tR3VpZBgBIAEoBSIrCg1TMkNQbGF5ZXJEYXRhEgwKBGd1aWQYASABKAUS",
-            "DAoEbmFtZRgCIAEoCSJ0CgxTMkNNYXRjaEluZm8SCwoDcG90GAEgASgFEhAK",
-            "CHJvb21HdWlkGAIgASgFEhIKCnJhbmRvbVNlZWQYAyABKAUSMQoHcGxheWVy",
-            "cxgEIAMoCzIgLkMyU1Byb3RvSW50ZXJmYWNlLlMyQ1BsYXllckRhdGEiVQoL",
-            "UzJDUm9vbUluZm8SEAoIcm9vbUd1aWQYASABKAUSNAoKYWxsUGxheWVycxgC",
-            "IAMoCzIgLkMyU1Byb3RvSW50ZXJmYWNlLlMyQ1BsYXllckRhdGEiEAoOUzJD",
-            "UHJpbnRGcmFtZXMiVQoMUzJDRnJhbWVEYXRhEhIKCmZyYW1lSW5kZXgYASAB",
-            "KAUSDAoEZ2lkcxgCIAMoBRIOCgZpbnB1dHMYAyADKAUSEwoLaW5wdXRBbmds",
-            "ZXMYBCADKAMiXQoOUzJDRnJhbWVVcGRhdGUSFgoOY3VyU2VydmVyRnJhbWUY",
-            "ASABKAUSMwoKZnJhbWVEYXRhcxgCIAMoCzIfLkMyU1Byb3RvSW50ZXJmYWNl",
-            "LlMyQ0ZyYW1lRGF0YSJCCg5TMkNBbGxSb29tSW5mbxIwCghhbGxSb29tcxgB",
-            "IAMoCzIeLkMyU1Byb3RvSW50ZXJmYWNlLlMyQ1Jvb21JbmZvKr4CCghFTWVz",
-            "c2FnZRIICgROb25lEAASDQoJSGVhcnRCZWF0EAESDQoJQ29ubmVjdGVkEAIS",
-            "CQoFTG9naW4QAxIKCgZMb2dvdXQQBBISCg5DMlNfQ3JlYXRlUm9vbRAFEhAK",
-            "DEMyU19Kb2luUm9vbRAGEhEKDUMyU19MZWF2ZVJvb20QBxIXChNTMkNfUm9v",
-            "bUluZm9SZWZyZXNoEAgSEQoNUzJDX0xlYXZlUm9vbRAJEhcKE0MyU19SZXFB",
-            "bGxSb29tSW5mb3MQChISCg5DMlNfU3RhcnRNYXRjaBALEhIKDlMyQ19TdGFy",
-            "dE1hdGNoEAwSEAoMQzJTX0VuZE1hdGNoEA0SEAoMUzJDX0VuZE1hdGNoEA4S",
-            "EwoPQzJTX1JlcVJvb21JbmZvEA8SFAoQQzJTX1JlcU1hdGNoSW5mbxAQYgZw",
-            "cm90bzM="));
+            "DAoEbmFtZRgCIAEoCSKHAQoMUzJDTWF0Y2hJbmZvEgsKA3BvdBgBIAEoBRIR",
+            "CgltYXRjaEd1aWQYAiABKAUSEAoIcm9vbUd1aWQYAyABKAUSEgoKcmFuZG9t",
+            "U2VlZBgEIAEoBRIxCgdwbGF5ZXJzGAUgAygLMiAuQzJTUHJvdG9JbnRlcmZh",
+            "Y2UuUzJDUGxheWVyRGF0YSJVCgtTMkNSb29tSW5mbxIQCghyb29tR3VpZBgB",
+            "IAEoBRI0CgphbGxQbGF5ZXJzGAIgAygLMiAuQzJTUHJvdG9JbnRlcmZhY2Uu",
+            "UzJDUGxheWVyRGF0YSIQCg5TMkNQcmludEZyYW1lcyJVCgxTMkNGcmFtZURh",
+            "dGESEgoKZnJhbWVJbmRleBgBIAEoBRIMCgRnaWRzGAIgAygFEg4KBmlucHV0",
+            "cxgDIAMoBRITCgtpbnB1dEFuZ2xlcxgEIAMoAyJdCg5TMkNGcmFtZVVwZGF0",
+            "ZRIWCg5jdXJTZXJ2ZXJGcmFtZRgBIAEoBRIzCgpmcmFtZURhdGFzGAIgAygL",
+            "Mh8uQzJTUHJvdG9JbnRlcmZhY2UuUzJDRnJhbWVEYXRhIkIKDlMyQ0FsbFJv",
+            "b21JbmZvEjAKCGFsbFJvb21zGAEgAygLMh4uQzJTUHJvdG9JbnRlcmZhY2Uu",
+            "UzJDUm9vbUluZm8qvgIKCEVNZXNzYWdlEggKBE5vbmUQABINCglIZWFydEJl",
+            "YXQQARINCglDb25uZWN0ZWQQAhIJCgVMb2dpbhADEgoKBkxvZ291dBAEEhIK",
+            "DkMyU19DcmVhdGVSb29tEAUSEAoMQzJTX0pvaW5Sb29tEAYSEQoNQzJTX0xl",
+            "YXZlUm9vbRAHEhcKE1MyQ19Sb29tSW5mb1JlZnJlc2gQCBIRCg1TMkNfTGVh",
+            "dmVSb29tEAkSFwoTQzJTX1JlcUFsbFJvb21JbmZvcxAKEhIKDkMyU19TdGFy",
+            "dE1hdGNoEAsSEgoOUzJDX1N0YXJ0TWF0Y2gQDBIQCgxDMlNfRW5kTWF0Y2gQ",
+            "DRIQCgxTMkNfRW5kTWF0Y2gQDhITCg9DMlNfUmVxUm9vbUluZm8QDxIUChBD",
+            "MlNfUmVxTWF0Y2hJbmZvEBBiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::C2SProtoInterface.EMessage), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -60,7 +60,7 @@ namespace C2SProtoInterface {
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SPrintFrames), global::C2SProtoInterface.C2SPrintFrames.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.C2SJoinRoom), global::C2SProtoInterface.C2SJoinRoom.Parser, new[]{ "RoomGuid" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CPlayerData), global::C2SProtoInterface.S2CPlayerData.Parser, new[]{ "Guid", "Name" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CMatchInfo), global::C2SProtoInterface.S2CMatchInfo.Parser, new[]{ "Pot", "RoomGuid", "RandomSeed", "Players" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CMatchInfo), global::C2SProtoInterface.S2CMatchInfo.Parser, new[]{ "Pot", "MatchGuid", "RoomGuid", "RandomSeed", "Players" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CRoomInfo), global::C2SProtoInterface.S2CRoomInfo.Parser, new[]{ "RoomGuid", "AllPlayers" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CPrintFrames), global::C2SProtoInterface.S2CPrintFrames.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::C2SProtoInterface.S2CFrameData), global::C2SProtoInterface.S2CFrameData.Parser, new[]{ "FrameIndex", "Gids", "Inputs", "InputAngles" }, null, null, null, null),
@@ -1164,6 +1164,7 @@ namespace C2SProtoInterface {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public S2CMatchInfo(S2CMatchInfo other) : this() {
       pot_ = other.pot_;
+      matchGuid_ = other.matchGuid_;
       roomGuid_ = other.roomGuid_;
       randomSeed_ = other.randomSeed_;
       players_ = other.players_.Clone();
@@ -1186,8 +1187,19 @@ namespace C2SProtoInterface {
       }
     }
 
+    /// <summary>Field number for the "matchGuid" field.</summary>
+    public const int MatchGuidFieldNumber = 2;
+    private int matchGuid_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MatchGuid {
+      get { return matchGuid_; }
+      set {
+        matchGuid_ = value;
+      }
+    }
+
     /// <summary>Field number for the "roomGuid" field.</summary>
-    public const int RoomGuidFieldNumber = 2;
+    public const int RoomGuidFieldNumber = 3;
     private int roomGuid_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int RoomGuid {
@@ -1198,7 +1210,7 @@ namespace C2SProtoInterface {
     }
 
     /// <summary>Field number for the "randomSeed" field.</summary>
-    public const int RandomSeedFieldNumber = 3;
+    public const int RandomSeedFieldNumber = 4;
     private int randomSeed_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int RandomSeed {
@@ -1209,9 +1221,9 @@ namespace C2SProtoInterface {
     }
 
     /// <summary>Field number for the "players" field.</summary>
-    public const int PlayersFieldNumber = 4;
+    public const int PlayersFieldNumber = 5;
     private static readonly pb::FieldCodec<global::C2SProtoInterface.S2CPlayerData> _repeated_players_codec
-        = pb::FieldCodec.ForMessage(34, global::C2SProtoInterface.S2CPlayerData.Parser);
+        = pb::FieldCodec.ForMessage(42, global::C2SProtoInterface.S2CPlayerData.Parser);
     private readonly pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData> players_ = new pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::C2SProtoInterface.S2CPlayerData> Players {
@@ -1232,6 +1244,7 @@ namespace C2SProtoInterface {
         return true;
       }
       if (Pot != other.Pot) return false;
+      if (MatchGuid != other.MatchGuid) return false;
       if (RoomGuid != other.RoomGuid) return false;
       if (RandomSeed != other.RandomSeed) return false;
       if(!players_.Equals(other.players_)) return false;
@@ -1242,6 +1255,7 @@ namespace C2SProtoInterface {
     public override int GetHashCode() {
       int hash = 1;
       if (Pot != 0) hash ^= Pot.GetHashCode();
+      if (MatchGuid != 0) hash ^= MatchGuid.GetHashCode();
       if (RoomGuid != 0) hash ^= RoomGuid.GetHashCode();
       if (RandomSeed != 0) hash ^= RandomSeed.GetHashCode();
       hash ^= players_.GetHashCode();
@@ -1262,12 +1276,16 @@ namespace C2SProtoInterface {
         output.WriteRawTag(8);
         output.WriteInt32(Pot);
       }
-      if (RoomGuid != 0) {
+      if (MatchGuid != 0) {
         output.WriteRawTag(16);
+        output.WriteInt32(MatchGuid);
+      }
+      if (RoomGuid != 0) {
+        output.WriteRawTag(24);
         output.WriteInt32(RoomGuid);
       }
       if (RandomSeed != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteInt32(RandomSeed);
       }
       players_.WriteTo(output, _repeated_players_codec);
@@ -1281,6 +1299,9 @@ namespace C2SProtoInterface {
       int size = 0;
       if (Pot != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Pot);
+      }
+      if (MatchGuid != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MatchGuid);
       }
       if (RoomGuid != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(RoomGuid);
@@ -1302,6 +1323,9 @@ namespace C2SProtoInterface {
       }
       if (other.Pot != 0) {
         Pot = other.Pot;
+      }
+      if (other.MatchGuid != 0) {
+        MatchGuid = other.MatchGuid;
       }
       if (other.RoomGuid != 0) {
         RoomGuid = other.RoomGuid;
@@ -1326,14 +1350,18 @@ namespace C2SProtoInterface {
             break;
           }
           case 16: {
-            RoomGuid = input.ReadInt32();
+            MatchGuid = input.ReadInt32();
             break;
           }
           case 24: {
+            RoomGuid = input.ReadInt32();
+            break;
+          }
+          case 32: {
             RandomSeed = input.ReadInt32();
             break;
           }
-          case 34: {
+          case 42: {
             players_.AddEntriesFrom(input, _repeated_players_codec);
             break;
           }

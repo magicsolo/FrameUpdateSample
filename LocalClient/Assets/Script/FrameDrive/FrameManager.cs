@@ -18,6 +18,7 @@ namespace FrameDrive
 
     public struct MatchInfo
     {
+        public int guid;
         public PlayerInfo[] players;
         public int randomSeed;
 
@@ -30,12 +31,14 @@ namespace FrameDrive
                 players[i] = new PlayerInfo(plInfo,i);
             }
             randomSeed = matchInfo.RandomSeed;
+            guid = matchInfo.MatchGuid;
         }
 
-        public MatchInfo(PlayerInfo[] players, int randomSeed = 0)
+        public MatchInfo(PlayerInfo[] players, int randomSeed = 0,int matchId = -1)
         {
             this.players = players;
             this.randomSeed = randomSeed;
+            this.guid = matchId;
         }
     }
 
@@ -57,6 +60,7 @@ namespace FrameDrive
         }
     }
 
+    [SerializeField]
     public class FrameData
     {
         public int frameIndex;
@@ -116,6 +120,7 @@ namespace FrameDrive
             }
 
             var nFrm = new FrameData(frameIndex,match.allPlayers);
+            EventManager.instance.DispatchEvent(EventKeys.LogicMatchUpdate,nFrm);
             frameDataInputs[frameIndex] = nFrm;
 
             return nFrm;
