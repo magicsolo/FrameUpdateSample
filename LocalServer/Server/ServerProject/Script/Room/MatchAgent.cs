@@ -57,10 +57,10 @@ namespace GameServer
                 loadingPlayers.Add(info.guid);
             }
             
-            string videoPath = Directory.GetCurrentDirectory() + "\\..\\SaveData";
-            Directory.CreateDirectory(videoPath);
+            string savePath = Directory.GetCurrentDirectory() + "\\..\\SaveData";
+            Directory.CreateDirectory(savePath);
             
-            videoPath += $"\\{matchGuid}_video.bytes";
+            var videoPath = savePath + $"\\video_{matchGuid}.bytes";
             if (videoWriter!=null)
                 videoWriter.Close();
             if (Directory.Exists(videoPath))
@@ -72,7 +72,7 @@ namespace GameServer
                     
             videoWriter = new StreamWriter(videoPath);
 
-            string logPath = Directory.GetCurrentDirectory() + "\\..\\SaveData\\log.txt";
+            string logPath = savePath + $"\\..\\SaveData\\log_{matchGuid}.txt";
             if (logWriter!=null)
             {
                 logWriter.Close();   
